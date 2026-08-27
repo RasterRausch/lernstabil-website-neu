@@ -1,0 +1,46 @@
+/* Design-Tokens — Werte aus der ersten gebauten Sektion ableiten.
+   Danach fix. Rollen-Namen nicht ändern, sie sind projektübergreifend
+   gleich. Keine freien Pixelwerte im Projekt — nur diese Variablen. */
+
+:root {
+  /* Farbrollen */
+  --bg: ;
+  --surface: ;
+  --text: ;
+  --text-muted: ;
+  --accent: ;
+  --accent-contrast: ;
+  --border: ;
+
+  /* Schriften */
+  --font-display: ;
+  --font-body: ;
+
+  /* Type-Scale */
+  --fs-display: ;
+  --fs-h1: ;
+  --fs-h2: ;
+  --fs-h3: ;
+  --fs-body: ;
+  --fs-small: ;
+
+  /* Spacing-Skala */
+  --space-3xs: ;
+  --space-2xs: ;
+  --space-xs: ;
+  --space-sm: ;
+  --space-md: ;
+  --space-lg: ;
+  --space-xl: ;
+  --space-2xl: ;
+  --space-3xl: ;
+
+  /* Radien */
+  --radius-sm: ;
+  --radius-md: ;
+  --radius-full: ;
+
+  /* Container */
+  --content-max: ;
+  --gutter: ;
+}
