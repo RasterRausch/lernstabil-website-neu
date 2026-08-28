@@ -1,0 +1,347 @@
+---
+// TESTSEITE — nur zur Beurteilung der Bildwirkung im Hero.
+// Nicht Teil der Seite, kein Baustein. Alle Werte sind lokal in dieser
+// Datei und fassen src/styles/tokens.css nicht an.
+// Zahlen stammen aus design/pages/startseite/sections/01-hero/spec.md.
+---
+
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Test — Hero-Bildwirkung</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Source+Sans+3:wght@400;600&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <section class="hero">
+      <div class="wrap">
+        <header class="kopf">
+          <img class="logo" src="/test/logo.svg" alt="#Lernstabil" />
+          <nav class="nav">
+            <a href="#">Preise</a>
+            <a href="#">Kontakt</a>
+            <a href="#">Für Dozenten</a>
+          </nav>
+          <a class="kopf-tel" href="tel:+4934165832918">0341 658 329 18</a>
+        </header>
+
+        <div class="inhalt">
+          <div class="text">
+            <h1>
+              <span class="zeile1">Einzelunterricht online.</span>
+              <span class="zeile2">Ohne Vertrag, ohne Abo, ohne Kleingedrucktes.</span>
+            </h1>
+
+            <p class="unterzeile">
+              Ein fester Dozent, der Ihr Kind kennt. Deutschlandweit, per
+              Video. Die erste Stunde ist kostenlos.
+            </p>
+
+            <ul class="punkte">
+              <li>Die ganze Stunde gehört einem Schüler</li>
+              <li>Ein fester Dozent, der bleibt</li>
+              <li>Sie entscheiden nach jeder Stunde neu</li>
+            </ul>
+
+            <div class="aktionen">
+              <a class="knopf-primaer" href="tel:+4934165832918">0341 658 329 18</a>
+              <a class="knopf-sekundaer" href="#">Probestunde anfragen</a>
+            </div>
+
+            <p class="zeiten">Mo bis Fr, 9 bis 20 Uhr</p>
+          </div>
+
+          <div class="motiv">
+            <img src="/test/hero-1-frei.png" alt="" />
+          </div>
+        </div>
+      </div>
+    </section>
+  </body>
+</html>
+
+<style>
+  :root {
+    --bg: #1f4e98;
+    --text: #ffffff;
+    --text-muted: #cfd9ea;
+    --accent: #ff0000;
+    --accent-contrast: #ffffff;
+    --border: #5b7fbb;
+
+    --font-display: 'Fraunces', Georgia, serif;
+    --font-body: 'Source Sans 3', system-ui, sans-serif;
+
+    --space-3xs: 4px;
+    --space-2xs: 8px;
+    --space-xs: 12px;
+    --space-sm: 16px;
+    --space-md: 24px;
+    --space-lg: 32px;
+    --space-xl: 48px;
+    --space-2xl: 72px;
+    --space-3xl: 112px;
+
+    --radius-sm: 4px;
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-body);
+    font-size: 17px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .hero {
+    min-height: 100svh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  .wrap {
+    width: 100%;
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 20px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Kopfzeile ------------------------------------------------------- */
+
+  .kopf {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-md);
+    padding: var(--space-md) 0;
+  }
+
+  .logo {
+    height: 34px;
+    width: auto;
+    display: block;
+  }
+
+  .nav {
+    display: none;
+    gap: var(--space-lg);
+  }
+
+  .nav a {
+    color: var(--text);
+    text-decoration: none;
+    font-size: 17px;
+  }
+
+  .kopf-tel {
+    color: var(--text);
+    text-decoration: none;
+    font-weight: 600;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: var(--space-2xs) var(--space-sm);
+    white-space: nowrap;
+  }
+
+  /* Inhalt ---------------------------------------------------------- */
+
+  .inhalt {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .motiv {
+    order: -1;
+    margin: 0 -20px var(--space-lg);
+  }
+
+  .motiv img {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  .text {
+    padding-bottom: var(--space-2xl);
+  }
+
+  h1 {
+    margin: 0;
+    font-family: var(--font-display);
+    font-weight: 600;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2xs);
+  }
+
+  .zeile1 {
+    font-size: 40px;
+    line-height: 1.05;
+  }
+
+  .zeile2 {
+    font-size: 26px;
+    line-height: 1.2;
+  }
+
+  .unterzeile {
+    margin: var(--space-md) 0 0;
+    color: var(--text-muted);
+    max-width: 46ch;
+  }
+
+  .punkte {
+    margin: var(--space-lg) 0 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xs);
+  }
+
+  .punkte li {
+    position: relative;
+    padding-left: 28px;
+  }
+
+  .punkte li::before {
+    content: '';
+    position: absolute;
+    left: 2px;
+    top: 8px;
+    width: 12px;
+    height: 7px;
+    border-left: 2px solid var(--text);
+    border-bottom: 2px solid var(--text);
+    transform: rotate(-45deg);
+  }
+
+  .aktionen {
+    margin-top: var(--space-xl);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+  }
+
+  .knopf-primaer,
+  .knopf-sekundaer {
+    display: block;
+    text-align: center;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 18px;
+    padding: var(--space-sm) var(--space-lg);
+    border-radius: var(--radius-sm);
+  }
+
+  .knopf-primaer {
+    background: var(--accent);
+    color: var(--accent-contrast);
+  }
+
+  .knopf-sekundaer {
+    border: 1px solid var(--border);
+    color: var(--text);
+  }
+
+  .zeiten {
+    margin: var(--space-sm) 0 0;
+    font-size: 15px;
+    color: var(--text-muted);
+  }
+
+  /* ab 768 ---------------------------------------------------------- */
+
+  @media (min-width: 768px) {
+    body {
+      font-size: 18px;
+    }
+
+    .wrap {
+      padding: 0 48px;
+    }
+
+    .motiv {
+      margin-left: -48px;
+      margin-right: -48px;
+    }
+
+    .zeile1 {
+      font-size: 72px;
+    }
+
+    .zeile2 {
+      font-size: 36px;
+    }
+
+    .aktionen {
+      flex-direction: row;
+    }
+
+    .knopf-primaer,
+    .knopf-sekundaer {
+      display: inline-block;
+    }
+  }
+
+  /* ab 1120 — zweispaltig ------------------------------------------- */
+
+  @media (min-width: 1120px) {
+    .kopf {
+      padding: var(--space-md) 0 0;
+    }
+
+    .nav {
+      display: flex;
+    }
+
+    .inhalt {
+      flex-direction: row;
+      align-items: stretch;
+      gap: var(--space-xl);
+    }
+
+    .text {
+      flex: 0 0 55%;
+      padding-top: var(--space-3xl);
+      padding-bottom: var(--space-3xl);
+    }
+
+    .motiv {
+      order: 0;
+      flex: 1 1 45%;
+      position: relative;
+      margin: 0;
+      padding: var(--space-3xl) 0;
+    }
+
+    /* Bild liegt als freigestelltes PNG vor (public/test/hero-1-frei.png,
+       erzeugt aus hero-1.png). Kein Blend-Modus noetig. */
+    .motiv img {
+      position: absolute;
+      top: var(--space-3xl);
+      right: calc(-1 * var(--space-xl));
+      height: calc(100% - 2 * var(--space-3xl));
+      width: auto;
+      max-width: none;
+      display: block;
+    }
+  }
+</style>
