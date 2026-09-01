@@ -14,7 +14,15 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Source+Sans+3:wght@400;600&display=swap"
+      rel="preload"
+      href="/fonts/comic-neue-700-latin.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link rel="stylesheet" href="https://use.typekit.net/chw4hpk.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;600;700&display=swap"
       rel="stylesheet"
     />
   </head>
@@ -22,7 +30,10 @@
     <section class="hero">
       <div class="wrap">
         <header class="kopf">
-          <img class="logo" src="/test/logo.svg" alt="#Lernstabil" />
+          <a class="logo" href="/" aria-label="#Lernstabil — Startseite">
+            <span class="logo-wort">#Lernstabil</span>
+            <span class="logo-claim">Nachhilfe bequem von zu Hause!</span>
+          </a>
           <nav class="nav">
             <a href="#">Preise</a>
             <a href="#">Kontakt</a>
@@ -34,13 +45,15 @@
         <div class="inhalt">
           <div class="text">
             <h1>
-              <span class="zeile1">Einzelunterricht online.</span>
-              <span class="zeile2">Ohne Vertrag, ohne Abo, ohne Kleingedrucktes.</span>
+              <span class="zeile1">ONLINE EINZELUNTERRICHT</span>
+              <span class="zeile2"
+                >Ohne Vertrag, ohne Abo, ohne Kleingedrucktes.</span
+              >
             </h1>
 
             <p class="unterzeile">
-              Ein fester Dozent, der Ihr Kind kennt. Deutschlandweit, per
-              Video. Die erste Stunde ist kostenlos.
+              Ein fester Dozent, der Ihr Kind kennt. Deutschlandweit, per Video.
+              Die erste Stunde ist kostenlos.
             </p>
 
             <ul class="punkte">
@@ -50,7 +63,9 @@
             </ul>
 
             <div class="aktionen">
-              <a class="knopf-primaer" href="tel:+4934165832918">0341 658 329 18</a>
+              <a class="knopf-primaer" href="tel:+4934165832918"
+                >0341 658 329 18</a
+              >
               <a class="knopf-sekundaer" href="#">Probestunde anfragen</a>
             </div>
 
@@ -58,7 +73,7 @@
           </div>
 
           <div class="motiv">
-            <img src="/test/hero-1-frei.png" alt="" />
+            <img src="/test/hero-version-1-a4-3.png" alt="" />
           </div>
         </div>
       </div>
@@ -67,16 +82,26 @@
 </html>
 
 <style>
+  /* Selbst gehostet, keine Laufzeitverbindung zu Google.
+     Herkunft und Lizenz: design/type/comic-neue.md */
+  @font-face {
+    font-family: "Comic Neue";
+    font-style: normal;
+    font-weight: 700;
+    font-display: swap;
+    src: url("/fonts/comic-neue-700-latin.woff2") format("woff2");
+  }
+
   :root {
-    --bg: #1f4e98;
+    --bg: #1a1a1a;
     --text: #ffffff;
-    --text-muted: #cfd9ea;
+    --text-muted: #b0b0b0;
     --accent: #ff0000;
     --accent-contrast: #ffffff;
-    --border: #5b7fbb;
+    --border: #3a3a3a;
 
-    --font-display: 'Fraunces', Georgia, serif;
-    --font-body: 'Source Sans 3', system-ui, sans-serif;
+    --font-display: "six-hands-marker", system-ui, sans-serif;
+    --font-body: "Source Sans 3", system-ui, sans-serif;
 
     --space-3xs: 4px;
     --space-2xs: 8px;
@@ -110,6 +135,25 @@
     display: flex;
     flex-direction: column;
     overflow: hidden;
+
+    /* Lichtkegel hinter dem Motiv, nachgebaut nach dem Studiolicht im
+       Originalfoto: heller Bereich hinter Kopf und Schultern, nach
+       aussen abfallend. Mobil sitzt er oben, weil das Motiv dort oben
+       steht; ab 1120 rechts hinter der Person. */
+    --licht-x: 50%;
+    --licht-y: 24%;
+    --licht-b: 90%;
+    --licht-h: 55%;
+    --licht-staerke: 0.075;
+
+    background:
+      radial-gradient(
+        ellipse var(--licht-b) var(--licht-h) at var(--licht-x) var(--licht-y),
+        rgb(255 255 255 / var(--licht-staerke)) 0%,
+        rgb(255 255 255 / calc(var(--licht-staerke) * 0.45)) 45%,
+        rgb(255 255 255 / 0) 75%
+      ),
+      var(--bg);
   }
 
   .wrap {
@@ -132,10 +176,38 @@
     padding: var(--space-md) 0;
   }
 
+  /* Logo als CSS-Nachbau. Alle Werte sind Bruchteile der Blockbreite
+     --logo-b; der Block traegt font-size: var(--logo-b), dadurch ist
+     1em = Blockbreite. Massverhaeltnisse aus design/brand/logo.svg
+     abgemessen (Block 324 x 110,86). */
   .logo {
-    height: 34px;
-    width: auto;
-    display: block;
+    --logo-b: 180px;
+    display: inline-flex;
+    flex-direction: column;
+    box-sizing: border-box;
+    flex: none;
+    width: var(--logo-b);
+    font-size: var(--logo-b);
+    background: var(--accent);
+    color: #fff;
+    font-family: "Comic Neue", "Comic Sans MS", cursive;
+    font-weight: 700;
+    line-height: 1;
+    white-space: nowrap;
+    text-decoration: none;
+    padding: 0.0279em 0.0621em 0.0481em 0.0571em;
+    gap: 0.01157em;
+  }
+
+  .logo-wort {
+    font-size: 0.18691em;
+    letter-spacing: -0.02em;
+  }
+
+  .logo-claim {
+    font-size: 0.06765em;
+    letter-spacing: -0.033em;
+    word-spacing: 0.0103em;
   }
 
   .nav {
@@ -184,20 +256,22 @@
 
   h1 {
     margin: 0;
-    font-family: var(--font-display);
-    font-weight: 600;
+    font-family: var(--font-body);
     display: flex;
     flex-direction: column;
-    gap: var(--space-2xs);
+    gap: var(--space-xs);
   }
 
   .zeile1 {
-    font-size: 40px;
+    font-family: var(--font-display);
+    font-size: 64px;
+    font-weight: 700;
     line-height: 1.05;
   }
 
   .zeile2 {
     font-size: 26px;
+    font-weight: 600;
     line-height: 1.2;
   }
 
@@ -222,7 +296,7 @@
   }
 
   .punkte li::before {
-    content: '';
+    content: "";
     position: absolute;
     left: 2px;
     top: 8px;
@@ -247,7 +321,7 @@
     text-decoration: none;
     font-weight: 600;
     font-size: 18px;
-    padding: var(--space-sm) var(--space-lg);
+    padding: var(--space-xs) var(--space-lg);
     border-radius: var(--radius-sm);
   }
 
@@ -274,6 +348,10 @@
       font-size: 18px;
     }
 
+    .logo {
+      --logo-b: 210px;
+    }
+
     .wrap {
       padding: 0 48px;
     }
@@ -281,14 +359,6 @@
     .motiv {
       margin-left: -48px;
       margin-right: -48px;
-    }
-
-    .zeile1 {
-      font-size: 72px;
-    }
-
-    .zeile2 {
-      font-size: 36px;
     }
 
     .aktionen {
@@ -304,8 +374,19 @@
   /* ab 1120 — zweispaltig ------------------------------------------- */
 
   @media (min-width: 1120px) {
+    .hero {
+      --licht-x: 72%;
+      --licht-y: 42%;
+      --licht-b: 62%;
+      --licht-h: 80%;
+    }
+
     .kopf {
       padding: var(--space-md) 0 0;
+    }
+
+    .logo {
+      --logo-b: 240px;
     }
 
     .nav {
@@ -315,7 +396,7 @@
     .inhalt {
       flex-direction: row;
       align-items: stretch;
-      gap: var(--space-xl);
+      gap: 0;
     }
 
     .text {
@@ -329,16 +410,38 @@
       flex: 1 1 45%;
       position: relative;
       margin: 0;
-      padding: var(--space-3xl) 0;
+      padding: var(--space-3xl) 0 0;
+
+      /* ------------------------------------------------------------
+         FEINJUSTIERUNG MOTIV — nur diese drei Werte anfassen.
+         Gilt ab 1120 px, also fuer die zweispaltige Ansicht.
+
+         --motiv-hoehe   Hoehe des Bildes in Prozent der Spaltenhoehe.
+                         Groesser = Bild groesser. Weil das Bild an der
+                         rechten Kante haengt, waechst es nach links und
+                         rueckt damit naeher an den Text.
+                         Aktuell 87,5 % = 782 px hoch.
+
+         --motiv-rechts  Wie weit das Bild ueber die rechte Kante des
+                         Inhalts hinausragt. Groesser = weiter nach
+                         rechts aus dem Raster heraus.
+
+         --motiv-unten   Abstand der Bildunterkante zur Sektionskante.
+                         0 = das Motiv wird von der Kante angeschnitten.
+                         Positiv = das Bild hebt sich vom Rand ab.
+         ------------------------------------------------------------ */
+      --motiv-hoehe: 97%;
+      --motiv-rechts: 48px;
+      --motiv-unten: 0px;
     }
 
-    /* Bild liegt als freigestelltes PNG vor (public/test/hero-1-frei.png,
+    /* Bild liegt als freigestelltes PNG vor (public/test/hero-version-1-a4-3.png,
        erzeugt aus hero-1.png). Kein Blend-Modus noetig. */
     .motiv img {
       position: absolute;
-      top: var(--space-3xl);
-      right: calc(-1 * var(--space-xl));
-      height: calc(100% - 2 * var(--space-3xl));
+      bottom: var(--motiv-unten);
+      right: calc(-1 * var(--motiv-rechts));
+      height: var(--motiv-hoehe);
       width: auto;
       max-width: none;
       display: block;
