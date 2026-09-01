@@ -1,32 +1,45 @@
 # Sektion: Hero (Startseite, 1)
 
-**Status:** in Arbeit — gebaut und in Abstimmung, noch nicht gesperrt.
+**Status:** GESPERRT (1. September 2026; die Sperre wurde am selben Tag
+einmal aufgehoben, um Zustände und mobile Reihenfolge nachzuziehen, und
+danach wieder gesetzt)
+<!-- GESPERRT heißt: nicht mehr anfassen, auch nicht refactoren.
+     Änderungswunsch? Erst fragen. -->
 
 Dieses Dokument beschreibt seit dem 1. September 2026 den **gebauten
 Stand**, nicht mehr einen Vorschlag. Wo etwas noch offen ist, steht es
 unter „Offene Fragen".
 
+> **Nachtrag, 1. September 2026 — die Kopfzeile ist ausgezogen.**
+> Sie ist jetzt eine eigene, seitenübergreifende Sektion mit eigener
+> Spezifikation: `design/shared/sections/01-header/spec.md`. Der Hero
+> beginnt unterhalb der roten Leiste. Alles, was hier zu Logo und
+> Kopfzeile stand, gilt dort weiter und steht unten nur noch als
+> Verweis.
+
 ## Stand der Umsetzung (1. September 2026)
 
-Die Sektion existiert **ausschließlich als Testseite**, nicht als
-Baustein:
+Die Sektion ist aus dem Testmodus heraus und als Baustein gesetzt:
 
-- **Datei:** `src/pages/test-hero.astro`, erreichbar unter `/test-hero`.
-  Markup und sämtliche CSS-Regeln liegen in dieser einen Datei.
-- **Keine Komponente.** `src/components/sections/` ist leer,
-  `src/pages/index.astro` enthält nur ein leeres `<main>`.
-- **Keine Tokens.** Farben, Abstände und Schriften stehen lokal im
-  `:root` der Testseite. `design/tokens.md` und `src/styles/tokens.css`
-  sind bewusst noch leer — sie werden gefüllt, wenn diese Sektion
-  gesperrt wird.
-- **Bild:** `public/test/hero-version-1-a4-3.png`, 1494 × 1628, mit
+- **Komponente:** `src/components/sections/Hero.astro`
+- **Eingebunden in:** `src/pages/index.astro`, innerhalb von `<main>`
+- **Kopfleiste:** `src/components/sections/Header.astro`, sitzt im
+  `BaseLayout` und damit über der Sektion, nicht in ihr
+- **Bild:** `public/bilder/hero-schuelerin.png`, 1494 × 1628, mit
   Alphakanal. Herkunft und Nacharbeit stehen in `bildprompt.md`.
-- **Zweite Testseite:** `src/pages/test-logo.astro` vergleicht den
-  CSS-Nachbau des Logos mit dem Original-SVG. Kann gelöscht werden,
-  sobald das Logo abgenommen ist.
+- **Tokens:** `src/styles/tokens.css` und `design/tokens.md` sind aus
+  dieser Sektion gefüllt. Die Komponente enthält keine eigenen Farb-,
+  Abstands- und Schriftwerte mehr.
 
-Beim Überführen in eine Komponente fallen beide Testseiten und der
-Ordner `public/test/` weg.
+Weggefallen sind `src/pages/test-hero.astro`,
+`src/pages/test-logo.astro` und der Ordner `public/test/`. Das
+Original-Logo liegt weiter als Maßvorlage unter `design/brand/logo.svg`.
+
+**Zwei freie Pixelwerte sind absichtlich stehen geblieben**, weil sie
+keine Rolle in der Skala sind, sondern Maße einer Zeichnung: das
+Häkchen vor den drei Punkten (12 × 7 px, 2 px Strich, 28 px
+Einrückung) und die 18 px Beschriftung der Knöpfe, an der der
+Kontrastnachweis hängt.
 
 ## Zweck
 
@@ -40,9 +53,12 @@ Ordner `public/test/` weg.
 
 **Desktop, zwei Spalten:**
 
-1. **Kopfzeile** liegt ohne eigenen Hintergrund auf der dunklen Fläche —
-   Logo links, Navigation mittig, Telefonnummer rechts. Der Hero beginnt
-   also am oberen Seitenrand, es gibt keine abgesetzte Leiste.
+1. **Über dem Hero** steht die rote Kopfleiste. Sie gehört nicht mehr
+   zu dieser Sektion — siehe `design/shared/sections/01-header/spec.md`.
+   Der Hero rechnet seine Mindesthöhe deshalb mit
+   `calc(100svh - var(--leiste-h))`, damit Leiste und Hero zusammen eine
+   Bildschirmhöhe ergeben. Der überstehende Logoblock ragt 10 bis 18 px
+   in die Fläche des Hero hinein.
 2. **Linke Spalte (etwa 55 %)**
    - Überschrift, zweistufig gesetzt:
      Zeile 1 groß: *ONLINE EINZELUNTERRICHT* (Versalien im Quelltext)
@@ -75,13 +91,14 @@ also 17 Helligkeitsstufen Spanne. Steuerung über fünf Variablen auf
 | Variable | mobil | ab 1120 px | Bedeutung |
 |---|---|---|---|
 | `--licht-x` | 50 % | 72 % | Mitte waagerecht |
-| `--licht-y` | 24 % | 42 % | Mitte senkrecht |
+| `--licht-y` | 72 % | 42 % | Mitte senkrecht |
 | `--licht-b` | 90 % | 62 % | Breite des Kegels |
 | `--licht-h` | 55 % | 80 % | Höhe des Kegels |
 | `--licht-staerke` | 0.075 | 0.075 | Deckkraft des Lichts |
 
-Der Kegel wandert mit dem Motiv: mobil steht das Bild oben, ab 1120 px
-rechts.
+Der Kegel wandert mit dem Motiv: unter 1120 px steht das Bild **unten**,
+ab 1120 px rechts. Der mobile Wert lag bis zum 1. September 2026 bei
+24 %, weil das Motiv dort oben stand.
 
 **Obergrenze für die Stärke:** Die Freistellung ist auf dunklem Grund
 entstanden, halbtransparente Haarpixel tragen Restdunkel. Je heller der
@@ -97,6 +114,12 @@ nichts sichtbar; deutlich darüber muss man genau hinsehen.
 | `--motiv-unten` | 0 px | Abstand zur Sektionskante. 0 = das Motiv wird angeschnitten. |
 
 ## Logo (festgelegt am 31. August 2026)
+
+> **Umgezogen.** Das Logo sitzt seit dem 1. September 2026 in der
+> Kopfleiste, nicht im Hero. Die Maßverhältnisse unten gelten
+> unverändert weiter und sind in `Header.astro` umgesetzt. **Neu
+> hinzugekommen:** Rundung `radius-sm` und ein kleiner Schatten, damit
+> sich der Block vom dunkleren Rot der Leiste absetzt.
 
 Das Logo wird **nicht als SVG eingebunden, sondern in CSS nachgebaut.**
 Grund: Als Text bleibt es in Größe, Farbe und Zeilenführung frei
@@ -120,7 +143,7 @@ Logo skaliert über eine einzige Zahl.
 | Eigenschaft | Wert |
 |---|---|
 | Seitenverhältnis Block | 324 : 110,86 |
-| Innenabstand | `0.0279em` oben, `0.0621em` rechts, `0.0481em` unten, `0.0571em` links |
+| Innenabstand | `0.0279em` oben, `0.0621em` rechts, `0.0481em` unten, `0.0571em` links — oben und unten kommt seit dem 1. September 2026 `--logo-luft` (`0.016em`) hinzu, siehe Header-Spezifikation |
 | Abstand zwischen den Zeilen | `0.01157em` |
 | Wortmarke | `font-size: 0.18691em`, `letter-spacing: -0.02em` |
 | Unterzeile | `font-size: 0.06765em`, `letter-spacing: -0.033em`, `word-spacing: 0.0103em` |
@@ -151,8 +174,17 @@ erreichen wie im SVG.
 5. Die drei Punkte — `body`
 6. Öffnungszeiten — `small`, gedämpft
 
-Rot kommt in dieser Sektion **genau einmal** vor: am primären Knopf.
-Nicht an den Häkchen, nicht in der Überschrift.
+**Neue Fassung seit dem 1. September 2026**, weil über dem Hero jetzt
+eine rote Leiste steht:
+
+- **Gesättigtes Rot** (`#ff0000`) trägt zwei Flächen: den Logoblock in
+  der Kopfleiste und den primären Telefon-Knopf im Hero. Nicht die
+  Häkchen, nicht die Überschrift.
+- **Gedecktes Rot** (`#b3000f`) ist die Fläche der Kopfleiste und
+  bleibt ihr vorbehalten.
+
+Innerhalb des Hero gilt weiterhin: genau ein roter Fleck, der Knopf.
+Der Logoblock steht darüber in der Leiste.
 
 ## Farben (Vorschlag, wird zu `design/tokens.md`)
 
@@ -162,6 +194,7 @@ Nicht an den Häkchen, nicht in der Überschrift.
 | `text` | `#ffffff` | Überschrift, Punkte |
 | `text-muted` | `#b0b0b0` | Unterzeile, Öffnungszeiten |
 | `accent` | `#ff0000` | primärer Knopf |
+| `accent-dark` | `#b3000f` | Fläche der Kopfleiste (Header-Sektion) |
 | `accent-contrast` | `#ffffff` | Beschriftung auf dem roten Knopf |
 | `border` | `#3a3a3a` | Umriss des sekundären Knopfes |
 
@@ -222,7 +255,12 @@ Spacing-Skala (Vorschlag, Basis 4 px):
 | `2xl` | 72 px |
 | `3xl` | 112 px |
 
-- Abstand nach oben (Kopfzeile bis Überschrift): `3xl` Desktop, `2xl` mobil
+- Abstand nach oben (Unterkante der Leiste bis Überschrift): `3xl`
+  Desktop, `2xl` mobil. Der mobile Wert ist seit dem 1. September 2026
+  auch tatsächlich gebaut — vorher stand dort das Motiv und es gab
+  keinen oberen Abstand.
+- Aktionen zum Motiv (nur mobil): `2xl`, als untere Innenkante der
+  Textspalte
 - Abstand nach unten (Aktionen bis Sektionsende): `3xl` Desktop, `2xl` mobil
 - Textspalte ab 1120 px: `flex: 0 0 55%`, kein Abstand zur Bildspalte (`gap: 0`)
 - Überschrift Zeile 1 zu Zeile 2: `xs`
@@ -254,47 +292,73 @@ entschiedener.
 
 ## Zustände
 
-> **Nicht gebaut.** Stand 1. September 2026 enthält die Testseite
-> **keine** Regeln für Hover, Fokus und Aktiv. Der fehlende Fokusring
-> ist ein echter Mangel für die Tastaturbedienung und muss vor dem
-> Livegang nachgezogen werden. Was unten steht, ist die Vorgabe dafür.
+**Gebaut am 1. September 2026.** Vorher gab es keine eigenen Regeln für
+Hover, Fokus und Aktiv — es galt der Browser-Standard, in Chrome eine
+1 px blaue Linie ohne Abstand, die auf dem roten Knopf kaum zu erkennen
+ist.
+
+**Die abgedunkelten Flächen sind aus den Tokens abgeleitet**, nicht frei
+gewählt: Hover ist `accent-dark`, Aktiv dieselbe Farbe noch einmal um
+15 % abgedunkelt (`color-mix`). Ein dritter Rotwert kommt nicht in die
+Palette.
 
 **Primärer Knopf (rot)**
-- Ruhe: Fläche `#ff0000`, Beschriftung `#ffffff`, 18 px im Schnitt 600
-- Hover: Fläche etwas abgedunkelt, kein Vergrößern, kein Schatten
-- Fokus: sichtbarer heller Ring außen, 2 px, mit 2 px Abstand
-- Aktiv: Fläche weiter abgedunkelt, 1 px nach unten versetzt
+- Ruhe: Fläche `accent`, Beschriftung `accent-contrast`, 18 px im Schnitt 600
+- Hover: Fläche `accent-dark`, kein Vergrößern, kein Schatten
+- Fokus: Ring außen, 2 px `text`, mit 2 px Abstand
+- Aktiv: `accent-dark` um 15 % abgedunkelt, 1 px nach unten versetzt
 
 **Sekundärer Knopf (Umriss)**
-- Ruhe: Umriss `#3a3a3a`, Beschriftung weiß
-- Hover: Umriss weiß
+- Ruhe: Umriss `border`, Beschriftung `text`
+- Hover: Umriss `text`
 - Fokus: wie oben
-- Aktiv: leicht aufgehellte Fläche
+- Aktiv: Fläche minimal aufgehellt, 1 px nach unten versetzt
 
-**Telefonnummer in der Kopfzeile**
-- immer sichtbar, auch mobil, als eigener Knopf
+Der Fokusring greift auf `:focus-visible`, erscheint also bei
+Tastaturbedienung und nicht beim Klicken mit der Maus.
 
 Ladezustand und Leerzustand entfallen — die Sektion ist statisch.
 
 ## Verhalten je Breakpoint
 
-- **mobil (bis 767 px):** einspaltig. Reihenfolge: Motiv oben, von der
-  oberen Kante angeschnitten, dann Überschrift, Unterzeile, Punkte,
-  Aktionen. Die beiden Knöpfe stehen untereinander und laufen über die
-  volle Breite. Ziel: Der Telefon-Knopf ist ohne Scrollen sichtbar.
+- **mobil (bis 767 px):** einspaltig. Reihenfolge: Überschrift,
+  Unterzeile, Punkte, Aktionen — **dann** das Motiv, unten von der
+  Sektionskante angeschnitten. Die beiden Knöpfe stehen untereinander
+  und laufen über die volle Breite. Ziel: Der Telefon-Knopf ist ohne
+  Scrollen sichtbar.
 
-  > **Dieses Ziel ist nicht erreicht.** Gemessen am 1. September 2026 bei
-  > 390 px Breite steht die Oberkante des Telefon-Knopfes bei rund
-  > 1010 px, also deutlich unter der Falte. Ursache ist die Höhe des
-  > Motivs, das im Hochformat rund 425 px einnimmt. Lösung wäre, das
-  > Motiv mobil auf eine feste Höhe zu deckeln. Auf einer Ads-
-  > Landingpage ist das der teuerste offene Punkt der Sektion.
+  > **Geändert am 1. September 2026, Ziel jetzt erreicht.** Bis dahin
+  > stand das Motiv oben. Mit 425 px Höhe schob es den Telefon-Knopf
+  > auf 1009 px — auf einem 390 × 844 großen Handy 165 px unter die
+  > Falte. Gemessen wurden vier Auswege:
+  >
+  > | Variante | Bildhöhe | Knopf oben |
+  > |---|---|---|
+  > | Motiv oben, wie bisher | 425 px | 1009 px |
+  > | Motiv oben, auf 260 px gedeckelt | 260 px | 844 px |
+  > | Motiv oben, auf 180 px gedeckelt | 180 px | 764 px |
+  > | **Motiv unter den Text** | **425 px** | **624 px** |
+  >
+  > Gewählt wurde die letzte Zeile: Sie kommt ohne Beschnitt des Motivs
+  > aus und wirkt auch auf kleinen Geräten. Preis dafür ist, dass mobil
+  > zuerst Schrift zu sehen ist und nicht das Gesicht.
+  >
+  > **Rest:** Auf einem iPhone SE (375 × 667) beginnt der Knopf bei
+  > 624 px und ist sichtbar, seine unteren 10 px liegen aber knapp
+  > unter der Falte. Zwei Stellschrauben dafür wären der obere Abstand
+  > (`2xl` → `xl`) oder der Abstand Punkteliste zu Aktionen
+  > (`xl` → `lg`). Beides sind Abstände aus der Spezifikation und
+  > deshalb nicht ohne Freigabe geändert.
 - **md (ab 768 px):** weiter einspaltig, größere Typografie, Knöpfe
   nebeneinander.
 - **lg (ab 1120 px):** zweispaltig wie oben beschrieben, Text links,
   Motiv rechts.
 
 ## Offene Fragen
+
+Die Sektion ist gesperrt. Diese Punkte bleiben trotzdem offen — jeder
+davon ist eine Änderung an einer gesperrten Sektion und braucht eine
+Freigabe.
 
 1. **Beschriftung des Blattes.** Das Motiv ist entschieden: Mädchen,
    lachend, Blatt vor der Brust, unten angeschnitten. Das Blatt ist
@@ -303,23 +367,24 @@ Ladezustand und Leerzustand entfallen — die Sektion ist statisch.
    gehört". Empfehlung dort: Variante B, ein Lernplan statt einer Note,
    weil eine Note auf dem Blatt exakt die Mechanik des
    Studienkreis-Plakats ist.
-2. **Roter Logoblock gegen roten Knopf:** Der Kasten bleibt vorerst
-   stehen, ist durch die Vergrößerung auf 180/210/240 px aber deutlich
-   präsenter geworden — er hat mehr Fläche als der primäre
-   Telefon-Knopf und zieht den Blick zuerst. Damit kommt Rot in der Sektion zweimal groß vor,
-   entgegen der Festlegung unter „Hierarchie". Zu entscheiden: Fassung
-   ohne Kasten auf dunklem Grund, oder andere Behandlung des primären
-   Knopfes.
-3. **Datenschutz bei Six Hands Marker.** Die Schrift kommt von Adobe
+2. ~~Roter Logoblock gegen roten Knopf.~~ **Erledigt am 1. September
+   2026.** Der Logoblock ist aus dem Hero heraus in die Kopfleiste
+   gewandert. Er behält `accent`, steht aber nicht mehr in derselben
+   Sektion wie der Knopf. Im Hero selbst ist der Knopf jetzt wieder der
+   einzige rote Fleck.
+3. ~~Fokusringe im Hero fehlen.~~ **Erledigt am 1. September 2026.**
+   Hover, Fokus und Aktiv sind für beide Knöpfe gebaut.
+4. **Datenschutz bei Six Hands Marker.** Die Schrift kommt von Adobe
    Fonts und darf nicht selbst gehostet werden. Bei jedem Seitenaufruf
    geht eine Anfrage an `use.typekit.net`, dabei wird die IP-Adresse des
    Besuchers übertragen. Cookies setzt Adobe dafür nicht. Im Briefing
    steht „möglichst kein Banner" — zu klären, bevor die Seite live geht.
    Ausweg: die Hauptzeile als SVG in Pfaden, echter Text bleibt im
    `<h1>`. Einzelheiten in `design/type/six-hands-marker.md`.
-4. **Navigation:** Welche Punkte stehen in der Kopfzeile? Bisher gibt es
-   Preise, Kontakt und Für Dozenten.
-5. **Anschluss nach unten:** Sektion 2 ist die Vertrauensleiste. Bleibt
+5. ~~Navigation: Welche Punkte stehen in der Kopfzeile?~~ **Erledigt am
+   1. September 2026:** Fächer, Dozent werden, Warum #Lernstabil,
+   Preise. Steht in der Header-Spezifikation.
+6. **Anschluss nach unten:** Sektion 2 ist die Vertrauensleiste. Bleibt
    sie dunkel, oder wechselt die Seite dort auf hell?
-6. **Blau:** In dieser Sektion kommt `#1f4e98` nicht vor. Ist das so
+7. **Blau:** In dieser Sektion kommt `#1f4e98` nicht vor. Ist das so
    gewollt, oder soll es hier eine Rolle bekommen?

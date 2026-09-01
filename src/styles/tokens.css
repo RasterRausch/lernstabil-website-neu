@@ -1,46 +1,81 @@
-/* Design-Tokens — Werte aus der ersten gebauten Sektion ableiten.
-   Danach fix. Rollen-Namen nicht ändern, sie sind projektübergreifend
-   gleich. Keine freien Pixelwerte im Projekt — nur diese Variablen. */
+/* Design-Tokens — abgeleitet aus Hero und Header, beide am
+   1. September 2026 gesperrt. Ab hier fix.
+
+   Rollen-Namen nicht ändern, sie sind projektübergreifend gleich.
+   Keine freien Pixelwerte im Projekt — nur diese Variablen.
+
+   Ausnahme Breakpoints: CSS kann in @media keine Variablen auswerten.
+   Die Werte 768 und 1120 stehen deshalb als Zahlen in den Dateien.
+   Sie sind trotzdem verbindlich, siehe design/tokens.md. */
 
 :root {
   /* Farbrollen */
-  --bg: ;
-  --surface: ;
-  --text: ;
-  --text-muted: ;
-  --accent: ;
-  --accent-contrast: ;
-  --border: ;
+  --bg: #1a1a1a;
+  --text: #ffffff;
+  --text-muted: #b0b0b0;
+  --accent: #ff0000;
+  --accent-dark: #b3000f;
+  --accent-contrast: #ffffff;
+  --border: #3a3a3a;
+  /* --surface ist noch nicht belegt. Wird gefüllt, sobald die erste
+     Sektion eine abgesetzte Fläche braucht. */
 
   /* Schriften */
-  --font-display: ;
-  --font-body: ;
+  --font-display: 'six-hands-marker', system-ui, sans-serif;
+  --font-body: 'Source Sans 3', system-ui, sans-serif;
+  --font-logo: 'Comic Neue', 'Comic Sans MS', cursive;
 
-  /* Type-Scale */
-  --fs-display: ;
-  --fs-h1: ;
-  --fs-h2: ;
-  --fs-h3: ;
-  --fs-body: ;
-  --fs-small: ;
+  /* Type-Scale. --fs-body wächst ab 768 px, alle anderen Stufen
+     gelten auf allen Breiten. --fs-h1 und --fs-h3 sind noch nicht
+     belegt. */
+  --fs-display: 64px;
+  --fs-h2: 26px;
+  --fs-body: 17px;
+  --fs-small: 15px;
 
-  /* Spacing-Skala */
-  --space-3xs: ;
-  --space-2xs: ;
-  --space-xs: ;
-  --space-sm: ;
-  --space-md: ;
-  --space-lg: ;
-  --space-xl: ;
-  --space-2xl: ;
-  --space-3xl: ;
+  --lh-display: 1.05;
+  --lh-h2: 1.2;
+  --lh-body: 1.6;
+  --lh-small: 1.5;
+
+  /* Spacing-Skala, Basis 4 px */
+  --space-3xs: 4px;
+  --space-2xs: 8px;
+  --space-xs: 12px;
+  --space-sm: 16px;
+  --space-md: 24px;
+  --space-lg: 32px;
+  --space-xl: 48px;
+  --space-2xl: 72px;
+  --space-3xl: 112px;
 
   /* Radien */
-  --radius-sm: ;
-  --radius-md: ;
-  --radius-full: ;
+  --radius-sm: 4px;
+  --radius-md: 10px;
+  --radius-full: 999px;
+
+  /* Schatten */
+  --schatten-sm: 0 2px 6px rgb(0 0 0 / 0.3);
 
   /* Container */
-  --content-max: ;
-  --gutter: ;
+  --content-max: 1280px;
+  --gutter: 20px;
+
+  /* Höhe der Kopfleiste. Sektionen, die eine Bildschirmhöhe füllen,
+     rechnen mit calc(100svh - var(--leiste-h)). */
+  --leiste-h: 52px;
+}
+
+@media (min-width: 768px) {
+  :root {
+    --fs-body: 18px;
+    --gutter: 48px;
+    --leiste-h: 58px;
+  }
+}
+
+@media (min-width: 1120px) {
+  :root {
+    --leiste-h: 64px;
+  }
 }

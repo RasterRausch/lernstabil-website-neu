@@ -1,0 +1,319 @@
+---
+// Sektion: Hero (Startseite, 1)
+// Spezifikation: design/pages/startseite/sections/01-hero/spec.md — GESPERRT.
+// Texte: brief/content.md, „Startseite — 1. Hero".
+---
+
+<section class="hero">
+  <div class="wrap">
+    <div class="inhalt">
+      <div class="text">
+        <h1>
+          <span class="zeile1">ONLINE EINZELUNTERRICHT</span>
+          <span class="zeile2">Ohne Vertrag, ohne Abo, ohne Kleingedrucktes.</span>
+        </h1>
+
+        <p class="unterzeile">
+          Ein fester Dozent, der Ihr Kind kennt. Deutschlandweit, per Video.
+          Die erste Stunde ist kostenlos.
+        </p>
+
+        <ul class="punkte">
+          <li>Die ganze Stunde gehört einem Schüler</li>
+          <li>Ein fester Dozent, der bleibt</li>
+          <li>Sie entscheiden nach jeder Stunde neu</li>
+        </ul>
+
+        <div class="aktionen">
+          <a class="knopf-primaer" href="tel:+4934165832918">0341 658 329 18</a>
+          <a class="knopf-sekundaer" href="#probestunde">Probestunde anfragen</a>
+        </div>
+
+        <p class="zeiten">Mo bis Fr, 9 bis 20 Uhr</p>
+      </div>
+
+      <div class="motiv">
+        {/* Freigestelltes PNG mit Alphakanal, deshalb kein Blend-Modus.
+            Herkunft und Nacharbeit: bildprompt.md der Sektion. */}
+        <img
+          src="/bilder/hero-schuelerin.png"
+          width="1494"
+          height="1628"
+          alt=""
+          fetchpriority="high"
+        />
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .hero {
+    /* Die Kopfleiste steht im Fluss und belegt Platz. Zusammen ergeben
+       Leiste und Hero eine Bildschirmhöhe. */
+    min-height: calc(100svh - var(--leiste-h));
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+
+    /* Lichtkegel hinter dem Motiv, nachgebaut nach dem Studiolicht im
+       Originalfoto: heller Bereich hinter Kopf und Schultern, nach
+       aussen abfallend. Der Kegel wandert mit dem Motiv: unter 1120 px
+       steht es unten, deshalb --licht-y: 72% — dort liegt der Kopf.
+       Ab 1120 px steht es rechts.
+
+       --licht-staerke: 0.075 ist die Obergrenze. Die Freistellung ist
+       auf dunklem Grund entstanden, halbtransparente Haarpixel tragen
+       Restdunkel. Deutlich heller, und um die Haare zeichnet sich ein
+       Saum ab. */
+    --licht-x: 50%;
+    --licht-y: 72%;
+    --licht-b: 90%;
+    --licht-h: 55%;
+    --licht-staerke: 0.075;
+
+    background:
+      radial-gradient(
+        ellipse var(--licht-b) var(--licht-h) at var(--licht-x) var(--licht-y),
+        rgb(255 255 255 / var(--licht-staerke)) 0%,
+        rgb(255 255 255 / calc(var(--licht-staerke) * 0.45)) 45%,
+        rgb(255 255 255 / 0) 75%
+      ),
+      var(--bg);
+  }
+
+  .wrap {
+    width: 100%;
+    max-width: var(--content-max);
+    margin: 0 auto;
+    padding: 0 var(--gutter);
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .inhalt {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Unter 1120 px steht das Motiv NACH dem Text, nicht davor. Grund:
+     Als erstes Element nahm es 425 px Hoehe und schob den Telefon-Knopf
+     auf 1009 px — auf einem 844 px hohen Handy weit unter die Falte.
+     So steht der Knopf bei rund 620 px. Gemessen am 1. September 2026,
+     Zahlen in spec.md. */
+  .motiv {
+    margin: 0 calc(-1 * var(--gutter));
+  }
+
+  .motiv img {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  .text {
+    padding-top: var(--space-2xl);
+    padding-bottom: var(--space-2xl);
+  }
+
+  h1 {
+    margin: 0;
+    font-family: var(--font-body);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xs);
+  }
+
+  .zeile1 {
+    font-family: var(--font-display);
+    font-size: var(--fs-display);
+    font-weight: 700;
+    line-height: var(--lh-display);
+  }
+
+  .zeile2 {
+    font-size: var(--fs-h2);
+    font-weight: 600;
+    line-height: var(--lh-h2);
+  }
+
+  .unterzeile {
+    margin: var(--space-md) 0 0;
+    color: var(--text-muted);
+    max-width: 46ch;
+  }
+
+  .punkte {
+    margin: var(--space-lg) 0 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xs);
+  }
+
+  .punkte li {
+    position: relative;
+    padding-left: 28px;
+  }
+
+  .punkte li::before {
+    content: '';
+    position: absolute;
+    left: 2px;
+    top: 8px;
+    width: 12px;
+    height: 7px;
+    border-left: 2px solid var(--text);
+    border-bottom: 2px solid var(--text);
+    transform: rotate(-45deg);
+  }
+
+  .aktionen {
+    margin-top: var(--space-xl);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+  }
+
+  /* Weiss auf --accent erreicht nur 4,0:1. Zulaessig, weil die
+     Beschriftung mit 18 px im Schnitt 600 als grosse Schrift gilt und
+     dafuer 3:1 genuegen. Wird sie kleiner oder leichter, ist der
+     Kontrast verletzt. Siehe spec.md. */
+  .knopf-primaer,
+  .knopf-sekundaer {
+    display: block;
+    text-align: center;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 18px;
+    padding: var(--space-xs) var(--space-lg);
+    border-radius: var(--radius-sm);
+  }
+
+  .knopf-primaer {
+    background: var(--accent);
+    color: var(--accent-contrast);
+  }
+
+  .knopf-sekundaer {
+    border: 1px solid var(--border);
+    color: var(--text);
+  }
+
+  /* Zustaende --------------------------------------------------------
+     Vorgabe aus spec.md, Abschnitt „Zustaende".
+
+     Die abgedunkelten Flaechen sind aus den Token-Farben abgeleitet,
+     nicht frei gewaehlt: Hover ist --accent-dark, Aktiv dieselbe Farbe
+     noch einmal abgedunkelt. Ein dritter Rotwert kommt nicht in die
+     Palette. */
+
+  .knopf-primaer:hover {
+    background: var(--accent-dark);
+  }
+
+  .knopf-primaer:active {
+    background: color-mix(in srgb, var(--accent-dark) 85%, #000);
+    transform: translateY(1px);
+  }
+
+  .knopf-sekundaer:hover {
+    border-color: var(--text);
+  }
+
+  .knopf-sekundaer:active {
+    background: color-mix(in srgb, var(--bg) 92%, #fff);
+    transform: translateY(1px);
+  }
+
+  /* Ohne diese Regel zeichnet jeder Browser seinen eigenen Ring — in
+     Chrome eine 1 px blaue Linie ohne Abstand, auf dem roten Knopf
+     kaum zu erkennen. */
+  .knopf-primaer:focus-visible,
+  .knopf-sekundaer:focus-visible {
+    outline: 2px solid var(--text);
+    outline-offset: 2px;
+  }
+
+  .zeiten {
+    margin: var(--space-sm) 0 0;
+    font-size: var(--fs-small);
+    line-height: var(--lh-small);
+    color: var(--text-muted);
+  }
+
+  /* ab 768 ---------------------------------------------------------- */
+
+  @media (min-width: 768px) {
+    .aktionen {
+      flex-direction: row;
+    }
+
+    .knopf-primaer,
+    .knopf-sekundaer {
+      display: inline-block;
+    }
+  }
+
+  /* ab 1120 — zweispaltig ------------------------------------------- */
+
+  @media (min-width: 1120px) {
+    .hero {
+      --licht-x: 72%;
+      --licht-y: 42%;
+      --licht-b: 62%;
+      --licht-h: 80%;
+    }
+
+    .inhalt {
+      flex-direction: row;
+      align-items: stretch;
+      gap: 0;
+    }
+
+    .text {
+      flex: 0 0 55%;
+      padding-top: var(--space-3xl);
+      padding-bottom: var(--space-3xl);
+    }
+
+    .motiv {
+      flex: 1 1 45%;
+      position: relative;
+      margin: 0;
+      padding: var(--space-3xl) 0 0;
+
+      /* ------------------------------------------------------------
+         FEINJUSTIERUNG MOTIV — nur diese drei Werte anfassen.
+         Gilt ab 1120 px, also fuer die zweispaltige Ansicht.
+
+         --motiv-hoehe   Hoehe des Bildes in Prozent der Spaltenhoehe.
+                         Groesser = Bild groesser. Weil das Bild an der
+                         rechten Kante haengt, waechst es nach links und
+                         rueckt damit naeher an den Text.
+
+         --motiv-rechts  Wie weit das Bild ueber die rechte Kante des
+                         Inhalts hinausragt.
+
+         --motiv-unten   Abstand der Bildunterkante zur Sektionskante.
+                         0 = das Motiv wird von der Kante angeschnitten.
+         ------------------------------------------------------------ */
+      --motiv-hoehe: 97%;
+      --motiv-rechts: 48px;
+      --motiv-unten: 0px;
+    }
+
+    .motiv img {
+      position: absolute;
+      bottom: var(--motiv-unten);
+      right: calc(-1 * var(--motiv-rechts));
+      height: var(--motiv-hoehe);
+      width: auto;
+      max-width: none;
+      display: block;
+    }
+  }
+</style>

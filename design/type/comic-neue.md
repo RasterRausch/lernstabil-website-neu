@@ -1,7 +1,7 @@
 # Comic Neue
 
 Verwendung: Wortmarke und Unterzeile im Logo (CSS-Nachbau, siehe
-`src/pages/test-hero.astro`). Nicht für Fließtext oder Überschriften.
+`src/components/sections/Header.astro`). Nicht für Fließtext oder Überschriften.
 
 - **Schnitt:** Bold (700), normal
 - **Datei:** `comic-neue-700-latin.woff2`, 12,8 kB, Subset latin

@@ -5,7 +5,7 @@ Grundlage für alle weiteren Bild-Prompts, damit die Bilder einer Seite
 untereinander zusammenpassen.
 
 Referenzbilder liegen in `design/refs-imagery/`, das aktuelle Hero-Motiv
-in `public/test/`.
+in `public/bilder/`.
 
 ## Bildsprache
 
@@ -95,5 +95,5 @@ muss, ist seins. Aufnahmehinweise in `bildprompt.md` unter Prompt C.
   schneidet man in bereits freigestellte Haarkanten und bekommt eine
   harte Kante.
 - **Format nach Optimierung:** WebP, Fallback nach Bedarf. Die
-  PNG-Fassungen in `public/test/` sind Arbeitsstände mit mehreren
+  PNG-Fassungen in `public/bilder/` sind Arbeitsstände mit mehreren
   Megabyte und nicht für die Produktion gedacht.

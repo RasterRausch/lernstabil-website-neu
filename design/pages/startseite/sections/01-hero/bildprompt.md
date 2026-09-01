@@ -11,7 +11,7 @@ was sich bewährt hat, steht als Notiz unter dem Prompt.
 
 ## Was im Hero tatsächlich liegt (Stand 1. September 2026)
 
-- **Datei:** `public/test/hero-version-1-a4-3.png`, 1494 × 1628, PNG mit
+- **Datei:** `public/bilder/hero-schuelerin.png`, 1494 × 1628, PNG mit
   Alphakanal
 - **Herkunft:** `~/Desktop/Lernstabil Hero/Version-1-filter-cropped-smaller dina4-3.png`
 - **Weg dorthin:** in Firefly mit **Flux** erzeugt, danach in Photoshop

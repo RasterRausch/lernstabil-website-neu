@@ -21,7 +21,7 @@ Blog.
 
 | # | Sektion | Zweck | Textstatus |
 |---|---------|-------|------------|
-| 1 | Header | Logo, schlanke Navigation, Telefonnummer dauerhaft erreichbar | offen |
+| 1 | Header | Logo, schlanke Navigation, Telefonnummer dauerhaft erreichbar | final |
 | 2 | Footer | Kontakt, Rechtliches, Verweis auf "Für Dozenten" | offen |
 
 ## Sektionen je Seite
@@ -30,7 +30,7 @@ Blog.
 
 | # | Sektion | Zweck | Textstatus |
 |---|---------|-------|------------|
-| 1 | Hero | Versprechen an die Eltern. Telefonnummer und Einstieg in die Probestunden-Anfrage. Kein Produktmerkmal als Hauptzeile, sondern die Entlastung der Eltern. | offen |
+| 1 | Hero | Versprechen an die Eltern. Telefonnummer und Einstieg in die Probestunden-Anfrage. Kein Produktmerkmal als Hauptzeile, sondern die Entlastung der Eltern. | final |
 | 2 | Vertrauensleiste | Seit 2021 · über 20 Jahre Unterrichtserfahrung · Schüler bleiben in der Regel über ein Jahr. Bewertungen laufen dezent mit, nicht als Hauptargument. | offen |
 | 3 | Ohne Kleingedrucktes | Kein Vertrag, keine Bindung, jederzeit kündbar. Nur gehaltene Stunden werden berechnet. Absage bis einen Tag vorher kostenfrei. Keine Einschränkungen. Die Kernsektion der Seite. | offen |
 | 4 | Was bei uns anders ist | Ausschließlich Einzelunterricht statt Gruppe. Fester Dozent statt Wechsel. Abgrenzung zu den Ketten, ohne sie zu nennen. | offen |
@@ -95,6 +95,23 @@ Leitlinien für diese Texte:
 - Verben statt Substantivketten. Kurze Sätze.
 - Keine Fächer an einzelne Personen binden. Das Studio unterrichtet,
   nicht der Gründer allein.
+
+---
+
+### Seitenübergreifend — Header
+
+*Festgelegt am 1. September 2026.*
+
+**Navigation**
+- Fächer → `#faecher` (Startseite, Sektion 7)
+- Dozent werden → `/fuer-dozenten`
+- Warum #Lernstabil → `#warum` (Startseite, Sektion 4)
+- Preise → `#preise` (Startseite, Sektion 10)
+
+**Kontakt**
+0341 658 329 18 — als Telefon-Icon mit Nummer darunter, ein `tel:`-Link.
+
+Suche, Login und Breadcrumbs gibt es nicht.
 
 ---
 

@@ -1,10 +1,15 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import Hero from '../components/sections/Hero.astro';
 ---
 
-<BaseLayout title="">
+<BaseLayout
+  title="#Lernstabil — Online-Einzelunterricht ohne Vertrag"
+  description="Ein fester Dozent, der Ihr Kind kennt. Deutschlandweit, per Video. Die erste Stunde ist kostenlos."
+>
   <main>
-    <!-- Sektionen werden hier eingesetzt, in der Reihenfolge aus
-         brief/content.md. Eine Sektion pro Durchgang. -->
+    {/* Sektionen in der Reihenfolge aus brief/content.md.
+        Eine Sektion pro Durchgang. */}
+    <Hero />
   </main>
 </BaseLayout>

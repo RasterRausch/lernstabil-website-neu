@@ -1,5 +1,6 @@
 ---
 import '../styles/tokens.css';
+import Header from '../components/sections/Header.astro';
 
 interface Props {
   title: string;
@@ -17,8 +18,53 @@ const { title, description, lang = 'de' } = Astro.props;
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{title}</title>
     {description && <meta name="description" content={description} />}
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="preload"
+      href="/fonts/comic-neue-700-latin.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    {/* Six Hands Marker kommt von Adobe Fonts und darf nicht selbst
+        gehostet werden. Datenschutzfolge und Ausweg stehen in
+        design/type/six-hands-marker.md — vor dem Livegang klären. */}
+    <link rel="stylesheet" href="https://use.typekit.net/chw4hpk.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
   </head>
   <body>
+    <Header />
     <slot />
   </body>
 </html>
+
+<style is:global>
+  /* Selbst gehostet, keine Laufzeitverbindung zu Google.
+     Herkunft und Lizenz: design/type/comic-neue.md */
+  @font-face {
+    font-family: 'Comic Neue';
+    font-style: normal;
+    font-weight: 700;
+    font-display: swap;
+    src: url('/fonts/comic-neue-700-latin.woff2') format('woff2');
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-body);
+    font-size: var(--fs-body);
+    line-height: var(--lh-body);
+    -webkit-font-smoothing: antialiased;
+  }
+</style>

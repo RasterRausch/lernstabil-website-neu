@@ -21,7 +21,7 @@ Was dort steht, wird hier nicht wiederholt.
 
 <!-- Beim Projektstart entscheiden, eins ankreuzen -->
 
-- [ ] statisch (`output: 'static'`) — Standard für Websites ohne
+- [x] statisch (`output: 'static'`) — Standard für Websites ohne
       serverseitige Logik
 - [ ] SSR mit Node-Adapter (`output: 'server'`) — nur wenn API-Routen,
       Formularverarbeitung oder dynamische Daten nötig sind
@@ -31,7 +31,7 @@ Was dort steht, wird hier nicht wiederholt.
 <!-- Beim Projektstart entscheiden, eins ankreuzen -->
 
 - [ ] Tailwind 4 — Tokens im `@theme`-Block statt in `tokens.css`
-- [ ] Normales CSS mit den Variablen aus `src/styles/tokens.css`
+- [x] Normales CSS mit den Variablen aus `src/styles/tokens.css`
 
 Nicht mischen. Keine freien Werte, nur Tokens.
 
