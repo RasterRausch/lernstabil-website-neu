@@ -9,6 +9,33 @@ was sich bewährt hat, steht als Notiz unter dem Prompt.
 
 ---
 
+## Was im Hero tatsächlich liegt (Stand 1. September 2026)
+
+- **Datei:** `public/test/hero-version-1-a4-3.png`, 1494 × 1628, PNG mit
+  Alphakanal
+- **Herkunft:** `~/Desktop/Lernstabil Hero/Version-1-filter-cropped-smaller dina4-3.png`
+- **Weg dorthin:** in Firefly mit **Flux** erzeugt, danach in Photoshop
+  freigestellt (`Select and Mask` mit *Decontaminate Colors* gegen den
+  dunklen Saum an den Haaren), Korn über den Camera-Raw-Filter,
+  beschnitten, Blattgröße in einem maskierten generativen Durchgang
+  korrigiert
+- **Freistellung geprüft:** 31,9 % der Pixel transparent, 9,9 %
+  halbtransparent. Der hohe Anteil Halbtransparenz sind die fliegenden
+  Haarspitzen — genau richtig, das ist keine harte Maskenkante.
+
+**Der Pullover ist grau geworden, nicht blau.** Das war ein Nebeneffekt
+der generativen Blattkorrektur und wurde am 1. September 2026 bewusst so
+belassen. Die Folge: **17,7 % der sichtbaren Figur sind dunkler als die
+Hero-Fläche** (Helligkeit 26), 9 % liegen innerhalb von ±10 davon. Auf
+Schulterhöhe misst der rechte Ärmel 7 bis 20. Der Umriss trägt dort
+also kaum. Deshalb gibt es in `spec.md` den Lichtkegel — er ist die
+Antwort auf dieses Problem, nicht Dekoration.
+
+Wer das Motiv neu erzeugt: **helle Kleidung nehmen.** Alles unter
+Helligkeit 40 verschwindet auf `#1a1a1a`.
+
+---
+
 ## Grundsätze, bevor der erste Prompt läuft
 
 **Kein Bildkasten.** Das Motiv wird ohne Rahmen direkt auf die
@@ -80,7 +107,13 @@ soft even frontal light, natural colour, fine film grain, sharp focus
 on the eyes, unretouched
 ```
 
-**Auszuschließen** (Firefly: Feld „Ausschließen"):
+**Auszuschließen** — **funktioniert nicht mehr.** Adobe hat das Feld für
+negatives Prompting aus der Firefly-Web-App entfernt; offiziell
+„vorübergehend", ohne Termin für die Rückkehr. Bei den Partnermodellen
+wie Flux greift auch die Formulierung `exclude [X]` im Prompt nicht.
+Die Liste bleibt hier stehen, falls das Feld zurückkommt. Bis dahin
+gehören die wichtigen Ausschlüsse als **positive Aussagen** in den
+Prompt selbst — siehe „Die Fassung, die funktioniert hat" weiter unten.
 
 ```
 gradient background, vignette, spotlight on the background, pool of
@@ -198,6 +231,111 @@ Kombination aus Schulbezug und Person.
 **Zur Bildwirkung:** Auf blauer Fläche ist das weiße Blatt der hellste
 Punkt im ganzen Hero — heller als die Überschrift. Was daraufsteht, muss
 kurz sein.
+
+---
+
+## Die Fassung, die funktioniert hat
+
+Erarbeitet am 1. September 2026 in mehreren Durchläufen. Die
+Ausschlussliste ist hier als positive Aussagen eingearbeitet, weil das
+Firefly-Feld dafür weggefallen ist.
+
+```
+Candid advertising photograph of a teenage girl with fair skin, light
+blonde hair and freckles, standing upright and square to the camera,
+her head level and not tilted, her shoulders horizontal, caught in a
+loud joyful laugh with her mouth open, natural slightly uneven teeth,
+her eyes narrowed into creases at the outer corners, looking straight
+into the lens, her long hair blown outwards to both sides by a gust of
+air, wearing a plain light coloured crew neck sweatshirt with visible
+knit texture and no pattern or print, holding a single sheet of plain
+white DIN A4 office paper upright against her chest with both hands,
+the sheet in portrait orientation and clearly taller than it is wide,
+narrow enough that both of her upper arms and the sides of her chest
+stay fully visible to the left and to the right of it, its top edge
+just below her chin, bright white and almost flat with only a few soft
+creases from her grip, matte uncoated paper with visible fibre texture,
+a soft contact shadow where the sheet rests against the sweatshirt,
+thumbs in front and all ten fingers in a natural position, the paper
+completely blank with nothing written or printed on it, waist-up
+portrait framed with generous empty space around her, her whole head,
+both shoulders, both upper arms and every strand of her flying hair
+completely inside the frame with plain background visible on the left
+and on the right of her, nothing touching or cut off by the edges of
+the frame, only the bottom edge crosses her body, seamless flat evenly
+toned very dark neutral charcoal grey background, almost black but not
+pure black, the same single solid colour in every corner of the frame
+with no gradient, no vignette, no pool of light and no shadow cast onto
+it, all light falling on the person only, soft even frontal light with
+no light from behind her, 85mm lens at f/4, muted natural colour,
+visible fine film grain, real skin texture with visible pores, sharp
+focus on the eyes, unretouched documentary look
+```
+
+### Welcher Satzteil welches Problem löst
+
+**`DIN A4` statt `A4`.** Erst mit dem vorangestellten „DIN" hat das
+Modell die Blattproportion getroffen. Vorher lag sie bei 1 : 1,2 bis
+1 : 1,3 statt bei 1 : 1,41.
+
+**`narrow enough that both of her upper arms and the sides of her chest
+stay fully visible to the left and to the right of it`.** Die
+Blattbreite ist damit im fertigen Bild **nachprüfbar**, ohne zu messen:
+Sieht man links und rechts neben dem Blatt noch Kleidung, stimmt es.
+Angaben wie „A4" oder ein Zahlenverhältnis allein bringen nichts, weil
+das Modell keinen Maßstab hat. Dazu `its top edge just below her chin`
+als zweite Grenze — sonst wächst das Blatt nach oben statt in die
+Breite.
+
+**Der `waist-up portrait`-Block.** Ohne ihn wird der Ausschnitt zu eng
+und die Arme und Haarspitzen werden am Bildrand abgeschnitten. Das
+frühere `close crop with her head filling most of the frame` war genau
+die Anweisung, die das verursacht hat — sie darf nicht zurück in den
+Prompt.
+
+**`standing upright and square to the camera, her head level and not
+tilted, her shoulders horizontal`.** Drei Angaben statt einer, weil das
+Modell sonst nur den Kopf geraderückt und die Schultern schräg lässt.
+Dann brauchen die Haare aber einen neuen Anlass: `blown outwards to
+both sides by a gust of air`. Ohne das stehen sie still, und die
+Dynamik im Bild kommt allein von ihnen.
+
+**`bright white and almost flat with only a few soft creases`.** Ein
+früheres `lightly crumpled` hat das Modell sehr wörtlich genommen — das
+Papier sah aus wie zerknülltes und wieder glattgestrichenes
+Butterbrotpapier, dazu graustichig. Wenn später eine Beschriftung
+daraufkommt, braucht es eine ruhige Fläche.
+
+**`plain light coloured crew neck sweatshirt`.** Bewusst hell, nicht
+blau und nicht grau. Royalblau verlor auf blauem Grund die Silhouette,
+Grau verliert sie auf `#1a1a1a` — siehe oben unter „Was im Hero
+tatsächlich liegt".
+
+### Wenn nachträglich am Blatt gearbeitet wird
+
+Beim Verkleinern des Blattes in einem maskierten Durchgang wird der
+Bereich, wo vorher Papier war, zu Pullover — und der wird **neu
+erzeugt**, nicht kopiert. Er muss deshalb genauso beschrieben werden wie
+das Blatt, sonst erfindet das Modell eine Farbe. Genau das ist zweimal
+passiert. Wirksam war:
+
+```
+the area beside and behind the sheet filled with the same sweatshirt
+she is already wearing, the identical colour as the untouched parts of
+the garment outside the selection, same knit texture, same brightness,
+clearly lighter than the dark background so the shoulders and arms stay
+visible against it, both hands unchanged, ten fingers in their current
+position
+```
+
+Auswahl dabei so knapp wie möglich um das Blatt legen — je mehr
+unveränderte Fläche stehen bleibt, desto besser die Farbreferenz. Hände
+möglichst aussparen.
+
+**Rückfallweg, wenn zwei Durchläufe nicht reichen:** Umfärben im Pro
+Editor. Auswahl auf die Kleidung, Einstellungsebene *Solid Color* im
+Modus **Color** für den Farbton, darüber *Curves* für die Helligkeit.
+Das Gesicht wird dabei nicht angefasst und trifft garantiert.
 
 ---
 

@@ -170,8 +170,9 @@ geplante Erweiterungen.
   gibt nur diese eine Variante. Für Favicon, Social-Preview und Logo auf
   farbigem Grund werden weitere Fassungen gebraucht.
 - Farben: `#ff0000` und `#1f4e98`
-- Schriften: **Source Sans 3** für Fließtext, **Fraunces** für
-  Überschriften
+- Schriften: **Source Sans 3** für Fließtext und Überschriften,
+  **Six Hands Marker** (Adobe Fonts) allein für die Hauptzeile im Hero.
+  Das Logo läuft auf **Comic Neue Bold**, siehe `design/type/`.
 
 **Visueller Bruch mit der alten Seite ist gewollt.** Die Unzufriedenheit
 betrifft primär die visuelle Umsetzung, nicht die Marke. Sektionsaufbau

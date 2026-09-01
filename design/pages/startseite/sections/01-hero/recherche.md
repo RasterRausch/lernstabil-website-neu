@@ -142,11 +142,16 @@ Weißraum, der nicht gefüllt wird, und eine Farbe, die selten auftritt.
 
 ## 6. Was #Lernstabil an Material hat
 
-- **Fraunces** für Überschriften — eine Serifenschrift mit
-  ausgeprägtem Charakter, an der man Größe sehen kann. Sie trägt die
-  Bauarten C und D, in A und B geht sie unter.
-- **Source Sans 3** für Fließtext — unauffällig, gut lesbar, macht
-  keine Konkurrenz zur Überschrift.
+- **Source Sans 3** für Fließtext und Überschriften — unauffällig, gut
+  lesbar, macht keine Konkurrenz zur Hauptzeile.
+- **Six Hands Marker** (Adobe Fonts) für die Hauptzeile im Hero —
+  entschieden am 1. September 2026. Ein runder Filzstift, der auf der
+  dunklen Fläche wie mit dem Marker geschrieben wirkt. Sie trägt die
+  Bauarten C und D.
+
+  *Anmerkung vom 1. September 2026:* Hier stand ursprünglich Fraunces
+  als Überschriftenschrift aus der Altmarke. Sie wird nicht mehr
+  verwendet.
 - **`#ff0000`** — laut. Als Fläche wird es zum Studienkreis-Problem, als
   Akzent zur Setzung. Zusätzlich: Weiß auf `#ff0000` erreicht nur etwa
   4,0:1 Kontrast und reicht für Fließtext nicht (nötig sind 4,5:1).

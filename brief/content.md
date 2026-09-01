@@ -100,8 +100,17 @@ Leitlinien für diese Texte:
 
 ### Startseite — 1. Hero
 
-**Überschrift**
-Einzelunterricht online. Ohne Vertrag, ohne Abo, ohne Kleingedrucktes.
+**Überschrift, Zeile 1** (Displayschrift, Versalien)
+ONLINE EINZELUNTERRICHT
+
+**Überschrift, Zeile 2**
+Ohne Vertrag, ohne Abo, ohne Kleingedrucktes.
+
+*Geändert am 1. September 2026.* Vorher lautete die Zeile
+„Einzelunterricht online. Ohne Vertrag, ohne Abo, ohne
+Kleingedrucktes." als ein Satz. Die Aufteilung entstand beim Bau: Zeile
+1 benennt das Angebot und trägt die Displayschrift, Zeile 2 liefert das
+Argument.
 
 **Unterzeile**
 Ein fester Dozent, der Ihr Kind kennt. Deutschlandweit, per Video. Die
