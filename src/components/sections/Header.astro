@@ -1,19 +1,18 @@
 ---
 // Sektion: Header (seitenübergreifend, 1)
-// Spezifikation: design/shared/sections/01-header/spec.md
-//
 // Die Komponente setzt keine eigenen Farb- und Abstandswerte. Sie
-// erwartet die Variablen der Seite: --accent-dark, --leiste-h,
-// --content-max, --gutter, --space-*, --radius-sm.
+// arbeitet ausschliesslich mit den semantischen Rollen aus
+// src/styles/tokens.css. Ausnahme ist die Geometrie des Logoblocks:
+// Sie stammt aus public/bilder/logo.svg und ist unten begruendet.
 
-const telefon = '0341 658 329 18';
-const telefonHref = 'tel:+4934165832918';
+const telefon = "0341 658 329 18";
+const telefonHref = "tel:+4934165832918";
 
 const links = [
-  { text: 'Fächer', href: '#faecher' },
-  { text: 'Dozent werden', href: '/fuer-dozenten' },
-  { text: 'Warum #Lernstabil', href: '#warum' },
-  { text: 'Preise', href: '#preise' },
+  { text: "Fächer", href: "#faecher" },
+  { text: "Dozent werden", href: "/fuer-dozenten" },
+  { text: "Warum #Lernstabil", href: "#warum" },
+  { text: "Preise", href: "#preise" },
 ];
 ---
 
@@ -26,17 +25,17 @@ const links = [
 
     <nav class="nav" id="hauptnav" aria-label="Hauptnavigation">
       <ul>
-        {links.map((l) => (
-          <li><a href={l.href}>{l.text}</a></li>
-        ))}
+        {
+          links.map((l) => (
+            <li>
+              <a href={l.href}>{l.text}</a>
+            </li>
+          ))
+        }
       </ul>
     </nav>
 
-    <a
-      class="kontakt"
-      href={telefonHref}
-      aria-label={`Anrufen: ${telefon}`}
-    >
+    <a class="kontakt" href={telefonHref} aria-label={`Anrufen: ${telefon}`}>
       {/* Selbst gezeichnet, kein Icon-Paket. Umriss, Strichstärke 2. */}
       <svg
         class="hoerer"
@@ -71,28 +70,31 @@ const links = [
 </header>
 
 <script>
-  const leiste = document.querySelector('[data-leiste]');
-  const burger = document.querySelector('[data-burger]');
-  const nav = document.getElementById('hauptnav');
+  const leiste = document.querySelector("[data-leiste]");
+  const burger = document.querySelector("[data-burger]");
+  const nav = document.getElementById("hauptnav");
 
   if (leiste && burger && nav) {
     const setzen = (offen) => {
-      leiste.classList.toggle('offen', offen);
-      burger.setAttribute('aria-expanded', String(offen));
-      burger.setAttribute('aria-label', offen ? 'Menü schließen' : 'Menü öffnen');
-      if (offen) nav.querySelector('a')?.focus();
+      leiste.classList.toggle("offen", offen);
+      burger.setAttribute("aria-expanded", String(offen));
+      burger.setAttribute(
+        "aria-label",
+        offen ? "Menü schließen" : "Menü öffnen",
+      );
+      if (offen) nav.querySelector("a")?.focus();
     };
 
-    burger.addEventListener('click', () => {
-      setzen(burger.getAttribute('aria-expanded') !== 'true');
+    burger.addEventListener("click", () => {
+      setzen(burger.getAttribute("aria-expanded") !== "true");
     });
 
-    nav.addEventListener('click', (e) => {
+    nav.addEventListener("click", (e) => {
       if (e.target instanceof HTMLAnchorElement) setzen(false);
     });
 
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape' && leiste.classList.contains('offen')) {
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && leiste.classList.contains("offen")) {
         setzen(false);
         burger.focus();
       }
@@ -100,7 +102,7 @@ const links = [
 
     // Beim Wechsel in die zweispaltige Ansicht ist der Burger weg —
     // dann darf kein offener Zustand zurückbleiben.
-    matchMedia('(min-width: 1120px)').addEventListener('change', (e) => {
+    matchMedia("(min-width: 1120px)").addEventListener("change", (e) => {
       if (e.matches) setzen(false);
     });
   }
@@ -110,24 +112,24 @@ const links = [
   .leiste {
     position: sticky;
     top: 0;
-    z-index: 100;
-    background: var(--accent-dark);
-    color: var(--accent-contrast);
+    z-index: var(--z-sticky);
+    background: var(--color-action);
+    color: var(--color-text-on-action);
   }
 
   .raster {
     width: 100%;
-    max-width: var(--content-max);
+    max-width: var(--layout-content-max);
     margin: 0 auto;
-    padding: 0 var(--gutter);
-    height: var(--leiste-h);
+    padding: 0 var(--layout-gutter);
+    height: var(--layout-header-height);
     display: flex;
     align-items: center;
-    gap: var(--space-sm);
+    gap: var(--space-4);
   }
 
   /* Logo ------------------------------------------------------------
-     CSS-Nachbau, Maßverhältnisse aus design/brand/logo.svg. Alle Werte
+     CSS-Nachbau, Maßverhältnisse aus public/bilder/logo.svg. Alle Werte
      sind Bruchteile der Blockbreite --logo-b; der Block trägt
      font-size: var(--logo-b), dadurch ist 1em = Blockbreite.
 
@@ -146,19 +148,19 @@ const links = [
     flex: none;
     width: var(--logo-b);
     font-size: var(--logo-b);
-    background: var(--accent);
-    color: var(--accent-contrast);
+    background: var(--color-brand);
+    color: var(--color-text-on-brand);
     /* Nur unten gerundet. Die Oberkante liegt buendig auf der
        Oberkante der Leiste — eine Rundung dort saehe aus wie ein
        Fehler, nicht wie eine Kante. */
     border-radius: 0 0 var(--radius-sm) var(--radius-sm);
-    box-shadow: var(--schatten-sm);
-    font-family: 'Comic Neue', 'Comic Sans MS', cursive;
-    font-weight: 700;
+    box-shadow: var(--shadow-sm);
+    font-family: var(--font-family-logo);
+    font-weight: var(--font-weight-bold);
     line-height: 1;
     white-space: nowrap;
     text-decoration: none;
-    /* Die vier Innenabstaende stammen aus design/brand/logo.svg.
+    /* Die vier Innenabstaende stammen aus public/bilder/logo.svg.
        --logo-luft kommt oben und unten zusaetzlich dazu und ist der
        einzige Wert, den man zum Nachjustieren anfassen muss. Bei 0
        entspricht der Block exakt dem SVG. */
@@ -185,6 +187,10 @@ const links = [
     display: none;
   }
 
+  /* Die aufgeklappte Navigation bleibt in der Farbfamilie der Leiste:
+     dieselbe Aktionsfarbe, eine Stufe dunkler, damit sie sich als
+     eigene Flaeche absetzt. Bis zum 1. September 2026 stand hier das
+     dunkle Rot — ein Rest aus der Zeit, als die Leiste selbst rot war. */
   .leiste.offen .nav {
     display: block;
     position: absolute;
@@ -192,30 +198,37 @@ const links = [
     left: 0;
     right: 0;
     z-index: 1;
-    background: var(--accent-dark);
+    background: var(--color-action-strong);
   }
 
   .nav ul {
-    max-width: var(--content-max);
+    max-width: var(--layout-content-max);
     margin: 0 auto;
-    padding: var(--space-sm) var(--gutter) var(--space-md);
+    padding: var(--space-4) var(--layout-gutter) var(--space-6);
     list-style: none;
     display: flex;
     flex-direction: column;
-    gap: var(--space-sm);
+    gap: var(--space-4);
   }
 
   .nav a {
-    color: var(--accent-contrast);
+    color: var(--color-text-on-action);
     text-decoration: none;
-    font-weight: 600;
+    font-weight: var(--font-weight-semibold);
     font-style: italic;
   }
 
-  .nav a:hover {
+  /* Die beiden Werte sind Schriftgeometrie, keine Abstaende: Sie
+     richten sich nach der Strichstaerke der Schrift, nicht nach dem
+     Raster der Seite. Deshalb lokal und nicht aus der Skala. */
+  .nav a:hover,
+  .kontakt:hover .kontakt-nummer {
+    --unterstrich-staerke: 2px;
+    --unterstrich-abstand: 3px;
+
     text-decoration: underline;
-    text-decoration-thickness: 2px;
-    text-underline-offset: 3px;
+    text-decoration-thickness: var(--unterstrich-staerke);
+    text-underline-offset: var(--unterstrich-abstand);
   }
 
   .nav a:active {
@@ -228,40 +241,42 @@ const links = [
     margin-left: auto;
     display: inline-flex;
     align-items: center;
-    gap: var(--space-2xs);
-    color: var(--accent-contrast);
+    gap: var(--space-2);
+    color: var(--color-text-on-action);
     text-decoration: none;
     flex: none;
   }
 
   .hoerer {
-    width: 22px;
-    height: 22px;
+    width: var(--icon-size-sm);
+    height: var(--icon-size-sm);
     flex: none;
   }
 
   .kontakt-nummer {
     display: none;
-    font-size: var(--fs-body);
-    font-weight: 600;
+    font-size: var(--font-size-md);
+    font-weight: var(--font-weight-semibold);
     font-style: italic;
     white-space: nowrap;
   }
 
-  .kontakt:hover .kontakt-nummer {
-    text-decoration: underline;
-    text-decoration-thickness: 2px;
-    text-underline-offset: 3px;
-  }
-
   /* Burger ---------------------------------------------------------- */
 
+  /* 44 px ist die Untergrenze fuer Tippziele aus WCAG 2.2. Die
+     Innenabstaende und der negative Aussenabstand sind Geometrie
+     dieses Kaestchens: Sie richten den sichtbaren Strich optisch an
+     der Kante des Rasters aus, waehrend die Trefferflaeche darueber
+     hinausreicht. */
   .burger {
+    --burger-strich-hoehe: 2px;
+    --burger-versatz: 10px;
+
     flex: none;
-    width: 44px;
-    height: 44px;
-    padding: 11px 10px;
-    margin-right: -10px;
+    width: var(--tap-target-min);
+    height: var(--tap-target-min);
+    padding: 11px var(--burger-versatz);
+    margin-right: calc(-1 * var(--burger-versatz));
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -272,10 +287,12 @@ const links = [
 
   .burger-strich {
     display: block;
-    height: 2px;
-    background: var(--accent-contrast);
-    border-radius: 1px;
-    transition: transform 150ms ease, opacity 150ms ease;
+    height: var(--burger-strich-hoehe);
+    background: var(--color-text-on-action);
+    border-radius: calc(var(--burger-strich-hoehe) / 2);
+    transition:
+      transform 150ms ease,
+      opacity 150ms ease;
   }
 
   .leiste.offen .burger-strich:nth-child(1) {
@@ -296,8 +313,8 @@ const links = [
   .nav a:focus-visible,
   .kontakt:focus-visible,
   .burger:focus-visible {
-    outline: 2px solid var(--accent-contrast);
-    outline-offset: 2px;
+    outline: var(--focus-ring-width) solid var(--color-focus-ring);
+    outline-offset: var(--focus-ring-offset);
     border-radius: var(--radius-sm);
   }
 
@@ -309,8 +326,8 @@ const links = [
     }
 
     .hoerer {
-      width: 24px;
-      height: 24px;
+      width: var(--icon-size-md);
+      height: var(--icon-size-md);
     }
 
     .kontakt-nummer {
@@ -329,7 +346,7 @@ const links = [
     .leiste.offen .nav {
       display: block;
       position: static;
-      margin-left: var(--space-xl);
+      margin-left: var(--space-12);
       background: none;
     }
 
@@ -338,13 +355,13 @@ const links = [
       margin: 0;
       padding: 0;
       flex-direction: row;
-      gap: var(--space-lg);
+      gap: var(--space-8);
     }
 
     /* margin-left bleibt auto — die Gruppe steht rechts im Raster.
-       var(--space-lg) ist nur der Mindestabstand zur Navigation. */
+       var(--space-8) ist nur der Mindestabstand zur Navigation. */
     .kontakt {
-      padding-left: var(--space-lg);
+      padding-left: var(--space-8);
     }
 
     .burger {

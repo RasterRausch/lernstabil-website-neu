@@ -1,0 +1,395 @@
+---
+// Sektion: Vertrauensleiste (Startseite, 2)
+
+// PLATZHALTER — noch nicht durch endgueltigen Text ersetzt.
+const platzhalterUeberschrift = "Mission: Verlässliche Nachhilfe.";
+
+// Trustindex-Karussell aus Alexanders Konto.
+const trustindexKarussell = "808d4748020846902d868e6fc63";
+
+// Band A hatte bis zum 1. September 2026 drei Spalten. Rechts stand
+// erst das Trustindex-Gesamt-Badge (Kennung
+// 7e23c8a8010c472df1869203ba6), dann kurz das Zertifikatsbild. Beides
+// ist raus — Alexander wollte an dieser Stelle keine dritte Spalte.
+//
+// Uebrig bleiben zwei: der Einstieg links, das Karussell rechts
+// daneben.
+
+// Nur Angaben, die das UNTERNEHMEN betreffen. Alexanders über 20 Jahre
+// Unterrichtserfahrung standen hier bis zum 1. September 2026 und sind
+// auf seinen Wunsch heraus: In einer Leiste mit Firmen-Eckdaten liest
+// sich eine persönliche Angabe, als hätte das Unternehmen sie. Ihr
+// Platz ist Sektion 5, „Wer unterrichtet", wo er in der Ich-Form
+// spricht — dort steht sie bereits in der Signatur.
+//
+// Die grosse Zeile darf ein Wort tragen („Seit 2021"). Das Referenzbild
+// macht es genauso, und die beiden Type-Stufen liegen weit genug
+// auseinander, dass es als eine Einheit liest.
+//
+// Die Einschränkung „in der Regel" steht im Label, nicht in der Zahl.
+// Andersherum wäre die grosse Zeile absolut gesetzt und würde von ihrem
+// eigenen Label wieder eingeschränkt.
+//
+// Geschützte Leerzeichen in „1 : 1", damit die Angabe nicht umbricht.
+const zahlen = [
+  { zahl: "Seit 2021", label: "unterrichten wir online" },
+  { zahl: "Über ein Jahr", label: "bleiben unsere Schüler in der Regel" },
+  { zahl: "1 : 1", label: "immer Einzelunterricht, nie Gruppe" },
+];
+---
+
+<section class="vertrauen" aria-labelledby="vertrauen-titel">
+  {/* Band A — Bewertungen ------------------------------------------- */}
+  <div class="band-a">
+    <div class="wrap">
+      <div class="spalten">
+        <div class="einstieg">
+          <h2 id="vertrauen-titel">{platzhalterUeberschrift}</h2>
+          <p class="unterzeile">
+            Wir unterrichten <strong>ausschließlich</strong> im Einzelunterricht.
+          </p>
+        </div>
+
+        {
+          /* Beide Widgets laden asynchron von cdn.trustindex.io und
+            bringen ihr eigenes CSS mit. Wir überschreiben es nicht —
+            das bricht beim nächsten Update ihrerseits. Gesteuert wird
+            nur die Fläche, die sie bekommen.
+
+            is:inline ist Pflicht: ohne das Attribut zieht Astro das
+            Script ins eigene Bundle und der Loader verliert die
+            Stelle, an der er das Widget einsetzt. */
+        }
+        <div class="widget widget-karussell">
+          <script
+            defer
+            async
+            is:inline
+            src={`https://cdn.trustindex.io/loader.js?${trustindexKarussell}`}
+          ></script>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {/* Band B — Zahlenleiste ------------------------------------------ */}
+  <div class="band-b">
+    <div class="wrap">
+      {
+        /* Eine Liste von drei Aussagen, kein Begriffsverzeichnis.
+           Vorher stand hier ein <dl> mit <dt>2021</dt> und
+           <dd>gibt es #Lernstabil</dd> — das dreht die Bedeutung um:
+           Bei einer Beschreibungsliste ist <dt> der Begriff und <dd>
+           die Erlaeuterung. Hier ist die Zahl aber der Wert und das
+           Label der Rest des Satzes. Als <ul> gelesen ergibt jeder
+           Eintrag einen zusammenhaengenden Satz. */
+      }
+      <ul class="zahlen">
+        {
+          zahlen.map((z) => (
+            <li class="gruppe">
+              <span class="zahl">{z.zahl}</span>
+              <span class="label">{z.label}</span>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </div>
+</section>
+
+<style>
+  .vertrauen {
+    background: var(--color-surface-default);
+  }
+
+  .wrap {
+    width: 100%;
+    max-width: var(--layout-content-max);
+    margin: 0 auto;
+    padding: 0 var(--layout-gutter);
+  }
+
+  /* Band A ---------------------------------------------------------- */
+
+  .band-a {
+    background: var(--color-surface-sunken);
+    padding: var(--space-18) 0;
+  }
+
+  .spalten {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-12);
+  }
+
+  /* Eine Stufe höher als zuvor (war `h2`), am 1. September 2026 auf
+     Wunsch von Alexander: Die Überschrift wirkte auf der schmalen
+     Spalte verloren. `h1` ist die nächste belegte Stufe der Skala —
+     dazwischen gibt es nichts, und freie Werte sind ausgeschlossen. */
+  h2 {
+    margin: 0;
+    font-family: var(--font-family-body);
+    font-size: var(--font-size-4xl);
+    font-weight: var(--font-weight-bold);
+    line-height: var(--line-height-snug);
+    /* In ch, wächst also mit der Schriftgröße mit. Hält die Überschrift
+       auf drei kurze Zeilen, ohne feste Umbrüche im Text.
+
+       11ch statt der früheren 14ch: Mit 40 px Schrift war der Kasten
+       296 px breit, die längste gesetzte Zeile aber nur 211 px — die
+       Differenz zog die ganze Spalte auf und nahm sie den Lücken weg.
+       Jeder Wert zwischen 10ch und 17ch ergibt denselben Umbruch;
+       11ch ist der engste mit Reserve. */
+    max-width: 11ch;
+  }
+
+  /* 30ch statt der 42ch, die für Fließtext üblich wären: Die Unterzeile
+     bestimmt die Breite der linken Spalte. Bei 42ch ist der Kasten
+     376 px breit, der Text bricht aber schon bei 260 px um — 116 px
+     stehen leer und fehlen dem Karussell.
+
+     ACHTUNG, das ist auf den PLATZHALTERTEXT eingestellt. 30ch ist der
+     engste Wert, bei dem „Wir unterrichten ausschließlich im /
+     Einzelunterricht." noch genauso umbricht. Mit dem endgültigen Text
+     ist der Wert neu zu bestimmen — siehe spec.md. */
+  .unterzeile {
+    margin: var(--space-6) 0 0;
+    color: var(--color-text-subtle);
+    max-width: var(--measure-narrow);
+  }
+
+  .unterzeile strong {
+    color: var(--color-text-default);
+    font-weight: var(--font-weight-semibold);
+  }
+
+  /* Beide Widgets laden nach. Ohne reservierte Höhe springt Band B beim
+     Eintreffen nach unten. Die Werte sind gemessen, nicht geschätzt —
+     siehe spec.md, Abschnitt „Zustände". */
+  .widget {
+    /* Alexanders Vorgabe: schmaler als die volle Spalte. Begrenzt wird
+       die Fläche, nicht das Innenleben des Widgets. */
+    width: 100%;
+  }
+
+  /* Karussell 420 px, am 1. September 2026 im Browser gemessen: Das
+     Widget hat eine feste Höhe von 256 px und ändert sie nicht mit der
+     Breite — es kürzt stattdessen den Bewertungstext ab. Schmaler
+     heisst hier also nicht kleiner, sondern weniger Text. 420 px ist
+     die Breite, bei der der Text der längsten Bewertung noch steht. */
+  .widget-karussell {
+    max-width: 420px;
+    min-height: 256px;
+  }
+
+
+  /* Band B ---------------------------------------------------------- */
+
+  /* Zwischen Band A und Band B liegt KEINE Kante. Bis zum
+     1. September 2026 stand hier eine schräge Trennung — Alexander hat
+     sie verworfen: Eine Sektion bekommt ihre Form an ihrem Ende, nicht
+     durch eine Schräge irgendwo in der Mitte. Die beiden Bänder
+     unterscheiden sich nur noch im Ton.
+
+     Der Keil am unteren Ende gehört ebenfalls nicht hierher, sondern
+     zur folgenden Sektion, die sich darüberschiebt. Siehe
+     ../03-ohne-kleingedrucktes/. */
+  .band-b {
+    background: var(--color-surface-raised);
+    padding: var(--space-12) 0;
+  }
+
+  .zahlen {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-8);
+    text-align: center;
+  }
+
+  .gruppe {
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Eine Stufe unter der Ueberschrift. Bis zum 1. September 2026 waren
+     beide gleich gross — die Sektion hatte damit zwei gleichrangige
+     Blickpunkte statt einer Rangfolge. */
+  .zahl {
+    font-size: var(--font-size-2xl);
+    font-weight: var(--font-weight-bold);
+    line-height: var(--line-height-snug);
+  }
+
+  .label {
+    margin-top: var(--space-1);
+    font-size: var(--font-size-sm);
+    line-height: var(--line-height-relaxed);
+    color: var(--color-text-subtle);
+  }
+
+  /* ab 768 ---------------------------------------------------------- */
+
+  @media (min-width: 768px) {
+    /* Als Block zusammen mittig, nicht über die volle Breite verteilt —
+       deshalb justify-content: center und kein space-between. */
+    .zahlen {
+      flex-direction: row;
+      justify-content: center;
+      align-items: flex-start;
+      gap: var(--space-18);
+    }
+  }
+
+  /* ab 1120 — Band A dreispaltig ------------------------------------ */
+
+  @media (min-width: 1120px) {
+    /* `gap` ist hier die UNTERGRENZE, nicht die feste Lücke: Was nach
+       dem Deckel des Karussells übrig bleibt, verteilt space-between
+       zusätzlich auf die beiden Lücken. Auf breiten Fenstern werden
+       daraus rund 68 px, bei 1120 px bleiben es die 32 px aus der
+       Skala. So bleibt das Karussell mittig und das Badge bündig
+       rechts, ohne dass irgendwo Rest liegen bleibt. */
+    .spalten {
+      flex-direction: row;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: var(--space-8);
+    }
+
+    /* Nur so breit wie der Inhalt — sie wächst nicht in freien Platz
+       hinein. Die Inhaltsbreite ergibt sich aus der `max-width: 42ch`
+       der Unterzeile, das sind rund 376 px.
+
+       Schrumpfen darf sie: bei 1120 px reicht die Zeile sonst nicht für
+       alle drei Spalten. Aber nicht beliebig — ohne min-width fällt sie
+       dort auf 200 px und die Überschrift bricht auseinander. Bei
+       1120 px bleiben ihr genau 260 px. */
+    .einstieg {
+      flex: 0 1 auto;
+      min-width: 250px;
+    }
+
+    /* Die Spalten stehen bewusst nicht bündig: der Einstieg oben, das
+       Karussell mittig, das Badge tiefer. So im Referenzbild.
+
+       Das Karussell ist ab hier die flexible Spalte: Was übrig bleibt,
+       nachdem der Einstieg seine Inhaltsbreite und das Badge seine
+       280 px haben, geht an das Karussell. Das ist die Spalte, die
+       davon profitiert — sie hat eine feste Höhe und kürzt den
+       Bewertungstext ab, mehr Breite heisst also mehr Text.
+
+       min-width 420: die Breite, unter der zu viel Text wegfällt.
+       max-width 480: darüber steht die Bewertung als breites Band und
+       die Sektion kippt aus der Balance. */
+    .widget-karussell {
+      /* Basis 420 statt auto: Mit `auto` erbt das Widget die 100 %
+         Breite aus der Grundregel, `max-width` friert es in der
+         Flex-Rechnung ein und die linke Spalte trägt das Schrumpfen
+         allein. Mit fester Basis wächst es nur in freien Platz und
+         verhält sich bei 1120 px still. */
+      flex: 1 1 420px;
+      min-width: 420px;
+      /* 640 statt der vollen Restbreite (850): Alexander fand die
+         rechte Seite zu breit. Die Hoehe des Widgets aendert sich
+         dadurch nicht — sie liegt bei jeder Breite bei 256 px.
+
+         margin-inline: auto verteilt den Rest gleichmaessig links und
+         rechts, statt ihn als Loch an einer Kante stehen zu lassen.
+         Das Karussell sitzt damit mittig in seiner Flaeche. */
+      max-width: 640px;
+      margin-inline: auto;
+      margin-top: var(--space-4);
+    }
+
+  }
+
+  /* Fällt Trustindex aus, bleibt an der Stelle eine leere Fläche. Auf
+     schmalen Geräten frisst die reservierte Höhe dann Platz ohne
+     Gegenwert, deshalb dort keine Mindesthöhe. Gilt nur noch für das
+     Karussell — das Siegel daneben ist ein Bild und bringt seine Höhe
+     über width/height im Markup mit. */
+  @media (max-width: 767px) {
+    .widget-karussell {
+      min-height: 0;
+    }
+  }
+</style>
+
+<style is:global>
+  /* ====================================================================
+     FREMDES CSS ÜBERSCHRIEBEN — bewusst, mit Vorbehalt.
+
+     Trustindex bietet für die Pfeile des Karussells keine Einstellung
+     im Konto. Von Alexander am 1. September 2026 geprüft, deshalb hier
+     der Eingriff von aussen. Es ist die Ausnahme, nicht der Normalfall:
+     überall sonst lassen wir das CSS des Widgets in Ruhe.
+
+     Was Trustindex setzt (Preset 37 / dark-minimal):
+       Ruhe    Kreis #000000, Pfeilspitze #c5c5c5
+       Hover   Kreis #b3b3b3 !important, Pfeilspitze #000 !important,
+               dazu ein box-shadow und eine eingefärbte outline
+
+     Vorgabe von Alexander: Kreis transparent, Hover komplett aus. Es
+     bleibt also nur die Pfeilspitze stehen, und beim Überfahren
+     passiert nichts.
+
+     Ihr !important zwingt uns zu zwei Dingen: selbst !important zu
+     setzen und spezifischer zu selektieren als sie. Deshalb die beiden
+     Attributselektoren — sie zählen für die Spezifität, prüfen aber
+     nur, DASS die Attribute da sind, nicht welchen Wert sie haben.
+
+     DAS HIER BRICHT STILL, WENN:
+     - im Trustindex-Konto ein anderes Layout oder Farbset gewählt wird
+     - Trustindex seine Klassennamen ändert
+     Dann sehen die Pfeile wieder aus wie vorher — ohne Fehlermeldung,
+     ohne Warnung im Build. Nach jeder Änderung am Widget nachsehen.
+     ==================================================================== */
+
+  /* Kreis weg, und zwar in allen Zuständen. Die drei Eigenschaften sind
+     genau die, die Trustindex beim Hover verändert — stehen sie in Ruhe
+     und Hover auf demselben Wert, passiert beim Überfahren nichts
+     mehr. */
+  .widget-karussell .ti-widget[data-layout-id][data-set-id] .ti-controls .ti-prev,
+  .widget-karussell .ti-widget[data-layout-id][data-set-id] .ti-controls .ti-next,
+  .widget-karussell .ti-widget[data-layout-id][data-set-id] .ti-controls .ti-prev:hover,
+  .widget-karussell .ti-widget[data-layout-id][data-set-id] .ti-controls .ti-next:hover,
+  .widget-karussell .ti-widget[data-layout-id][data-set-id] .ti-controls .ti-prev:focus,
+  .widget-karussell .ti-widget[data-layout-id][data-set-id] .ti-controls .ti-next:focus {
+    background-color: transparent !important;
+    outline-color: transparent !important;
+    box-shadow: none !important;
+  }
+
+  /* Die Pfeilspitze bleibt in jedem Zustand gleich. Trustindex zeichnet
+     sie als zwei Rahmenkanten eines gedrehten Kästchens, deshalb
+     border-color statt color. */
+  .widget-karussell .ti-widget[data-layout-id][data-set-id] .ti-controls .ti-prev::before,
+  .widget-karussell .ti-widget[data-layout-id][data-set-id] .ti-controls .ti-next::before,
+  .widget-karussell .ti-widget[data-layout-id][data-set-id] .ti-controls .ti-prev:hover::before,
+  .widget-karussell .ti-widget[data-layout-id][data-set-id] .ti-controls .ti-next:hover::before,
+  .widget-karussell .ti-widget[data-layout-id][data-set-id] .ti-controls .ti-prev:focus::before,
+  .widget-karussell .ti-widget[data-layout-id][data-set-id] .ti-controls .ti-next:focus::before {
+    border-color: var(--color-text-subtle) !important;
+  }
+
+  /* Ausnahme von „Hover komplett aus": die Tastaturbedienung.
+
+     Ohne diese Regel hätte die Tastatur GAR KEINE Rückmeldung mehr —
+     Trustindex' eigener Fokus lief über dieselbe Farbe, die wir gerade
+     abgeschaltet haben, und ihre outline steht auf 0 px Breite. Wer mit
+     Tab durch die Seite geht, wüsste nicht, wo er steht.
+
+     :focus-visible greift nur bei Tastaturbedienung, nicht beim Klicken
+     mit der Maus. Für dich ändert sich also nichts. Es ist derselbe
+     Ring wie auf den Knöpfen im Hero. */
+  .widget-karussell .ti-widget[data-layout-id][data-set-id] .ti-controls .ti-prev:focus-visible,
+  .widget-karussell .ti-widget[data-layout-id][data-set-id] .ti-controls .ti-next:focus-visible {
+    outline: var(--focus-ring-width) solid var(--color-focus-ring) !important;
+    outline-offset: var(--focus-ring-offset) !important;
+  }
+</style>

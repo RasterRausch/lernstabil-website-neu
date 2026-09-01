@@ -29,8 +29,8 @@ const { title, description, lang = 'de' } = Astro.props;
       crossorigin
     />
     {/* Six Hands Marker kommt von Adobe Fonts und darf nicht selbst
-        gehostet werden. Datenschutzfolge und Ausweg stehen in
-        design/type/six-hands-marker.md — vor dem Livegang klären. */}
+        gehostet werden. Jeder Aufruf überträgt die IP des Besuchers an
+        Adobe — gehört in die Datenschutzerklärung. Siehe CLAUDE.md. */}
     <link rel="stylesheet" href="https://use.typekit.net/chw4hpk.css" />
     <link
       href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;600;700&display=swap"
@@ -38,14 +38,18 @@ const { title, description, lang = 'de' } = Astro.props;
     />
   </head>
   <body>
+    {/* Erste fokussierbare Stelle der Seite. Wer mit der Tastatur
+        arbeitet, muss sonst auf jeder Seite erst durch Logo,
+        Navigation und Telefonnummer tabben, bevor der Inhalt kommt. */}
+    <a class="sprungmarke" href="#inhalt">Zum Inhalt springen</a>
     <Header />
     <slot />
   </body>
 </html>
 
 <style is:global>
-  /* Selbst gehostet, keine Laufzeitverbindung zu Google.
-     Herkunft und Lizenz: design/type/comic-neue.md */
+  /* Selbst gehostet, keine Laufzeitverbindung nach aussen.
+     Lizenz SIL OFL 1.1, Lizenztext in public/fonts/. */
   @font-face {
     font-family: 'Comic Neue';
     font-style: normal;
@@ -58,13 +62,43 @@ const { title, description, lang = 'de' } = Astro.props;
     box-sizing: border-box;
   }
 
+  /* Aus dem Blickfeld, aber nicht aus dem Fokusbaum: display:none oder
+     visibility:hidden wuerden die Marke auch fuer die Tastatur
+     entfernen. Bei Fokus springt sie sichtbar in die linke obere Ecke. */
+  .sprungmarke {
+    position: absolute;
+    left: var(--space-2);
+    top: var(--space-2);
+    z-index: calc(var(--z-sticky) + 1);
+    transform: translateY(-200%);
+    padding: var(--space-3) var(--space-4);
+    background: var(--color-surface-deepest);
+    color: var(--color-text-default);
+    text-decoration: none;
+    border-radius: var(--radius-sm);
+  }
+
+  .sprungmarke:focus-visible {
+    transform: translateY(0);
+    outline: var(--focus-ring-width) solid var(--color-focus-ring);
+    outline-offset: var(--focus-ring-offset);
+  }
+
+  /* Wer „Bewegung reduzieren" eingestellt hat, bekommt keinen
+     Uebergang — die Marke ist sofort da. */
+  @media (prefers-reduced-motion: no-preference) {
+    .sprungmarke {
+      transition: transform 150ms ease;
+    }
+  }
+
   body {
     margin: 0;
-    background: var(--bg);
-    color: var(--text);
-    font-family: var(--font-body);
-    font-size: var(--fs-body);
-    line-height: var(--lh-body);
+    background: var(--color-surface-default);
+    color: var(--color-text-default);
+    font-family: var(--font-family-body);
+    font-size: var(--font-size-md);
+    line-height: var(--line-height-loose);
     -webkit-font-smoothing: antialiased;
   }
 </style>

@@ -1,110 +1,111 @@
-# Website-Projekt
+# #Lernstabil — Website
 
 Ergänzt meine globale `~/.claude/CLAUDE.md` (Umgebung, Secrets, mittwald).
 Was dort steht, wird hier nicht wiederholt.
 
+## Das Briefing
+
+**Du arbeitest als professioneller Webdesigner und als professioneller
+Marketing- und Website-Texter für #Lernstabil, meine Online-Nachhilfe.**
+
+Das ist das ganze Briefing. Gestaltung und Text kommen von dir, nicht
+von mir — schlag vor, entscheide, begründe. Ich prüfe und korrigiere.
+
+Was das praktisch heißt:
+
+- **Texte schreibst du.** Überschriften, Fließtext, Knopfbeschriftungen.
+  Keine Rückfrage nötig, ob du darfst.
+- **Gestaltung entscheidest du.** Größen, Abstände, Anordnung, Farben
+  innerhalb der Rollen.
+- **Erfinde keine Tatsachen.** Preise, Zahlen, Auszeichnungen, Zitate
+  und Kundenstimmen kommen von mir. Wenn du eine Angabe brauchst, die
+  du nicht hast, frag danach — nicht ausdenken.
+- **Keine Platzhaltertexte** wie „Lorem ipsum". Wenn ein Text nötig ist,
+  schreib einen richtigen.
+
+Bis zum 2. September 2026 lief das Projekt mit umfangreichen
+Spezifikationen, einem Briefing-Ordner und einer verbindlichen
+Sektionsliste. Das hat mehr gebremst als geholfen und ist an diesem Tag
+komplett verworfen worden. Die Dateien liegen weiterhin in der
+Git-Historie (Commit `4fd1997`), falls doch einmal etwas gebraucht wird.
+
 ## Stack
 
-- Astro ist der Standard. Svelte nur, wo echte Interaktivität nötig ist —
-  nicht für statische Sektionen. Erst prüfen, ob es ohne Framework geht;
-  ein Akkordeon oder ein Burger-Menü braucht keins.
-- SvelteKit nur, wenn das Projekt eine Anwendung ist: Nutzerkonten,
-  geschützte Bereiche, nutzerspezifische Daten, oder Nutzer legen selbst
-  Daten an. Formulare, Menüs, Galerien, Blogs und CMS-Anbindung sind KEIN
-  Grund für SvelteKit. Im Zweifel fragen, nicht entscheiden.
-- Shops: Astro als Frontend, Warenkorb und Checkout über ein Shop-Backend
-  oder einen gehosteten Anbieter. Nicht selbst bauen.
+- Astro ist der Standard. Svelte nur, wo echte Interaktivität nötig ist.
+  Erst prüfen, ob es ohne Framework geht; ein Akkordeon oder ein
+  Burger-Menü braucht keins.
+- Rendering: statisch (`output: 'static'`).
 - In Astro landet alles mit `PUBLIC_`-Präfix im Client-Bundle. Ohne
   Präfix bleibt es serverseitig.
 
-## Rendering
-
-<!-- Beim Projektstart entscheiden, eins ankreuzen -->
-
-- [x] statisch (`output: 'static'`) — Standard für Websites ohne
-      serverseitige Logik
-- [ ] SSR mit Node-Adapter (`output: 'server'`) — nur wenn API-Routen,
-      Formularverarbeitung oder dynamische Daten nötig sind
-
 ## Styling
 
-<!-- Beim Projektstart entscheiden, eins ankreuzen -->
+Normales CSS mit den Tokens aus `src/styles/tokens.css`. **Das ist die
+einzige verbliebene Regelquelle für Gestaltung** — sie ist ausführlich
+kommentiert und erklärt sich selbst.
 
-- [ ] Tailwind 4 — Tokens im `@theme`-Block statt in `tokens.css`
-- [x] Normales CSS mit den Variablen aus `src/styles/tokens.css`
+Zwei Regeln daraus:
 
-Nicht mischen. Keine freien Werte, nur Tokens.
+- **Komponenten benutzen nur die semantische Ebene** (`--color-brand`,
+  `--space-6`), nie die Primitive (`--color-red-600`).
+- **Keine freien Werte.** Ausnahme ist Geometrie, die aus einer
+  Zeichnung oder einem Fremdsystem stammt — Logo-Nachbau,
+  Trustindex-Widgets, gezeichnete Icons. Die steht als lokale Variable
+  mit Begründung in der Komponente.
 
-## Arbeitsweise
+Braucht das System eine neue Stufe oder Rolle, leg sie an und begründe
+sie im Kommentar. Das ist erwünscht, keine Grenzüberschreitung.
 
-Das Design kommt von mir, die technische Umsetzung von dir.
+## Bilder
 
-Wir bauen Sektion für Sektion, nicht die ganze Seite auf einmal. Ablauf
-pro Sektion:
+- Erzeugte Personen, nie echte Schüler. Datenschutz bei Minderjährigen.
+  Erzeugte Personen dürfen nie mit Namen, Zitat oder als
+  Erfolgsgeschichte ausgegeben werden.
+- Freigestellte Motive sitzen direkt auf der Fläche, ohne Rahmen und
+  ohne Rundung — wie im Hero und in Sektion 3.
+- **WebP statt PNG**, auch für Freistellungen: WebP kann den Alphakanal
+  und ist um ein Vielfaches kleiner. `cwebp -q 88 -alpha_q 100` ist der
+  eingespielte Aufruf.
+- **Firefly hat kein Feld für Ausschlüsse.** Alles, was ein Bild nicht
+  haben soll, muss positiv beschrieben werden. Statt „keine Kapuze"
+  also „ein sichtbarer Rundkragen am Hals".
 
-1. Ich liefere den Input (Screenshot, Figma-Frame, Referenz, Maßangaben).
-2. Du beschreibst zurück, was du siehst: Hierarchie, Aufbau, Abstände,
-   Zustände, Verhalten an den Breakpoints. Liste ausdrücklich auf, was du
-   NICHT erkennen kannst.
-3. Ich korrigiere diese Beschreibung. Sie ist die Spezifikation.
-4. Du baust genau diese eine Sektion.
-5. Ich prüfe.
-6. Sektion wird gesperrt.
+## Schriften
 
-Screenshots schätzt du, du misst sie nicht. Wenn ich exakte Werte
-mitgebe, nutze diese und rate nicht daneben.
+- **Six Hands Marker** kommt von Adobe Fonts, Kit `chw4hpk`.
+  **Darf nicht selbst gehostet werden** — Adobe-Webfonts müssen über
+  das Kit von Adobes Servern kommen. Jeder Seitenaufruf überträgt die
+  IP des Besuchers an Adobe; Cookies setzt Adobe dafür nicht. Gehört in
+  die Datenschutzerklärung. Das Kit enthält 18 Schnitte, gebraucht wird
+  einer — vor dem Livegang ausdünnen.
+- **Comic Neue** ist selbst gehostet unter `public/fonts/`, keine
+  Laufzeitverbindung nach außen. Lizenz SIL Open Font License 1.1, der
+  Lizenztext liegt daneben und **muss mitausgeliefert werden**.
+- **Source Sans 3** kommt von Google Fonts.
 
-Die Design-Tokens werden aus der ersten gebauten Sektion abgeleitet und
-sind danach fix. Abstände kommen ausschließlich aus der Skala.
+## Offene Punkte vor dem Livegang
 
-## Was du nicht entscheidest
-
-- Keine Schriftwahl, keine Schriftgrößen außerhalb der Type-Scale
-- Keine Farben erfinden, nur die definierten Rollen verwenden
-- Keine Sektionen hinzufügen, die ich nicht beauftragt habe
-- Keine dekorativen Elemente, Icons oder Illustrationen ungefragt
-- Keine Icon- oder Komponenten-Library ohne Absprache
-- Keine Platzhaltertexte ("Lorem ipsum", erfundene Kundenstimmen)
-
-## Vor größeren Änderungen lesen
-
-- `brief/briefing.md` — Kunde, Zielgruppe, Ziel, Tonalität
-- `brief/content.md` — verbindliche Seiten- und Sektionsreihenfolge
-- `design/tokens.md` — Farbrollen, Type-Scale, Spacing
-- `design/bildkonzept.md` — Bildsprache
-- die `spec.md` der betroffenen Sektion, inklusive **Status**
-
-Sektionsspezifikationen liegen unter:
-
-- `design/shared/sections/<nr>-<name>/` — seitenübergreifend
-  (Header, Footer, wiederkehrende Blöcke)
-- `design/pages/<seite>/sections/<nr>-<name>/` — seitenspezifisch
-
-Bei einem One-Pager gibt es eben nur eine Seite. Die Struktur bleibt
-gleich.
-
-Eine Sektion mit Status `GESPERRT` wird nicht verändert. Auch nicht
-refactored, aufgeräumt oder verbessert. Bei Änderungsbedarf fragen.
+- `public/bilder/hero-schuelerin.png` wiegt **4,9 MB**. Nach WebP
+  wandeln und mehrere Größen über `srcset` ausliefern.
+- Trustindex lädt `loader.js` je Widget neu — dieselbe Datei, 89 KB pro
+  Stück. Bei Trustindex nachfragen, ob mehrere Widgets über einen
+  Loader gehen.
+- Das Trustindex-Zertifikats-Widget (`loader-cert.js`) ist an die
+  Domain gebunden und zeigt außerhalb von `lernstabil.de` eine
+  englische Fehlermeldung. Nach dem Livegang prüfen.
+- Eine automatisierte Zugänglichkeitsprüfung ist nie gelaufen. Vor dem
+  Livegang axe oder Lighthouse.
 
 ## Deployment
-
-<!-- Beim Projektstart ausfüllen -->
 
 - Hosting: mittwald mStudio
 - Projekt-ID: p-
 - App-Installation: a-
-- Domain:
-- Staging:
-- Document Root:
+- Domain: lernstabil.de (aktuell noch die alte Seite)
 - Build: `npm run build` → `dist/`
-- Deploy:
 
 ## Repository
 
 - GitHub:
 - `main` = produktiv
 - Sektionen auf `feature/<nr>-<name>`
-
-## Projektspezifisches
-
-<!-- Abweichungen hier festhalten -->

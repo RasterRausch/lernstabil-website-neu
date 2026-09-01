@@ -1,81 +1,254 @@
-/* Design-Tokens — abgeleitet aus Hero und Header, beide am
-   1. September 2026 gesperrt. Ab hier fix.
+/* =====================================================================
+   DESIGN-TOKENS — #Lernstabil
+   Überarbeitet am 1. September 2026.
 
-   Rollen-Namen nicht ändern, sie sind projektübergreifend gleich.
-   Keine freien Pixelwerte im Projekt — nur diese Variablen.
+   AUFBAU: Das System hat zwei Ebenen.
 
-   Ausnahme Breakpoints: CSS kann in @media keine Variablen auswerten.
-   Die Werte 768 und 1120 stehen deshalb als Zahlen in den Dateien.
-   Sie sind trotzdem verbindlich, siehe design/tokens.md. */
+   1. PRIMITIVE   Rohwerte mit beschreibenden Namen (--color-red-600).
+                  Sie sagen, WIE etwas aussieht, nicht WOFÜR es da ist.
+                  In Komponenten NICHT verwenden.
+
+   2. SEMANTISCH  Rollen (--color-brand, --font-size-lg). Sie sagen,
+                  WOFÜR ein Wert da ist. Nur diese Ebene benutzen
+                  Komponenten.
+
+   Der Sinn der Trennung: Wird das Rot der Marke einmal ausgetauscht,
+   ändert sich genau ein Primitiv. Alle Rollen und alle Komponenten
+   bleiben unangetastet.
+
+   REGELN
+   - Komponenten setzen keine freien Werte. Ausnahmen sind Geometrie,
+     die aus einer Zeichnung oder einem Fremdsystem stammt (Logo-SVG,
+     Trustindex-Widget, Icon-Formen). Sie stehen als lokale Variablen
+     mit Begründung in der jeweiligen Komponente.
+   - Namen sind englisch, durchgehend, auch wenn der Rest des Projekts
+     deutsch ist. Token-Namen sind Fachbegriffe.
+   - Skalen sind offen: Nicht jede Stufe muss belegt sein. Eine freie
+     Stufe ist kein Fehler, sondern Reserve.
+
+   BREAKPOINTS: CSS kann in @media keine Variablen auswerten. Die Werte
+   768 und 1120 stehen deshalb als Zahlen in den Dateien. Sie sind
+   trotzdem verbindlich:
+     md  768 px   Knoepfe und Zahlen nebeneinander, groessere Gutter
+     lg 1120 px   Hero und Sektionen zweispaltig, Navigation offen
+   ===================================================================== */
 
 :root {
-  /* Farbrollen */
-  --bg: #1a1a1a;
-  --text: #ffffff;
-  --text-muted: #b0b0b0;
-  --accent: #ff0000;
-  --accent-dark: #b3000f;
-  --accent-contrast: #ffffff;
-  --border: #3a3a3a;
-  /* --surface ist noch nicht belegt. Wird gefüllt, sobald die erste
-     Sektion eine abgesetzte Fläche braucht. */
+  /* ===================================================================
+     1. PRIMITIVE
+     =================================================================== */
 
-  /* Schriften */
-  --font-display: 'six-hands-marker', system-ui, sans-serif;
-  --font-body: 'Source Sans 3', system-ui, sans-serif;
-  --font-logo: 'Comic Neue', 'Comic Sans MS', cursive;
+  /* Neutralskala. Höhere Zahl = dunkler, wie in gängigen Systemen.
+     Die Seite ist dunkel, deshalb liegt das Gewicht am oberen Ende. */
+  --color-neutral-0: #ffffff;
+  --color-neutral-400: #b0b0b0;
+  --color-neutral-500: #6b6b6b;
+  --color-neutral-700: #3a3a3a;
+  --color-neutral-800: #232323;
+  --color-neutral-850: #1a1a1a;
+  --color-neutral-900: #111111;
+  --color-neutral-950: #000000;
 
-  /* Type-Scale. --fs-body wächst ab 768 px, alle anderen Stufen
-     gelten auf allen Breiten. --fs-h1 und --fs-h3 sind noch nicht
-     belegt. */
-  --fs-display: 64px;
-  --fs-h2: 26px;
-  --fs-body: 17px;
-  --fs-small: 15px;
+  /* Rot. Das Signalrot der Marke und seine dunkle Stufe.
+     600 → 700 ist derselbe Farbton, um rund 30 % abgedunkelt. */
+  --color-red-600: #d00000;
+  --color-red-700: #b3000f;
 
-  --lh-display: 1.05;
-  --lh-h2: 1.2;
-  --lh-body: 1.6;
-  --lh-small: 1.5;
+  /* Blau. Trägt Kopfleiste und Telefonweg.
+     700 → 900 im selben Verhältnis wie beim Rot. */
+  --color-blue-700: #1f4e98;
+  --color-blue-900: #16386d;
 
-  /* Spacing-Skala, Basis 4 px */
-  --space-3xs: 4px;
-  --space-2xs: 8px;
-  --space-xs: 12px;
-  --space-sm: 16px;
-  --space-md: 24px;
-  --space-lg: 32px;
-  --space-xl: 48px;
-  --space-2xl: 72px;
-  --space-3xl: 112px;
+  /* ===================================================================
+     2. SEMANTISCHE ROLLEN
+     =================================================================== */
 
-  /* Radien */
+  /* --- Flächen -------------------------------------------------------
+     Benannt nach Tiefe, nicht nach Ort. In einem dunklen Entwurf liegt
+     „sunken" unter der Grundfläche (dunkler), „raised" darüber
+     (heller). Reihenfolge von tief nach hoch:
+       deepest < sunken < default < raised                             */
+  --color-surface-deepest: var(--color-neutral-950);
+  --color-surface-sunken: var(--color-neutral-900);
+  --color-surface-default: var(--color-neutral-850);
+  --color-surface-raised: var(--color-neutral-800);
+
+  /* Umgekehrte Flaeche: hell statt dunkel. Belegt am 1. September 2026
+     mit Sektion 3. Wer sie verwendet, MUSS auch die Textrollen
+     umstellen — weisser Text auf weisser Flaeche ist der wahrschein-
+     lichste Fehler dieses Systems. Deshalb liegen beide direkt
+     beieinander. */
+  --color-surface-inverse: var(--color-neutral-0);
+
+  /* --- Text ---------------------------------------------------------- */
+  --color-text-default: var(--color-neutral-0);
+  --color-text-subtle: var(--color-neutral-400);
+
+  /* Text auf --color-surface-inverse. Kontraste auf Weiss:
+       inverse         #1a1a1a  15,9:1
+       inverse-subtle  #6b6b6b   5,3:1  (ueber 4,5:1, also auch fuer
+                                         normale Schriftgroessen) */
+  --color-text-inverse: var(--color-neutral-850);
+  --color-text-inverse-subtle: var(--color-neutral-500);
+
+  /* --- Linien -------------------------------------------------------- */
+  --color-border-default: var(--color-neutral-700);
+
+  /* --- Marke (Rot) ---------------------------------------------------
+     Logo, Knopf „Probestunde anfragen", Sockel, Keil.
+     `strong` ist die dunkle Stufe: große Flächen und Hover. Große
+     Flächen laufen bewusst auf `strong`, damit der gesättigte Knopf
+     der hellste rote Punkt der Seite bleibt.
+     `stronger` ist der Aktiv-Zustand, aus `strong` abgeleitet statt
+     frei gewählt. Ein dritter Rotwert kommt nicht in die Palette.     */
+  --color-brand: var(--color-red-600);
+  --color-brand-strong: var(--color-red-700);
+  --color-brand-stronger: color-mix(
+    in srgb,
+    var(--color-red-700) 85%,
+    var(--color-neutral-950)
+  );
+  --color-text-on-brand: var(--color-neutral-0);
+
+  /* --- Aktion (Blau) -------------------------------------------------
+     Der wichtigste Weg auf dieser Seite ist der Anruf. Er ist blau,
+     und die Kopfleiste trägt dieselbe Farbe: Der Telefonweg ist über
+     die ganze Seite hinweg blau, das Rot gehört der Marke.            */
+  --color-action: var(--color-blue-700);
+  --color-action-strong: var(--color-blue-900);
+  --color-action-stronger: color-mix(
+    in srgb,
+    var(--color-blue-900) 85%,
+    var(--color-neutral-950)
+  );
+  --color-text-on-action: var(--color-neutral-0);
+
+  /* --- Fokus ---------------------------------------------------------
+     Ein Ring für das ganze Projekt. Weiß trägt auf jeder Fläche,
+     die hier vorkommt.                                                */
+  --color-focus-ring: var(--color-neutral-0);
+  --focus-ring-width: 2px;
+  --focus-ring-offset: 2px;
+
+  /* --- Schriftfamilien ----------------------------------------------- */
+  --font-family-display: "six-hands-marker", system-ui, sans-serif;
+  --font-family-body: "Source Sans 3", system-ui, sans-serif;
+  --font-family-logo: "Comic Neue", "Comic Sans MS", cursive;
+
+  /* --- Schriftgrößen -------------------------------------------------
+     Handverlesene Skala, Schrittweite rund 1,25. Runde Zahlen statt
+     gerechneter Kommastellen — der Faktor ist ein Hilfsmittel, kein
+     Selbstzweck.
+
+       xs   13   frei
+       sm   15   Öffnungszeiten, Labels unter den Zahlen
+       md   17   Fließtext, Knöpfe, Navigation   (ab 768 px: 18)
+       lg   21   frei
+       xl   26   zweite Zeile der Hero-Überschrift
+       2xl  32   die Zahlen der Vertrauensleiste
+       3xl  40   Überschrift der Vertrauensleiste
+       4xl  52   frei
+       5xl  64   Hero-Überschrift, Displayschrift
+
+     `md` ist die einzige Stufe, die mit der Breite wächst.            */
+  --font-size-xs: 13px;
+  --font-size-sm: 15px;
+  --font-size-md: 17px;
+  --font-size-lg: 21px;
+  --font-size-xl: 26px;
+  --font-size-2xl: 32px;
+  --font-size-3xl: 40px;
+  --font-size-4xl: 52px;
+  --font-size-5xl: 64px;
+
+  /* --- Zeilenhöhen ---------------------------------------------------
+     Ohne Einheit, damit sie sich auf die jeweilige Schriftgröße
+     beziehen. Je größer die Schrift, desto enger die Zeile.           */
+  --line-height-tight: 1.05;
+  --line-height-snug: 1.15;
+  --line-height-normal: 1.25;
+  --line-height-relaxed: 1.5;
+  --line-height-loose: 1.6;
+
+  /* --- Schriftschnitte -----------------------------------------------
+     Nur diese drei werden geladen (siehe BaseLayout). Andere Werte
+     lässt der Browser künstlich fetten — das sieht schlechter aus als
+     ein echter Schnitt.                                               */
+  --font-weight-regular: 400;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+
+  /* --- Zeilenlänge ---------------------------------------------------
+     In ch, wächst also mit der Schriftgröße mit. Für Fließtext sind
+     45–75 Zeichen je Zeile die Faustregel; `narrow` liegt bewusst
+     darunter und ist nur für kurze zweizeilige Texte gedacht.         */
+  --measure-narrow: 30ch;
+  --measure-default: 46ch;
+  /* Fuer mittig gesetzten Einleitungstext, der ueber die volle Breite
+     einer Sektion laeuft. 60 Zeichen liegen noch im lesbaren Bereich
+     (45 bis 75), wirken aber deutlich weniger schmal als 46. */
+  --measure-wide: 60ch;
+
+  /* --- Abstandsskala -------------------------------------------------
+     Basis 4 px. Die Zahl im Namen ist der Wert geteilt durch 4 —
+     --space-6 sind also 24 px. Damit sieht man dem Namen den Wert an,
+     was bei den früheren Kürzeln (sm/md/lg) nicht der Fall war.       */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-12: 48px;
+  --space-18: 72px;
+  --space-28: 112px;
+
+  /* --- Radien --------------------------------------------------------- */
   --radius-sm: 4px;
   --radius-md: 10px;
   --radius-full: 999px;
 
-  /* Schatten */
-  --schatten-sm: 0 2px 6px rgb(0 0 0 / 0.3);
+  /* --- Schatten -------------------------------------------------------- */
+  --shadow-sm: 0 2px 6px rgb(0 0 0 / 0.3);
 
-  /* Container */
-  --content-max: 1280px;
-  --gutter: 20px;
+  /* --- Icons -----------------------------------------------------------
+     Für Icons, die neben Text in fester Größe stehen. Icons INNERHALB
+     einer Textzeile werden stattdessen in em gesetzt, damit sie mit der
+     Beschriftung mitwachsen.                                           */
+  --icon-size-sm: 22px;
+  --icon-size-md: 24px;
 
-  /* Höhe der Kopfleiste. Sektionen, die eine Bildschirmhöhe füllen,
-     rechnen mit calc(100svh - var(--leiste-h)). */
-  --leiste-h: 52px;
+  /* --- Mindestgröße für Tippziele ---------------------------------------
+     44 px ist die Untergrenze aus WCAG 2.2 (Target Size, AA).          */
+  --tap-target-min: 44px;
+
+  /* --- Layout ----------------------------------------------------------- */
+  --layout-content-max: 1280px;
+  --layout-gutter: 20px;
+  --layout-header-height: 52px;
+
+  /* --- Ebenen -----------------------------------------------------------
+     Nur für Elemente, die über die ganze Seite hinweg gestapelt werden.
+     Stapelung innerhalb einer Komponente bleibt dort lokal.            */
+  --z-sticky: 100;
 }
 
+/* ======================================================================
+   BREAKPOINT md — ab 768 px
+   ====================================================================== */
 @media (min-width: 768px) {
   :root {
-    --fs-body: 18px;
-    --gutter: 48px;
-    --leiste-h: 58px;
+    --font-size-md: 18px;
+    --layout-gutter: 48px;
+    --layout-header-height: 58px;
   }
 }
 
+/* ======================================================================
+   BREAKPOINT lg — ab 1120 px
+   ====================================================================== */
 @media (min-width: 1120px) {
   :root {
-    --leiste-h: 64px;
+    --layout-header-height: 64px;
   }
 }

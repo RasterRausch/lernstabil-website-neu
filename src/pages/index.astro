@@ -1,15 +1,18 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Hero from '../components/sections/Hero.astro';
+import Vertrauensleiste from '../components/sections/Vertrauensleiste.astro';
+import WasUnsUnterscheidet from '../components/sections/WasUnsUnterscheidet.astro';
 ---
 
 <BaseLayout
-  title="#Lernstabil — Online-Einzelunterricht ohne Vertrag"
-  description="Ein fester Dozent, der Ihr Kind kennt. Deutschlandweit, per Video. Die erste Stunde ist kostenlos."
+  title="#Lernstabil — Online-Einzelunterricht ohne Vertragslaufzeit"
+  description="Nachhilfe, die ankommt. Erste Stunde gratis testen. Online-Einzelunterricht ohne Vertragslaufzeit, Mo bis Fr 9 bis 20 Uhr."
 >
-  <main>
-    {/* Sektionen in der Reihenfolge aus brief/content.md.
-        Eine Sektion pro Durchgang. */}
+  <main id="inhalt">
+    {/* Eine Sektion pro Durchgang. */}
     <Hero />
+    <Vertrauensleiste />
+    <WasUnsUnterscheidet />
   </main>
 </BaseLayout>

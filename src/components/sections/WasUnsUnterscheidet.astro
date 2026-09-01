@@ -1,0 +1,298 @@
+---
+// Sektion: Was machen wir anders (Startseite, 3)
+//
+// Aufbau und Text sind von der bestehenden Seite lernstabil.de
+// uebernommen, der Hintergrund ist weiss statt hellgrau.
+
+const vorzeile = "Was machen wir anders";
+const ueberschrift = "Echte Förderung statt Franchise-Fließband";
+
+const punkte = [
+  {
+    titel: "Einzelunterricht",
+    text: "Wir knüpfen dort an, wo der Schüler gerade steht, greifen spontane Fragen auf und vertiefen genau die Themen, die jetzt zählen.",
+  },
+  {
+    titel: "Mehr Selbstvertrauen",
+    text: "Wir setzen auf einen offenen Lernprozess, der nicht nur Wissen vermittelt, sondern auch Mut macht.",
+  },
+  {
+    titel: "Starke Grundlagen",
+    text: "Ob Mathe, Deutsch, Englisch oder Latein etc. – wir sorgen dafür, dass das Fundament steht, bevor wir uns an die kniffligen Themen wagen.",
+  },
+  {
+    titel: "100 % online, 100 % persönlich",
+    text: "Wir setzen auf echten Austausch, persönliche Betreuung und ein Lernklima, das auch digital Nähe schafft.",
+  },
+];
+---
+
+<section class="anders" aria-labelledby="anders-titel">
+  <div class="wrap">
+    <div class="kopf">
+      <p class="vorzeile">{vorzeile}</p>
+      <h2 id="anders-titel">{ueberschrift}</h2>
+      <p class="einleitung">
+        Bei <strong>#Lernstabil</strong> gibt es keine versteckten Kosten, kein
+        unpersönliches Franchise-Modell und keine standardisierten
+        Unterrichtspakete. Jeder Schüler lernt anders – und genau darauf gehen
+        wir ein.
+      </p>
+    </div>
+
+    <div class="spalten">
+      <div class="bild">
+        {
+          /* Freigestelltes Motiv mit Alphakanal, erzeugt am
+             2. September 2026. Es sitzt direkt auf der weissen Flaeche,
+             deshalb keine gerundeten Ecken und kein Kasten — wie das
+             Hero-Motiv.
+
+             alt="" wie beim Hero: Das Bild traegt Stimmung, keine
+             Information. Der Satz daneben sagt bereits alles, was es
+             zeigt; eine Beschreibung waere fuer Screenreader nur
+             Rauschen. */
+        }
+        <img
+          src="/bilder/schueler-sektion-3.webp"
+          width="665"
+          height="1113"
+          alt=""
+          loading="lazy"
+          decoding="async"
+        />
+      </div>
+
+      <div class="inhalt">
+        <ul class="punkte">
+          {
+            punkte.map((p) => (
+              <li>
+                <h3>{p.titel}</h3>
+                <p>{p.text}</p>
+              </li>
+            ))
+          }
+        </ul>
+
+        <a class="knopf" href="#probestunde">Gratis Probestunde sichern</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  /* ------------------------------------------------------------------
+     DER KEIL — nur diesen Wert anfassen.
+
+     --keil-h  Wie tief der Keil ist. Gemessen von der Oberkante der
+               Flaeche an den beiden Seiten bis zu ihrer tiefsten Stelle
+               in der Mitte. 0 = gerade Kante.
+
+     ACHTUNG: Der Keil traegt jetzt die WEISSE Flaeche dieser Sektion,
+     nicht mehr Rot. Er schneidet damit hell in die dunkle
+     Vertrauensleiste darueber. Das ist die Folge davon, dass der
+     Hintergrund weiss wurde — siehe spec.md.
+     ------------------------------------------------------------------ */
+  .anders {
+    --keil-h: 24px;
+
+    background: var(--color-surface-inverse);
+    color: var(--color-text-inverse);
+
+    margin-top: calc(-1 * var(--keil-h));
+    clip-path: polygon(0 0, 50% var(--keil-h), 100% 0, 100% 100%, 0 100%);
+    padding: calc(var(--space-18) + var(--keil-h)) 0 var(--space-18);
+  }
+
+  .wrap {
+    width: 100%;
+    max-width: var(--layout-content-max);
+    margin: 0 auto;
+    padding: 0 var(--layout-gutter);
+  }
+
+  /* Kopf — mittig, wie in der Vorlage ---------------------------------- */
+
+  .kopf {
+    text-align: center;
+  }
+
+  .vorzeile {
+    margin: 0;
+    color: var(--color-action);
+    font-size: var(--font-size-md);
+    font-weight: var(--font-weight-bold);
+    line-height: var(--line-height-relaxed);
+  }
+
+  h2 {
+    margin: var(--space-2) auto 0;
+    /* 28ch statt der frueheren 22: Alexander fand den Kopf am
+       2. September 2026 zu schmal fuer die Seitenbreite. Der Umbruch
+       bleibt zweizeilig, die Zeilen werden nur laenger. In ch, waechst
+       also mit der Schriftgroesse mit. */
+    max-width: 28ch;
+    font-size: var(--font-size-4xl);
+    font-weight: var(--font-weight-bold);
+    line-height: var(--line-height-snug);
+  }
+
+  .einleitung {
+    margin: var(--space-8) auto 0;
+    max-width: var(--measure-wide);
+    color: var(--color-text-inverse-subtle);
+  }
+
+  /* Die Marke ist in der Vorlage rot hervorgehoben. Rot als Schrift ist
+     im Projekt sonst ausgeschlossen, weil es auf dunklem Grund nur
+     3,05:1 erreicht. HIER ist der Grund weiss: #d00000 auf Weiss ergibt
+     5,70:1 und ist damit sauber. Die Regel gilt also weiterhin — sie
+     bezieht sich auf dunkle Flaechen. */
+  .einleitung strong {
+    color: var(--color-brand);
+    font-weight: var(--font-weight-bold);
+  }
+
+  /* Spalten ------------------------------------------------------------ */
+
+  .spalten {
+    margin-top: var(--space-12);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-12);
+  }
+
+  /* Freigestelltes Motiv: kein Rahmen, keine Rundung, kein Schatten.
+     Es steht auf der Flaeche, es liegt nicht darauf. */
+  .bild img {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  /* Punkte -------------------------------------------------------------
+     Haekchen wie im Hero gezeichnet, hier in Rot wie in der Vorlage.
+     Die fuenf Werte sind Geometrie dieser Zeichnung und stammen nicht
+     aus der Abstandsskala. */
+  .punkte {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-8);
+  }
+
+  .punkte li {
+    --haken-breite: 12px;
+    --haken-hoehe: 7px;
+    --haken-strich: 2px;
+    --haken-links: 0px;
+    --haken-oben: 9px;
+    --haken-einzug: 28px;
+
+    position: relative;
+    padding-left: var(--haken-einzug);
+  }
+
+  .punkte li::before {
+    content: "";
+    position: absolute;
+    left: var(--haken-links);
+    top: var(--haken-oben);
+    width: var(--haken-breite);
+    height: var(--haken-hoehe);
+    border-left: var(--haken-strich) solid var(--color-brand);
+    border-bottom: var(--haken-strich) solid var(--color-brand);
+    transform: rotate(-45deg);
+  }
+
+  .punkte h3 {
+    margin: 0;
+    font-size: var(--font-size-md);
+    font-weight: var(--font-weight-bold);
+    line-height: var(--line-height-relaxed);
+  }
+
+  .punkte p {
+    margin: var(--space-2) 0 0;
+    color: var(--color-text-inverse-subtle);
+  }
+
+  /* Knopf --------------------------------------------------------------
+     In der Vorlage blau und ueber die volle Breite der rechten Spalte.
+     Blau ist im Projekt die Aktionsfarbe, das passt zusammen. */
+  .knopf {
+    margin-top: var(--space-12);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: var(--tap-target-min);
+    padding: var(--space-3) var(--space-8);
+    border-radius: var(--radius-sm);
+    background: var(--color-action);
+    color: var(--color-text-on-action);
+    font-size: var(--font-size-md);
+    font-weight: var(--font-weight-bold);
+    text-align: center;
+    text-decoration: none;
+  }
+
+  .knopf:hover {
+    background: var(--color-action-strong);
+  }
+
+  .knopf:active {
+    background: var(--color-action-stronger);
+    transform: translateY(1px);
+  }
+
+  /* Der Fokusring des Projekts ist weiss — auf dieser hellen Flaeche
+     waere er unsichtbar. Hier traegt ihn der dunkle Text. */
+  .knopf:focus-visible {
+    outline: var(--focus-ring-width) solid var(--color-text-inverse);
+    outline-offset: var(--focus-ring-offset);
+  }
+
+  /* ab 768 -------------------------------------------------------------- */
+
+  @media (min-width: 768px) {
+    .anders {
+      --keil-h: 48px;
+    }
+  }
+
+  /* ab 1120 — zweispaltig ------------------------------------------------ */
+
+  @media (min-width: 1120px) {
+    .anders {
+      --keil-h: 72px;
+      padding-top: calc(var(--space-28) + var(--keil-h));
+      padding-bottom: var(--space-28);
+    }
+
+    /* Mittig statt oben: Das Motiv ist hochformatig und deutlich
+       hoeher als eine einzelne Textzeile. Auf gleicher Oberkante
+       haenge es unten ins Leere. */
+    .spalten {
+      flex-direction: row;
+      align-items: center;
+      gap: var(--space-18);
+    }
+
+    /* Das Motiv ist 665 px breit. Mehr bekommt es nicht, sonst wird es
+       hochskaliert und unscharf. 400 px ist die Breite, bei der seine
+       Hoehe ungefaehr der Hoehe der Punkte daneben entspricht. */
+    .bild {
+      flex: 0 0 auto;
+      max-width: 400px;
+    }
+
+    .inhalt {
+      flex: 1 1 auto;
+      display: flex;
+      flex-direction: column;
+    }
+  }
+</style>

@@ -1,40 +1,114 @@
 ---
 // Sektion: Hero (Startseite, 1)
-// Spezifikation: design/pages/startseite/sections/01-hero/spec.md — GESPERRT.
-// Texte: brief/content.md, „Startseite — 1. Hero".
+
+// Siegel von Trustindex, aus Alexanders Konto.
+//
+// Am 1. September 2026 stand hier zeitweise ein drittes Siegel: das
+// Zertifikat „Aussergewoehnlicher Kundenservice", als Bild statt als
+// Widget, weil `loader-cert.js` an die Domain gebunden ist und auf
+// jeder Adresse ausser lernstabil.de nur die Meldung „Trustmark widget
+// validation failed" zeigt. Alexander hat es am selben Tag wieder
+// entfernt.
+//
+// Das Bild ist am selben Tag mitgeloescht worden. Zum Zurueckholen:
+// Es stammt aus Alexanders Trustindex-Konto (Format 436 x 90). Die
+// Kennung des zugehoerigen Widgets lautet 3bfd6d6807be50304926958dc7a.
+const siegel = [
+  { id: "67c6a0b8012c503e17061c29e56" },
+  { id: "d7ec3be801f95047135619f0996" },
+];
 ---
 
-<section class="hero">
+<section class="hero" aria-labelledby="hero-titel">
   <div class="wrap">
     <div class="inhalt">
       <div class="text">
-        <h1>
+        {
+          /* Beide Zeilen gehoeren in die H1. Zusammengelesen ergeben
+             sie die Kernaussage der Seite — genau das soll die
+             Ueberschrift transportieren, auch fuer Screenreader und
+             Suchmaschinen. Die Spans tragen nur die zwei
+             Schriftgroessen; sie erzeugen keine eigene Gliederungsebene
+             und sind semantisch unauffaellig. Die Alternative waere
+             <hgroup> mit H1 und <p>; sie wurde verworfen, weil dabei
+             das Versprechen aus der H1 herausfaellt. */
+        }
+        <h1 id="hero-titel">
           <span class="zeile1">ONLINE EINZELUNTERRICHT</span>
-          <span class="zeile2">Ohne Vertrag, ohne Abo, ohne Kleingedrucktes.</span>
+          <span class="zeile2"
+            >Ohne Vertragslaufzeit und ohne Kleingedrucktes.</span
+          >
         </h1>
 
         <p class="unterzeile">
-          Ein fester Dozent, der Ihr Kind kennt. Deutschlandweit, per Video.
-          Die erste Stunde ist kostenlos.
+          Nachhilfe, die ankommt. Erste Stunde gratis testen.
         </p>
 
         <ul class="punkte">
-          <li>Die ganze Stunde gehört einem Schüler</li>
-          <li>Ein fester Dozent, der bleibt</li>
-          <li>Sie entscheiden nach jeder Stunde neu</li>
+          <li>Die ganze Stunde gehört dem Schüler</li>
+          <li>Volle Flexibilität (Fächerwechsel, Unterrichtszeiten)</li>
+          <li>Bequem von zuhause</li>
         </ul>
 
         <div class="aktionen">
-          <a class="knopf-primaer" href="tel:+4934165832918">0341 658 329 18</a>
-          <a class="knopf-sekundaer" href="#probestunde">Probestunde anfragen</a>
+          <a class="knopf-primaer" href="tel:+4934165832918">
+            {
+              /* Der Linktext nennt die Nummer bereits, das Icon ist rein
+                dekorativ und bleibt fuer Screenreader unsichtbar. */
+            }
+            <svg
+              class="icon-telefon"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+              focusable="false"
+            >
+              <path
+                d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"
+              ></path>
+            </svg>
+            <span>0341 658 329 18</span>
+          </a>
+          <a class="knopf-sekundaer" href="#probestunde">Probestunde anfragen</a
+          >
         </div>
 
         <p class="zeiten">Mo bis Fr, 9 bis 20 Uhr</p>
+
+        {
+          /* Siegel. Wie die Widgets in der Vertrauensleiste laden sie
+             asynchron von cdn.trustindex.io und bringen ihr eigenes CSS
+             mit; wir ruehren es nicht an und steuern nur die Flaeche.
+
+             is:inline ist Pflicht: ohne das Attribut zieht Astro das
+             Script ins eigene Bundle und der Loader verliert die
+             Stelle, an der er das Siegel einsetzt. */
+        }
+        <div class="siegel">
+          {
+            siegel.map((s) => (
+              <div class="siegel-feld siegel-widget">
+                <script
+                  defer
+                  async
+                  is:inline
+                  src={`https://cdn.trustindex.io/loader.js?${s.id}`}
+                />
+              </div>
+            ))
+          }
+        </div>
       </div>
 
       <div class="motiv">
-        {/* Freigestelltes PNG mit Alphakanal, deshalb kein Blend-Modus.
-            Herkunft und Nacharbeit: bildprompt.md der Sektion. */}
+        {
+          /* Freigestelltes PNG mit Alphakanal, deshalb kein Blend-Modus.
+            Herkunft und Nacharbeit: bildprompt.md der Sektion. */
+        }
         <img
           src="/bilder/hero-schuelerin.png"
           width="1494"
@@ -45,13 +119,21 @@
       </div>
     </div>
   </div>
+  {/* Schwarze Abschlusskante. Rein dekorativ, deshalb ohne Inhalt. */}
+  <div class="sockel"></div>
 </section>
 
 <style>
   .hero {
+    /* Hoehe des schwarzen Sockels am unteren Rand. Steht hier, weil die
+       Mindesthoehe damit rechnet. */
+    --sockel-h: var(--space-12);
+
     /* Die Kopfleiste steht im Fluss und belegt Platz. Zusammen ergeben
-       Leiste und Hero eine Bildschirmhöhe. */
-    min-height: calc(100svh - var(--leiste-h));
+       Leiste und Hero 75 % der Bildschirmhöhe. Der Sockel kommt darunter
+       DAZU, statt dem Inhalt Hoehe wegzunehmen — sonst schrumpft die
+       Motivspalte und das Bild wird frueher angeschnitten. */
+    min-height: calc(75svh - var(--layout-header-height) + var(--sockel-h));
     display: flex;
     flex-direction: column;
     overflow: hidden;
@@ -79,14 +161,26 @@
         rgb(255 255 255 / calc(var(--licht-staerke) * 0.45)) 45%,
         rgb(255 255 255 / 0) 75%
       ),
-      var(--bg);
+      var(--color-surface-default);
+  }
+
+  /* Schwarze Kante am unteren Rand des Hero, bevor die naechste Sektion
+     beginnt.
+
+     flex: 0 0 — als Flex-Kind gaebe der Sockel sonst nach, sobald der
+     Text darueber die Mindesthoehe ausreizt. Mit `height` allein und
+     dem voreingestellten flex-shrink: 1 wird er auf schmalen oder
+     kurzen Viewports duenner, ohne dass man den Grund sieht. */
+  .sockel {
+    flex: 0 0 var(--sockel-h);
+    background: var(--color-brand-strong);
   }
 
   .wrap {
     width: 100%;
-    max-width: var(--content-max);
+    max-width: var(--layout-content-max);
     margin: 0 auto;
-    padding: 0 var(--gutter);
+    padding: 0 var(--layout-gutter);
     flex: 1;
     display: flex;
     flex-direction: column;
@@ -104,7 +198,7 @@
      So steht der Knopf bei rund 620 px. Gemessen am 1. September 2026,
      Zahlen in spec.md. */
   .motiv {
-    margin: 0 calc(-1 * var(--gutter));
+    margin: 0 calc(-1 * var(--layout-gutter));
   }
 
   .motiv img {
@@ -114,136 +208,217 @@
   }
 
   .text {
-    padding-top: var(--space-2xl);
-    padding-bottom: var(--space-2xl);
+    padding-top: var(--space-18);
+    padding-bottom: var(--space-18);
   }
 
   h1 {
     margin: 0;
-    font-family: var(--font-body);
+    font-family: var(--font-family-body);
     display: flex;
     flex-direction: column;
-    gap: var(--space-xs);
+    gap: var(--space-3);
   }
 
   .zeile1 {
-    font-family: var(--font-display);
-    font-size: var(--fs-display);
-    font-weight: 700;
-    line-height: var(--lh-display);
+    font-family: var(--font-family-display);
+    font-size: var(--font-size-5xl);
+    font-weight: var(--font-weight-bold);
+    line-height: var(--line-height-tight);
   }
 
   .zeile2 {
-    font-size: var(--fs-h2);
-    font-weight: 600;
-    line-height: var(--lh-h2);
+    font-size: var(--font-size-xl);
+    font-weight: var(--font-weight-semibold);
+    line-height: var(--line-height-normal);
   }
 
   .unterzeile {
-    margin: var(--space-md) 0 0;
-    color: var(--text-muted);
-    max-width: 46ch;
+    margin: var(--space-6) 0 0;
+    color: var(--color-text-subtle);
+    max-width: var(--measure-default);
   }
 
   .punkte {
-    margin: var(--space-lg) 0 0;
+    margin: var(--space-8) 0 0;
     padding: 0;
     list-style: none;
     display: flex;
     flex-direction: column;
-    gap: var(--space-xs);
+    gap: var(--space-3);
   }
 
+  /* Das Haekchen ist gezeichnet, kein Zeichen und kein Icon-Paket:
+     zwei Rahmenkanten eines Kaestchens, um 45 Grad gedreht. Die fuenf
+     Werte unten sind Geometrie dieser Zeichnung und stammen deshalb
+     NICHT aus der Abstandsskala — sie stehen zueinander im
+     Verhaeltnis, nicht zum Raster der Seite. Nur --haken-einzug
+     beruehrt das Layout: Er haelt den Text frei vom Haken. */
   .punkte li {
+    --haken-breite: 12px;
+    --haken-hoehe: 7px;
+    --haken-strich: 2px;
+    --haken-links: 2px;
+    --haken-oben: 8px;
+    --haken-einzug: 28px;
+
     position: relative;
-    padding-left: 28px;
+    padding-left: var(--haken-einzug);
   }
 
   .punkte li::before {
-    content: '';
+    content: "";
     position: absolute;
-    left: 2px;
-    top: 8px;
-    width: 12px;
-    height: 7px;
-    border-left: 2px solid var(--text);
-    border-bottom: 2px solid var(--text);
+    left: var(--haken-links);
+    top: var(--haken-oben);
+    width: var(--haken-breite);
+    height: var(--haken-hoehe);
+    border-left: var(--haken-strich) solid var(--color-text-default);
+    border-bottom: var(--haken-strich) solid var(--color-text-default);
     transform: rotate(-45deg);
   }
 
   .aktionen {
-    margin-top: var(--space-xl);
+    margin-top: var(--space-12);
     display: flex;
     flex-direction: column;
-    gap: var(--space-sm);
+    gap: var(--space-4);
   }
 
-  /* Weiss auf --accent erreicht nur 4,0:1. Zulaessig, weil die
-     Beschriftung mit 18 px im Schnitt 600 als grosse Schrift gilt und
-     dafuer 3:1 genuegen. Wird sie kleiner oder leichter, ist der
-     Kontrast verletzt. Siehe spec.md. */
   .knopf-primaer,
   .knopf-sekundaer {
     display: block;
     text-align: center;
     text-decoration: none;
-    font-weight: 600;
-    font-size: 18px;
-    padding: var(--space-xs) var(--space-lg);
+    font-weight: var(--font-weight-semibold);
+    font-size: var(--font-size-md);
+    padding: var(--space-3) var(--space-8);
     border-radius: var(--radius-sm);
+    /* WCAG 2.2, Target Size: 44 px Mindesthoehe fuer Tippziele. Mit
+       17 px Schrift und je 12 px Innenabstand sind es rund 50 px. Die
+       Untergrenze steht hier trotzdem, damit sie beim Aendern der
+       Abstaende nicht unbemerkt unterschritten wird. */
+    min-height: var(--tap-target-min);
   }
 
+  /* Der primaere Knopf traegt Icon und Nummer nebeneinander, deshalb
+     Flex statt Block. Zentriert wird ueber justify-content, nicht mehr
+     ueber text-align. */
   .knopf-primaer {
-    background: var(--accent);
-    color: var(--accent-contrast);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-2);
+    background: var(--color-action);
+    color: var(--color-text-on-action);
   }
 
+  /* Waechst mit der Beschriftung mit, deshalb em statt Pixel. */
+  .icon-telefon {
+    width: 1.1em;
+    height: 1.1em;
+    flex-shrink: 0;
+  }
+
+  /* Kontraste, nachgerechnet am 1. September 2026:
+     Weiss auf --color-brand  (#d00000) = 5,70:1
+     Weiss auf --color-action (#1f4e98) = 8,05:1
+     Beide liegen ueber 4,5:1 und sind damit unabhaengig von der
+     Schriftgroesse sauber. Die frueher noetige Bedingung „nur zulaessig,
+     weil die Beschriftung gross ist" ist mit dem Wechsel von #ff0000
+     auf #d00000 entfallen. */
   .knopf-sekundaer {
-    border: 1px solid var(--border);
-    color: var(--text);
+    background: var(--color-brand);
+    border: 1px solid var(--color-brand);
+    color: var(--color-text-on-brand);
   }
 
   /* Zustaende --------------------------------------------------------
      Vorgabe aus spec.md, Abschnitt „Zustaende".
 
      Die abgedunkelten Flaechen sind aus den Token-Farben abgeleitet,
-     nicht frei gewaehlt: Hover ist --accent-dark, Aktiv dieselbe Farbe
-     noch einmal abgedunkelt. Ein dritter Rotwert kommt nicht in die
-     Palette. */
+     nicht frei gewaehlt: Hover ist die -dark-Stufe der jeweiligen
+     Akzentfarbe, Aktiv dieselbe Farbe noch einmal abgedunkelt. Jeder
+     Knopf bleibt dabei in seiner Farbfamilie — der blaue wird nicht
+     rot. Ein dritter Rot- oder Blauwert kommt nicht in die Palette. */
 
   .knopf-primaer:hover {
-    background: var(--accent-dark);
+    background: var(--color-action-strong);
   }
 
   .knopf-primaer:active {
-    background: color-mix(in srgb, var(--accent-dark) 85%, #000);
+    background: var(--color-action-stronger);
     transform: translateY(1px);
   }
 
   .knopf-sekundaer:hover {
-    border-color: var(--text);
+    background: var(--color-brand-strong);
+    border-color: var(--color-brand-strong);
   }
 
   .knopf-sekundaer:active {
-    background: color-mix(in srgb, var(--bg) 92%, #fff);
+    background: var(--color-brand-stronger);
+    border-color: var(--color-brand-stronger);
     transform: translateY(1px);
   }
 
   /* Ohne diese Regel zeichnet jeder Browser seinen eigenen Ring — in
-     Chrome eine 1 px blaue Linie ohne Abstand, auf dem roten Knopf
-     kaum zu erkennen. */
+     Chrome eine 1 px blaue Linie ohne Abstand, auf den farbigen
+     Knoepfen kaum zu erkennen. Auf dem blauen waere sie unsichtbar. */
   .knopf-primaer:focus-visible,
   .knopf-sekundaer:focus-visible {
-    outline: 2px solid var(--text);
-    outline-offset: 2px;
+    outline: var(--focus-ring-width) solid var(--color-focus-ring);
+    outline-offset: var(--focus-ring-offset);
   }
 
   .zeiten {
-    margin: var(--space-sm) 0 0;
-    font-size: var(--fs-small);
-    line-height: var(--lh-small);
-    color: var(--text-muted);
+    margin: var(--space-4) 0 0;
+    font-size: var(--font-size-sm);
+    line-height: var(--line-height-relaxed);
+    color: var(--color-text-subtle);
   }
+
+  /* Siegel -----------------------------------------------------------
+     Zwei Fremd-Widgets nebeneinander, linksbuendig unter den
+     Oeffnungszeiten. Sie bringen ihre eigenen Groessen mit; wir geben
+     ihnen nur die Zeile und den Abstand.
+
+     flex-wrap bleibt: Auf schmalen Geraeten sollen sie umbrechen
+     duerfen, statt sich zu quetschen. */
+  .siegel {
+    margin-top: var(--space-8);
+    display: flex;
+    flex-wrap: wrap;
+    /* Unten buendig: Alle drei Siegel stehen auf derselben Linie,
+       obwohl sie unterschiedlich hoch sind. */
+    align-items: flex-end;
+    gap: var(--space-6);
+  }
+
+  /* Alle Groessen unten sind am 1. September 2026 im Browser gemessen,
+     nicht entworfen. Sie gehoeren den Widgets, nicht uns. */
+
+  /* Beide Siegel auf die Haelfte, Vorgabe von Alexander am
+     1. September 2026.
+
+     Die Widgets bringen feste Groessen mit. Trustindex bietet keine
+     Groesseneinstellung dafuer, deshalb `zoom`.
+
+     Warum zoom und nicht transform: transform verkleinert nur die
+     Optik, der Kasten belegt weiter die alte Flaeche — daneben bliebe
+     ein Loch. zoom rechnet die Verkleinerung ins Layout ein.
+
+     --siegel-massstab gilt fuer beide Widgets. Ein Wert, eine Stelle. */
+  .siegel-widget {
+    /* 0,78125 = 0,5 x 1,25 x 1,25. Am 1. September 2026 dreimal
+       angepasst: erst auf die Haelfte, dann zweimal um ein Viertel
+       wieder hinauf. */
+    --siegel-massstab: 0.78125;
+
+    flex: 0 0 auto;
+    zoom: var(--siegel-massstab);
+  }
+
 
   /* ab 768 ---------------------------------------------------------- */
 
@@ -252,7 +427,10 @@
       flex-direction: row;
     }
 
-    .knopf-primaer,
+    .knopf-primaer {
+      display: inline-flex;
+    }
+
     .knopf-sekundaer {
       display: inline-block;
     }
@@ -261,6 +439,44 @@
   /* ab 1120 — zweispaltig ------------------------------------------- */
 
   @media (min-width: 1120px) {
+    /* Die Textspalte wird zur Flex-Spalte, damit die Siegel per
+       margin-top: auto an ihren unteren Rand rutschen. Ohne das haengen
+       sie direkt unter den Oeffnungszeiten und der Abstand zum Sockel
+       waechst mit jedem hoeheren Fenster. */
+    .text {
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* --------------------------------------------------------------
+       SIEGEL IN DEN SOCKEL ZIEHEN — nur diesen Wert anfassen.
+
+       --siegel-tiefe  Wie weit die Siegel unter die Unterkante der
+                       Textspalte reichen, also in den Sockel hinein.
+                       0 = sie sitzen buendig auf der Kante.
+       --------------------------------------------------------------
+
+       Der Versatz rechnet mit dem unteren Innenabstand der Spalte:
+       Die Siegel stehen nach margin-top: auto genau um diesen Abstand
+       ueber der Unterkante. Wird der Abstand geaendert, wandert der
+       Versatz automatisch mit.
+
+       transform statt margin, damit der Versatz rein optisch ist und
+       die Hoehe der Sektion nicht veraendert. z-index, weil der Sockel
+       im Quelltext nach der Textspalte kommt und sonst darueber liegt.
+
+       padding-top ersetzt den margin-top von oben: margin-top: auto
+       und ein Mindestabstand gehen nicht gleichzeitig. */
+    .siegel {
+      --siegel-tiefe: var(--space-4);
+
+      margin-top: auto;
+      padding-top: var(--space-8);
+      position: relative;
+      z-index: 1;
+      transform: translateY(calc(var(--space-28) + var(--siegel-tiefe)));
+    }
+
     .hero {
       --licht-x: 72%;
       --licht-y: 42%;
@@ -276,15 +492,15 @@
 
     .text {
       flex: 0 0 55%;
-      padding-top: var(--space-3xl);
-      padding-bottom: var(--space-3xl);
+      padding-top: var(--space-28);
+      padding-bottom: var(--space-28);
     }
 
     .motiv {
       flex: 1 1 45%;
       position: relative;
       margin: 0;
-      padding: var(--space-3xl) 0 0;
+      padding: var(--space-28) 0 0;
 
       /* ------------------------------------------------------------
          FEINJUSTIERUNG MOTIV — nur diese drei Werte anfassen.
@@ -301,7 +517,7 @@
          --motiv-unten   Abstand der Bildunterkante zur Sektionskante.
                          0 = das Motiv wird von der Kante angeschnitten.
          ------------------------------------------------------------ */
-      --motiv-hoehe: 97%;
+      --motiv-hoehe: 85%;
       --motiv-rechts: 48px;
       --motiv-unten: 0px;
     }
