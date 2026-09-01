@@ -80,8 +80,8 @@ ausgegeben werden.
 
 ## Fassung 1 — Hero-Motiv
 
-Nachbau der Bildmechanik des Studienkreis-Motivs
-(`design/refs-layout/branche/studienkreis-lp-schulstart.jpeg`), aber auf
+Nachbau der Bildmechanik des Studienkreis-Motivs (Screenshot
+gelöscht, siehe `recherche.md`), aber auf
 unserem Grund: blondes Mädchen, Blatt an die Brust gedrückt,
 Hintergrund direkt im Markenblau statt in Dunkelgrau.
 

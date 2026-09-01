@@ -6,8 +6,9 @@ Festlegung. Die Entscheidung trifft Alexander.
 Alle Aufnahmen bei 1440 × 900, also das, was ein Besucher am
 Desktop ohne Scrollen sieht.
 
-- Branche: `design/refs-layout/branche/`
-- Weitere Referenzen: `design/refs-layout/referenzen/`
+> **Die Screenshots wurden am 1. September 2026 gelöscht.** Die Befunde
+> unten stehen für sich; die Bilder waren nur Arbeitsmaterial. Wer sie
+> braucht, ruft die Seiten neu auf.
 
 ---
 
@@ -54,7 +55,7 @@ funktioniert — und es sieht bei allen gleich aus. Wer diesen Aufbau
 
 ## 3. Die alte #Lernstabil-Seite, ehrlich betrachtet
 
-`design/refs-layout/branche/lernstabil-alt.jpeg`
+(Screenshot der alten Seite, gelöscht)
 
 Was den Baukasten-Eindruck erzeugt:
 
@@ -180,8 +181,7 @@ Weißraum, der nicht gefüllt wird, und eine Farbe, die selten auftritt.
 
 ## 8. Nachtrag: Studienkreis-Landingpage "Schulstart"
 
-`design/refs-layout/branche/studienkreis-lp-schulstart.jpeg`
-`design/refs-layout/branche/studienkreis-lp-schulstart-mobil.jpeg`
+(Screenshots der Studienkreis-Landingpage, Desktop und mobil, gelöscht)
 
 Diese Anzeigen-Landingpage ist gestalterisch deutlich stärker als die
 normale Studienkreis-Seite. Es lohnt sich, genau zu trennen, was daran
