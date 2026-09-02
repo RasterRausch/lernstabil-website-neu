@@ -139,7 +139,7 @@ const punkte = [
   }
 
   .einleitung {
-    margin: var(--space-8) auto 0;
+    margin: var(--space-6) auto 0;
     max-width: var(--measure-wide);
     color: var(--color-text-inverse-subtle);
   }
@@ -181,7 +181,7 @@ const punkte = [
     list-style: none;
     display: flex;
     flex-direction: column;
-    gap: var(--space-8);
+    gap: var(--space-6);
   }
 
   .punkte li {
@@ -224,7 +224,7 @@ const punkte = [
      In der Vorlage blau und ueber die volle Breite der rechten Spalte.
      Blau ist im Projekt die Aktionsfarbe, das passt zusammen. */
   .knopf {
-    margin-top: var(--space-12);
+    margin-top: var(--space-8);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -266,10 +266,14 @@ const punkte = [
   /* ab 1120 — zweispaltig ------------------------------------------------ */
 
   @media (min-width: 1120px) {
+    /* Aussenabstand wie in der Vertrauensleiste darueber
+       (--space-18). Vorher stand hier --space-28; zusammen mit dem
+       hochformatigen Motiv wurde die Sektion damit hoeher als der
+       Bildschirm und liess sich nicht mehr am Stueck erfassen. */
     .anders {
       --keil-h: 72px;
-      padding-top: calc(var(--space-28) + var(--keil-h));
-      padding-bottom: var(--space-28);
+      padding-top: calc(var(--space-18) + var(--keil-h));
+      padding-bottom: var(--space-18);
     }
 
     /* Mittig statt oben: Das Motiv ist hochformatig und deutlich
@@ -278,15 +282,20 @@ const punkte = [
     .spalten {
       flex-direction: row;
       align-items: center;
-      gap: var(--space-18);
+      gap: var(--space-12);
     }
 
     /* Das Motiv ist 665 px breit. Mehr bekommt es nicht, sonst wird es
-       hochskaliert und unscharf. 400 px ist die Breite, bei der seine
-       Hoehe ungefaehr der Hoehe der Punkte daneben entspricht. */
+       hochskaliert und unscharf.
+
+       Es ist hochformatig (665 x 1113) und damit der einzige Grund,
+       warum diese Sektion hoch wird: jedes Pixel Breite kostet 1,67
+       Pixel Hoehe. 340 px ist die Breite, bei der seine Hoehe der
+       Hoehe der Punkte daneben entspricht — vorher standen hier
+       400 px, da hing das Motiv unten ueber den Text hinaus. */
     .bild {
       flex: 0 0 auto;
-      max-width: 400px;
+      max-width: 340px;
     }
 
     .inhalt {

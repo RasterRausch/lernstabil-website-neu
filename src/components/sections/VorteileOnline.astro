@@ -1,0 +1,287 @@
+---
+// Sektion: Vorteile der Online-Nachhilfe (Startseite, 4)
+//
+// Aufbau nach einer Vorlage, die Alexander am 2. September 2026
+// mitgebracht hat. Zwei Dinge sind bewusst anders:
+//
+// 1. ROT STATT HELLGRAU. Die Vorlage setzt weisse Karten auf eine
+//    hellgraue Flaeche. Auf Rot dreht sich das Verhaeltnis um: Weisse
+//    Kaesten wuerden zum Blickfang und das Rot zum blossen Rahmen —
+//    genau das Gegenteil dessen, was die Markenfarbe hier leisten
+//    soll. Deshalb stehen die Inhalte direkt auf der Flaeche, ohne
+//    Kasten und ohne Rundung. Das ist dieselbe Regel, nach der auch
+//    die freigestellten Motive im Hero und in Sektion 3 sitzen.
+//
+// 2. EIGENE ICONS. Die Vorlage benutzt das uebliche Business-Set:
+//    Haus, Kalender, Trendpfeil, Euro, Person, Headset. Dieselben
+//    sechs Symbole stehen auf jeder Versicherungsseite und sagen
+//    nichts ueber Nachhilfe. Hier sind es Dinge vom Schreibtisch:
+//    Lampe, Klebezettel, eine Eins auf dem Blatt, Preisschild,
+//    Sprechblasen, Telefonhoerer. Gezeichnet als Filzstiftlinie, wie
+//    die Haekchen im Hero und die Displayschrift der Marke.
+//
+// „Tutor" aus der Vorlage ist zu „Dozenten" geworden: Das ist das
+// Wort, das die Seite sonst benutzt (siehe Navigation, „Dozent
+// werden").
+
+const vorzeile = "Digitales Lernen";
+const ueberschrift = "Vorteile der Online-Nachhilfe";
+---
+
+<section class="vorteile" aria-labelledby="vorteile-titel">
+  <div class="wrap">
+    <div class="kopf">
+      <p class="vorzeile">{vorzeile}</p>
+      <h2 id="vorteile-titel">{ueberschrift}</h2>
+      <p class="einleitung">
+        Geben Sie Ihrem Kind die besten Chancen: Flexibles und effizientes
+        Lernen – ganz bequem von zu Hause.
+      </p>
+    </div>
+
+    {
+      /* Die Icons tragen keine Information, die nicht daneben steht.
+         Sie sind deshalb aria-hidden und focusable="false" — sonst
+         liest ein Screenreader den Titel doppelt.
+
+         Die Zeichnungen liegen inline und nicht als Datei: Sechs
+         Ladevorgaenge fuer je unter 400 Byte lohnen nicht, und nur
+         inline erben sie die Farbe ueber currentColor. */
+    }
+    <ul class="punkte">
+      <li>
+        <span class="icon">
+          {/* Schreibtischlampe — der Lernplatz zu Hause.
+
+              Erste Fassung hatte den Schirm als geneigtes Viereck am
+              Ende eines Gelenkarms; bei dieser Groesse las sich das als
+              Faehnchen. Jetzt frontal: ein Trapez, das sich nach unten
+              oeffnet — die Silhouette, an der man eine Lampe auch als
+              Umriss erkennt. */}
+          <svg viewBox="0 0 64 64" aria-hidden="true" focusable="false">
+            <path class="kringel" d="M32 5c14 0 27 11 27 27 0 15-12 27-27 27S5 47 5 32C5 18 16 6 30 5.2" />
+            <path d="M29 14h13l6 15H23z" />
+            <path d="M35 29c0 8-1 14 0 21" />
+            <path d="M25 50h20" />
+          </svg>
+        </span>
+        <h3>Lernen von zu Hause</h3>
+        <p>
+          Keine Anfahrtswege, entspannte Lernumgebung im gewohnten Umfeld
+        </p>
+      </li>
+
+      <li>
+        <span class="icon">
+          {/* Klebezettel mit umgeknickter Ecke — der spontane Termin. */}
+          <svg viewBox="0 0 64 64" aria-hidden="true" focusable="false">
+            <path class="kringel" d="M32 5c14 0 27 11 27 27 0 15-12 27-27 27S5 47 5 32C5 18 16 6 30 5.2" />
+            <path d="M17 16h30v22L38 48H17z" />
+            <path d="M47 38H38v10" />
+            <path d="M24 25h16" />
+            <path d="M24 32h11" />
+          </svg>
+        </span>
+        <h3>Flexible Terminplanung</h3>
+        <p>Unterricht wann es passt – auch kurzfristige Termine möglich</p>
+      </li>
+
+      <li>
+        <span class="icon">
+          {/* Eine Eins auf dem Blatt — das Ziel, in einem Zeichen. */}
+          <svg viewBox="0 0 64 64" aria-hidden="true" focusable="false">
+            <path class="kringel" d="M32 5c14 0 27 11 27 27 0 15-12 27-27 27S5 47 5 32C5 18 16 6 30 5.2" />
+            <path d="M18 13h28v38H18z" />
+            <path d="M32 42V22l-5 4" />
+            <path d="M26 46h12" />
+          </svg>
+        </span>
+        <h3>Messbare Erfolge</h3>
+        <p>Regelmäßige Fortschrittskontrolle und transparente Leistungsbewertung</p>
+      </li>
+
+      <li>
+        <span class="icon">
+          {/* Preisschild — der Anhaenger, nicht das Eurozeichen. */}
+          <svg viewBox="0 0 64 64" aria-hidden="true" focusable="false">
+            <path class="kringel" d="M32 5c14 0 27 11 27 27 0 15-12 27-27 27S5 47 5 32C5 18 16 6 30 5.2" />
+            <path d="M14 14h16l20 20-16 16-20-20z" />
+            <circle cx="22" cy="22" r="3.5" />
+            <path d="M31 33l7 7" />
+          </svg>
+        </span>
+        <h3>Faire Preise</h3>
+        <p>Transparente Kostenstruktur ohne versteckte Gebühren oder Verträge</p>
+      </li>
+
+      <li>
+        <span class="icon">
+          {/* Zwei Sprechblasen — Frage und Antwort, einer zu einem. */}
+          <svg viewBox="0 0 64 64" aria-hidden="true" focusable="false">
+            <path class="kringel" d="M32 5c14 0 27 11 27 27 0 15-12 27-27 27S5 47 5 32C5 18 16 6 30 5.2" />
+            <path d="M13 15h24v15H23l-7 6 1-6h-4z" />
+            <path d="M27 34h24v15h-4l1 6-7-6H27z" />
+          </svg>
+        </span>
+        <h3>Individueller Einzelunterricht</h3>
+        <p>Einzelunterricht statt Gruppenunterricht</p>
+      </li>
+
+      <li>
+        <span class="icon">
+          {/* Die gehobene Hand — das Meldezeichen aus dem Unterricht.
+
+              Hier stand zuerst ein Telefonhoerer mit Ringelkabel. Er
+              wurde beim Zeichnen zum Headset, also genau zu dem
+              Standardsymbol, das diese Sektion vermeiden soll; ausserdem
+              haette er das Telefon-Icon aus dem Hero gedoppelt.
+
+              Die gehobene Hand trifft die Sache besser: In der Schule
+              meldet man sich, wenn man nicht weiterkommt. Genau darum
+              geht es hier — es antwortet jemand. */}
+          <svg viewBox="0 0 64 64" aria-hidden="true" focusable="false">
+            <path class="kringel" d="M32 5c14 0 27 11 27 27 0 15-12 27-27 27S5 47 5 32C5 18 16 6 30 5.2" />
+            <path d="M17 42V27a4 4 0 0 1 8 0v-6a4 4 0 0 1 8 0v3a4 4 0 0 1 8 0v5a4 4 0 0 1 8 0v13" />
+            <path d="M15 42h34v8H15z" />
+          </svg>
+        </span>
+        <h3>Persönlicher Support</h3>
+        <p>Direkter Kontakt zum Dozenten und unserem Kundenservice</p>
+      </li>
+    </ul>
+  </div>
+</section>
+
+<style>
+  /* Rote Vollflaeche. --color-brand auf Weiss ergibt 5,70:1 — der
+     Wert gilt symmetrisch, weisser Text auf diesem Rot ist also
+     ebenfalls sauber und erfuellt AA auch in kleinen Graden. */
+  .vorteile {
+    background: var(--color-brand);
+    color: var(--color-text-on-brand);
+    padding: var(--space-18) 0;
+  }
+
+  .wrap {
+    width: 100%;
+    max-width: var(--layout-content-max);
+    margin: 0 auto;
+    padding: 0 var(--layout-gutter);
+  }
+
+  /* Kopf --------------------------------------------------------------- */
+
+  .kopf {
+    text-align: center;
+  }
+
+  /* Die Vorzeile steht sonst in Blau. Auf Rot ist Blau weder lesbar
+     noch stimmig, deshalb hier Weiss — die Rolle bleibt dieselbe, nur
+     die Flaeche darunter hat gewechselt. Getrennt wird sie von der
+     Ueberschrift durch Groesse und Laufweite, nicht durch Farbe. */
+  .vorzeile {
+    margin: 0;
+    font-size: var(--font-size-md);
+    font-weight: var(--font-weight-bold);
+    line-height: var(--line-height-relaxed);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  h2 {
+    margin: var(--space-2) auto 0;
+    max-width: 22ch;
+    font-size: var(--font-size-4xl);
+    font-weight: var(--font-weight-bold);
+    line-height: var(--line-height-snug);
+  }
+
+  .einleitung {
+    margin: var(--space-6) auto 0;
+    max-width: var(--measure-wide);
+  }
+
+  /* Raster --------------------------------------------------------------
+     Feste Stufen statt auto-fit: Bei sechs Punkten muss die Spaltenzahl
+     ein Teiler von sechs sein. auto-fit hat auf der vollen Breite vier
+     Spalten gebildet, die letzte Zeile stand dann mit zwei Punkten
+     halbleer da. 1 / 2 / 3 geht immer auf. */
+  .punkte {
+    margin: var(--space-18) 0 0;
+    padding: 0;
+    list-style: none;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-12) var(--space-8);
+  }
+
+  @media (min-width: 768px) {
+    .punkte {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (min-width: 1120px) {
+    .punkte {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  .punkte li {
+    text-align: center;
+  }
+
+  .punkte h3 {
+    margin: var(--space-6) 0 0;
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-bold);
+    line-height: var(--line-height-snug);
+  }
+
+  .punkte p {
+    margin: var(--space-3) auto 0;
+    max-width: 34ch;
+    line-height: var(--line-height-relaxed);
+  }
+
+  /* Icons ---------------------------------------------------------------
+     Gezeichnet, nicht aus einem Set. Die Werte unten sind Geometrie
+     dieser Zeichnungen und stammen deshalb nicht aus der Skala.
+
+     --icon-strich: Die Strichstaerke traegt den handgezeichneten
+     Eindruck. Zu duenn wirkt technisch, zu dick wirkt nach Comic.
+     2,6 bei einer 64er Zeichenflaeche entspricht ungefaehr dem
+     Verhaeltnis der Haekchen im Hero.
+
+     Die Kappen und Ecken sind rund: Ein Filzstift setzt keine
+     scharfen Ecken. */
+  .icon {
+    --icon-gr: 76px;
+    --icon-strich: 2.6;
+
+    display: block;
+    width: var(--icon-gr);
+    height: var(--icon-gr);
+    margin: 0 auto;
+  }
+
+  .icon svg {
+    display: block;
+    width: 100%;
+    height: 100%;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: var(--icon-strich);
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  /* Der Kringel ist mit Absicht nicht geschlossen und nicht rund: Der
+     Pfad endet kurz vor seinem Anfang, wie ein Kreis, den jemand in
+     einem Zug gezogen hat. Etwas duenner als das Motiv darin, damit
+     er rahmt statt zu konkurrieren. */
+  .icon .kringel {
+    stroke-width: calc(var(--icon-strich) * 0.8);
+    opacity: 0.55;
+  }
+</style>
