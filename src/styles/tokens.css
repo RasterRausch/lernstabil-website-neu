@@ -59,6 +59,16 @@
   --color-blue-700: #1f4e98;
   --color-blue-900: #16386d;
 
+  /* Gold. Gedeckt, nicht metallisch glaenzend — ein Verlauf oder
+     Glanzlicht wuerde auf der dunklen Heroflaeche billig wirken.
+
+     Am 2. September 2026 von #c9a227 auf diesen satteren Ton
+     abgedunkelt, weil Alexander weissen Text auf dem Stempel wollte.
+     Das helle Gold erreichte mit Weiss nur 2,4:1 — der kleine Satz
+     im Kreis waere kaum lesbar gewesen. Jetzt sind es 4,7:1 und damit
+     AA auch fuer kleine Grade. */
+  --color-gold-500: #8f6f12;
+
   /* ===================================================================
      2. SEMANTISCHE ROLLEN
      =================================================================== */
@@ -122,6 +132,19 @@
     var(--color-neutral-950)
   );
   --color-text-on-action: var(--color-neutral-0);
+
+  /* --- Auszeichnung (Gold) -------------------------------------------
+     Dritte Farbrolle neben Marke (Rot) und Aktion (Blau), angelegt am
+     2. September 2026 fuer den Stempel im Hero. Sie ist bewusst schmal
+     geschnitten: Gold markiert Bestehendes und Erreichtes, es fordert
+     zu nichts auf. Knoepfe und Verweise bleiben blau, Hervorhebungen
+     im Text bleiben rot.
+
+     Text auf Gold ist weiss — siehe Kontrastnotiz oben. Dunkler Text
+     erreicht auf diesem Ton zwar ebenfalls einen guten Wert, wirkt
+     aber schwer; Weiss auf Gold ist die Fassung, die im Hero steht. */
+  --color-accent: var(--color-gold-500);
+  --color-text-on-accent: var(--color-neutral-0);
 
   /* --- Fokus ---------------------------------------------------------
      Ein Ring für das ganze Projekt. Weiß trägt auf jeder Fläche,

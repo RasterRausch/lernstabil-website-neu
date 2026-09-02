@@ -32,8 +32,20 @@ const { title, description, lang = 'de' } = Astro.props;
         gehostet werden. Jeder Aufruf überträgt die IP des Besuchers an
         Adobe — gehört in die Datenschutzerklärung. Siehe CLAUDE.md. */}
     <link rel="stylesheet" href="https://use.typekit.net/chw4hpk.css" />
+    {/* ital,wght: Die vier geladenen Schnitte sind 400, 600, 700 aufrecht
+        und 400 kursiv. Der Kursivschnitt kam am 2. September 2026 dazu,
+        fuer die Hervorhebungen in der zweiten Zeile der Hero-Ueberschrift.
+        Ohne echten Schnitt schert der Browser die aufrechte Schrift nur
+        schraeg — bei Source Sans 3 gut sichtbar, weil die echte Kursive
+        andere Buchstabenformen hat (a, e, g).
+
+        400 ist der einzige kursive Schnitt: Er passt zum Schnitt der
+        zweiten Zeile. Wird Kursiv spaeter in einem fetteren Text noetig,
+        kommt der passende dazu — nicht vorsorglich. Ein kursiver Schnitt,
+        dessen Gewicht nicht geladen ist, wird vom Browser wieder
+        synthetisiert; das ist genau der Fall, den wir vermeiden. */}
     <link
-      href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;600;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&display=swap"
       rel="stylesheet"
     />
   </head>

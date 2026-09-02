@@ -138,7 +138,14 @@ const links = [
      statt in der Leiste zu verschwinden. Siehe spec.md, Abschnitt
      „Farbe". */
   .logo {
-    --logo-b: 180px;
+    /* Blockbreite des Logos. Alles darin ist ein Bruchteil davon, der
+       Nachbau skaliert also proportional mit — Schriftzug, Claim,
+       Innenabstaende, Rundung.
+
+       Am 2. September 2026 um ein Vierzehntel verkleinert (180/210/240
+       vorher), weil das Logo neben der Navigation zu schwer stand. Die
+       drei Stufen behalten ihr Verhaeltnis zueinander. */
+    --logo-b: 168px;
     align-self: flex-start;
     position: relative;
     z-index: 2;
@@ -322,7 +329,7 @@ const links = [
 
   @media (min-width: 768px) {
     .logo {
-      --logo-b: 210px;
+      --logo-b: 196px;
     }
 
     .hoerer {
@@ -339,7 +346,7 @@ const links = [
 
   @media (min-width: 1120px) {
     .logo {
-      --logo-b: 240px;
+      --logo-b: 224px;
     }
 
     .nav,

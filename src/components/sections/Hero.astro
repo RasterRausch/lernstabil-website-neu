@@ -34,20 +34,51 @@ const siegel = [
              das Versprechen aus der H1 herausfaellt. */
         }
         <h1 id="hero-titel">
-          <span class="zeile1">ONLINE EINZELUNTERRICHT</span>
+          <span class="zeile1">ONLINE NACHHILFE</span>
+          {
+            /* <em> statt <i>: Die Vertragsfreiheit ist der Markenkern,
+               die Betonung ist echt und nicht bloss typografisch.
+               Screenreader heben <em> leicht hervor, <i> nicht. */
+          }
           <span class="zeile2"
-            >Ohne Vertragslaufzeit und ohne Kleingedrucktes.</span
+            ><em
+              >Einzelunterricht, ohne Vertragslaufzeit und ohne Kleingedrucktes.</em
+            ></span
           >
         </h1>
 
+        {
+          /* „Nachhilfe, die ankommt" stand hier bis zum 2. September
+             2026. Das Wortspiel — ankommen im Sinn von gut ankommen und
+             im Sinn von wirklich beim Schueler ankommen — loest sich
+             nicht ein, solange der Satz nicht sagt, WAS ankommt. Der
+             Nachsatz nennt jetzt den Gegenentwurf: nicht der schnelle
+             Rettungsring vor der naechsten Arbeit, sondern Stoff, der
+             haelt. Das ist dieselbe Haltung wie in Sektion 3
+             („Echte Foerderung statt Franchise-Fliessband"). */
+        }
         <p class="unterzeile">
-          Nachhilfe, die ankommt. Erste Stunde gratis testen.
+          <strong>Profi-Nachhilfe</strong>, die ankommt. Wir erklären, bis es
+          wirklich sitzt.
         </p>
 
+        {
+          /* Drei Punkte, drei verschiedene Einwaende: Bekommt mein Kind
+             genug Aufmerksamkeit? Bin ich festgelegt? Brauche ich
+             Technik dafuer?
+
+             Der erste Punkt hiess „Die ganze Stunde gehoert dem
+             Schueler" — richtig gemeint, aber er klang nach
+             Zeitabrechnung statt nach Zuwendung. Der zweite nannte
+             „Volle Flexibilitaet (Faecherwechsel, Unterrichtszeiten)":
+             eine Behauptung mit Klammer dahinter. Jetzt steht dort die
+             Sache selbst, und die Unterrichtszeiten sind draussen —
+             sie stehen ohnehin unter den Knoepfen. */
+        }
         <ul class="punkte">
-          <li>Die ganze Stunde gehört dem Schüler</li>
-          <li>Volle Flexibilität (Fächerwechsel, Unterrichtszeiten)</li>
-          <li>Bequem von zuhause</li>
+          <li>Individueller Einzelunterricht</li>
+          <li>Volle Flexibilität (Fächerwechsel)</li>
+          <li>Einfach per PC, Laptop, Tablet oder Smartphone</li>
         </ul>
 
         <div class="aktionen">
@@ -73,11 +104,10 @@ const siegel = [
             </svg>
             <span>0341 658 329 18</span>
           </a>
-          <a class="knopf-sekundaer" href="#probestunde">Probestunde anfragen</a
-          >
+          <a class="knopf-sekundaer" href="#probestunde">Jetzt gratis testen</a>
         </div>
 
-        <p class="zeiten">Mo bis Fr, 9 bis 20 Uhr</p>
+        <p class="zeiten"><em>Mo bis Fr, 9 bis 20 Uhr</em></p>
 
         {
           /* Siegel. Wie die Widgets in der Vertrauensleiste laden sie
@@ -116,6 +146,29 @@ const siegel = [
           alt=""
           fetchpriority="high"
         />
+
+        {
+          /* Stempel. Bewusst KEIN Pruefsiegel: kein Kranz, keine
+             Sterne, keine Pruefsprache („geprueft", „zertifiziert",
+             „ausgezeichnet"). Der Satz ist eine Aussage ueber uns
+             selbst und eine nachpruefbare Tatsache — seit 2021 wird
+             online unterrichtet, dieselbe Zahl steht in der
+             Vertrauensleiste.
+
+             Das ist der Unterschied, an dem das Wettbewerbsrecht
+             haengt: Eigenwerbung ist erlaubt, der Anschein einer
+             Bestaetigung durch Dritte nicht. Deshalb steht der Stempel
+             auch am Motiv und nicht bei den Trustindex-Siegeln, wo er
+             als drittes Fremdsiegel gelesen wuerde.
+
+             Ein <p> statt eines Bildes: Der Satz wird vorgelesen und
+             mitgesucht, er skaliert mit der Schriftgroesse und kostet
+             keinen Ladevorgang. */
+        }
+        <p class="stempel">
+          <span class="stempel-satz">Qualifizierte Nachhilfe seit</span>
+          <span class="stempel-jahr">2021</span>
+        </p>
       </div>
     </div>
   </div>
@@ -198,6 +251,10 @@ const siegel = [
      So steht der Knopf bei rund 620 px. Gemessen am 1. September 2026,
      Zahlen in spec.md. */
   .motiv {
+    /* position: relative auch hier, nicht erst ab 1120 px: Der Stempel
+       haengt absolut an dieser Flaeche. Ohne den Bezug wuerde er auf
+       schmalen Geraeten an die Sektion springen. */
+    position: relative;
     margin: 0 calc(-1 * var(--layout-gutter));
   }
 
@@ -205,6 +262,85 @@ const siegel = [
     display: block;
     width: 100%;
     height: auto;
+  }
+
+  /* ------------------------------------------------------------------
+     STEMPEL AM MOTIV — die drei Werte oben anfassen.
+
+     --stempel-gr      Durchmesser.
+     --stempel-rechts  Abstand zur rechten Kante des Motivs.
+     --stempel-unten   Abstand zur unteren Kante des Motivs.
+
+     Der Kreis haengt an derselben Ecke wie das Bild (unten rechts),
+     damit er beim Skalieren des Motivs an seiner Stelle bleibt.
+
+     Die Schriftgroessen sind Bruchteile des Durchmessers, nicht Stufen
+     aus der Skala: Der Stempel ist eine geschlossene Zeichnung, sein
+     Text muss mit dem Kreis wachsen und nicht mit dem Fliesstext.
+     Deshalb traegt der Kreis font-size: var(--stempel-gr) — 1em ist
+     damit der Durchmesser.
+     ------------------------------------------------------------------ */
+  .stempel {
+    --stempel-gr: 128px;
+    --stempel-rechts: 8px;
+    --stempel-unten: 24px;
+    /* Leichte Drehung nach rechts. Ein Stempel, der exakt gerade
+       sitzt, sieht nach Platzhalter aus; die Schraege laesst ihn
+       wirken, als waere er aufgebracht worden. Positiv = im
+       Uhrzeigersinn. */
+    --stempel-drehung: 8deg;
+
+    position: absolute;
+    right: var(--stempel-rechts);
+    bottom: var(--stempel-unten);
+    z-index: 1;
+
+    margin: 0;
+    width: var(--stempel-gr);
+    height: var(--stempel-gr);
+    border-radius: var(--radius-full);
+    background: var(--color-accent);
+    color: var(--color-text-on-accent);
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    text-wrap: balance;
+
+    font-size: var(--stempel-gr);
+    line-height: var(--line-height-snug);
+    padding: 0 0.09em;
+    box-shadow: var(--shadow-sm);
+    transform: rotate(var(--stempel-drehung));
+  }
+
+  /* Ohne Bewegung sitzt der Stempel gerade — wie die Neigung der
+     Ueberschrift ist die Schraege reine Dekoration. */
+  @media (prefers-reduced-motion: reduce) {
+    .stempel {
+      --stempel-drehung: 0deg;
+    }
+  }
+
+  /* Der Satz laeuft dreizeilig, klein und ruhig — die Zahl soll
+     tragen, nicht er. 0.1em ist rund ein Zehntel des Durchmessers,
+     bei 128 px also knapp 13 px. */
+  .stempel-satz {
+    font-size: 0.1em;
+    font-weight: var(--font-weight-semibold);
+  }
+
+  /* Die Zahl doppelt so gross wie der Satz und im fetten Schnitt.
+       Sie ist die Aussage, der Rest ist ihr Rahmen. */
+  .stempel-jahr {
+    display: block;
+    margin-top: 0.012em;
+    font-size: 0.2em;
+    font-weight: var(--font-weight-bold);
+    line-height: var(--line-height-tight);
+    letter-spacing: -0.01em;
   }
 
   .text {
@@ -220,16 +356,47 @@ const siegel = [
     gap: var(--space-3);
   }
 
+  /* ------------------------------------------------------------------
+     NEIGUNG DER ERSTEN ZEILE — nur diesen Wert anfassen.
+
+     --neigung  Wie stark die Displayzeile nach oben kippt.
+                Negativ = die Zeile steigt nach rechts an.
+                0deg = gerade.
+
+     Ein Winkel ist Geometrie, keine Stufe aus dem Abstandssystem —
+     deshalb steht er als lokale Variable hier und nicht in tokens.css.
+
+     Der Drehpunkt liegt links auf der Mittellinie: der Zeilenanfang
+     bleibt an der Kante des Rasters stehen, nur das Ende hebt sich.
+     Bei `left top` oder `left bottom` waere die Zeile zusaetzlich
+     gewandert und der Abstand zur Unterzeile haette sich mitgeaendert.
+
+     Die Drehung ist rein optisch — der Kasten der Zeile behaelt seine
+     Lage im Fluss, die Ueberschrift rutscht also nicht.
+     ------------------------------------------------------------------ */
   .zeile1 {
+    --neigung: -1.5deg;
+
     font-family: var(--font-family-display);
     font-size: var(--font-size-5xl);
     font-weight: var(--font-weight-bold);
     line-height: var(--line-height-tight);
+
+    transform: rotate(var(--neigung));
+    transform-origin: left center;
+  }
+
+  /* Wer Bewegung im Browser abbestellt hat, bekommt die gerade Zeile.
+     Die Neigung ist Dekoration; sie traegt keine Information. */
+  @media (prefers-reduced-motion: reduce) {
+    .zeile1 {
+      --neigung: 0deg;
+    }
   }
 
   .zeile2 {
-    font-size: var(--font-size-xl);
-    font-weight: var(--font-weight-semibold);
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-regular);
     line-height: var(--line-height-normal);
   }
 
@@ -237,6 +404,21 @@ const siegel = [
     margin: var(--space-6) 0 0;
     color: var(--color-text-subtle);
     max-width: var(--measure-default);
+  }
+
+  /* Die Unterzeile steht insgesamt in der gedaempften Textfarbe; das
+     Kernwort bekommt die volle Helligkeit zurueck. Der Kontrast
+     zwischen beiden Farben traegt die Hervorhebung.
+
+     font-weight: inherit hebt die Fettung von <strong> wieder auf.
+     Zwei Signale — heller UND fetter — waeren an dieser Stelle eines
+     zu viel: Die Zeile steht direkt unter einer 64-px-Ueberschrift,
+     eine zweite fette Stelle darunter macht den Kopf unruhig. Die
+     Bedeutung von <strong> bleibt fuer Screenreader erhalten, sie wird
+     nur anders sichtbar gemacht. */
+  .unterzeile strong {
+    color: var(--color-text-default);
+    font-weight: inherit;
   }
 
   .punkte {
@@ -413,12 +595,11 @@ const siegel = [
     /* 0,78125 = 0,5 x 1,25 x 1,25. Am 1. September 2026 dreimal
        angepasst: erst auf die Haelfte, dann zweimal um ein Viertel
        wieder hinauf. */
-    --siegel-massstab: 0.78125;
+    --siegel-massstab: 0.65;
 
     flex: 0 0 auto;
     zoom: var(--siegel-massstab);
   }
-
 
   /* ab 768 ---------------------------------------------------------- */
 
@@ -468,13 +649,13 @@ const siegel = [
        padding-top ersetzt den margin-top von oben: margin-top: auto
        und ein Mindestabstand gehen nicht gleichzeitig. */
     .siegel {
-      --siegel-tiefe: var(--space-4);
+      --siegel-tiefe: var(--space-8);
 
       margin-top: auto;
       padding-top: var(--space-8);
       position: relative;
       z-index: 1;
-      transform: translateY(calc(var(--space-28) + var(--siegel-tiefe)));
+      transform: translateY(calc(var(--text-unten) + var(--siegel-tiefe)));
     }
 
     .hero {
@@ -490,10 +671,26 @@ const siegel = [
       gap: 0;
     }
 
+    /* --text-unten ist der Abstand zwischen der letzten Textzeile und
+       der Sockelkante. Ab 1120 px steht in diesem Raum nichts mehr —
+       die Siegel liegen im Fluss direkt unter den Oeffnungszeiten und
+       werden nur optisch hineingeschoben. Der Wert bestimmt damit
+       allein, wie weit die Knoepfe ueber dem Sockel stehen.
+
+       Alexander war der Abstand am 2. September 2026 zu gross; vorher
+       stand hier --space-28 wie oben. Oben bleibt es dabei, unten sind
+       es jetzt --space-18.
+
+       Die Verschiebung der Siegel rechnet mit derselben Variable. Bis
+       zum 2. September 2026 stand --space-28 an beiden Stellen
+       getrennt — der Kommentar am Siegel-Block behauptete eine
+       Kopplung, die es nicht gab. Jetzt gibt es sie. */
     .text {
+      --text-unten: var(--space-8);
+
       flex: 0 0 55%;
       padding-top: var(--space-28);
-      padding-bottom: var(--space-28);
+      padding-bottom: var(--text-unten);
     }
 
     .motiv {
