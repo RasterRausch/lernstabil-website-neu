@@ -4,13 +4,13 @@
 // Aufbau nach einer Vorlage, die Alexander am 2. September 2026
 // mitgebracht hat. Zwei Dinge sind bewusst anders:
 //
-// 1. ROT STATT HELLGRAU. Die Vorlage setzt weisse Karten auf eine
-//    hellgraue Flaeche. Auf Rot dreht sich das Verhaeltnis um: Weisse
-//    Kaesten wuerden zum Blickfang und das Rot zum blossen Rahmen —
-//    genau das Gegenteil dessen, was die Markenfarbe hier leisten
-//    soll. Deshalb stehen die Inhalte direkt auf der Flaeche, ohne
-//    Kasten und ohne Rundung. Das ist dieselbe Regel, nach der auch
-//    die freigestellten Motive im Hero und in Sektion 3 sitzen.
+// 1. KREIDETAFEL STATT HELLGRAU. Die Vorlage setzt weisse Karten auf
+//    eine hellgraue Flaeche. Auf der dunklen Tafel wuerden weisse
+//    Kaesten zum grellsten Punkt der Seite. Deshalb stehen die Inhalte
+//    direkt auf der Flaeche, ohne Kasten und ohne Rundung. Das ist
+//    dieselbe Regel, nach der auch die freigestellten Motive im Hero
+//    und in Sektion 3 sitzen. (Bis 14. September 2026 war die Flaeche
+//    rot.)
 //
 // 2. EIGENE ICONS. Die Vorlage benutzt das uebliche Business-Set:
 //    Haus, Kalender, Trendpfeil, Euro, Person, Headset. Dieselben
@@ -101,16 +101,39 @@ const ueberschrift = "Vorteile der Online-Nachhilfe";
 </section>
 
 <style>
-  /* Rote Vollflaeche. --color-brand-strong auf Weiss ergibt 7,18:1 —
-     der Wert gilt symmetrisch, weisser Text auf diesem Rot ist also
-     ebenfalls sauber und erfuellt AAA auch in kleinen Graden. Die
-     dunklere Stufe statt --color-brand (5,70:1), damit die Flaeche
-     sich von den helleren roten Akzenten der Nachbarsektionen
-     absetzt. */
+  /* Kreidetafel wie in Sektion 6 (Schulfaecher). Am 14. September 2026
+     auf Alexanders Wunsch von Rot (--color-brand-strong) umgestellt,
+     nach Versuchen mit Blau und Dunkelgrau. Die Sektion hat nur weissen
+     Text; der kommt auf der hellsten Stelle der abgedunkelten Tafel
+     noch auf ueber 9:1. Zur Abdunklung siehe --color-scrim in
+     tokens.css, zur Bildgroesse den Kommentar in Schulfaecher.astro.
+
+     GEDREHT: Mit demselben Bildausschnitt saehen beide Tafeln gleich
+     aus. Verschieben hilft nicht — das Bild ist nur 768 x 576 und
+     fuellt die Sektion mit cover schon aus, es bleibt kaum Spielraum.
+     Um 180 Grad gedreht liegen die Kreidespuren an anderen Stellen,
+     bei derselben Datei. CSS kann ein Hintergrundbild nicht drehen,
+     deshalb liegt die Tafel auf ::before; isolation haelt die Ebene
+     hinter dem Inhalt, aber vor der Grundfarbe. */
   .vorteile {
-    background: var(--color-brand-strong);
-    color: var(--color-text-on-brand);
+    position: relative;
+    isolation: isolate;
+    background-color: var(--color-surface-sunken);
+    color: var(--color-text-default);
     padding: var(--space-18) 0;
+  }
+
+  .vorteile::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background-image:
+      linear-gradient(var(--color-scrim), var(--color-scrim)),
+      url("/bilder/kreidetafel.webp");
+    background-size: cover;
+    background-position: center;
+    transform: rotate(180deg);
   }
 
   .wrap {
@@ -126,8 +149,8 @@ const ueberschrift = "Vorteile der Online-Nachhilfe";
     text-align: center;
   }
 
-  /* Die Vorzeile steht sonst in Blau. Auf Rot ist Blau weder lesbar
-     noch stimmig, deshalb hier Weiss — die Rolle bleibt dieselbe, nur
+  /* Die Vorzeile steht sonst in Blau. Auf der dunklen Tafel kaeme Blau
+     auf hoechstens 2:1, deshalb hier Weiss — die Rolle bleibt dieselbe, nur
      die Flaeche darunter hat gewechselt. Getrennt wird sie von der
      Ueberschrift durch Groesse und Laufweite, nicht durch Farbe. */
   .vorzeile {
