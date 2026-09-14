@@ -1,0 +1,517 @@
+---
+// Sektion: Preise (Startseite, 7)
+//
+// Ersetzt die drei Paketkarten der bestehenden Seite (Flex, Fokus,
+// Intensiv). Festgelegt mit Alexander am 14. September 2026:
+//
+// - KEIN PAKET ZUM AUSWAEHLEN. Drei Karten nebeneinander verlangen eine
+//   Entscheidung — genau die Bindung, die #Lernstabil nicht hat.
+//   Stattdessen ein Preis, der mit der Zahl der Stunden von selbst
+//   sinkt. Die Stufen werden nicht gebucht, sondern am Monatsende
+//   angewendet.
+// - „MONATLICH KUENDBAR" ENTFAELLT. Kuendigen setzt einen Vertrag
+//   voraus; die Seite verspricht, dass es keinen gibt.
+// - DER PREIS STEHT NIE ALLEIN. Direkt daneben, was nicht dazukommt.
+//   Dieselbe Zahl wirkt dann ehrlich statt teuer.
+// - DER VERGLEICH nennt keine Anbieter. Er gibt Eltern die zwei
+//   Fragen an die Hand, an denen die beworbenen Kettenpreise scheitern
+//   (Gruppenpreis, 24 Monate Laufzeit — belegt in der
+//   Wettbewerbsrecherche, Commit 4fd1997).
+//
+// Preise, Stufen, Absage- und Ferienregel von Alexander bestaetigt am
+// 14. September 2026. Die Terminangaben an den Stufen sind reine
+// Umrechnung (12 Unterrichtsstunden = 6 Termine zu je 90 Minuten).
+
+const telefon = "0341 658 329 18";
+const telefonHref = "tel:+4934165832918";
+
+const leistungen = [
+  "Einzelunterricht mit festem Dozenten",
+  "Alle Fächer, alle Klassenstufen",
+  "Keine Anmeldegebühr, keine Materialkosten",
+  "Keine Laufzeit, keine Kündigung",
+  "Absage bis 24 Stunden vorher kostenfrei",
+  "In den Ferien zahlen Sie nichts",
+];
+
+// nachlass: markiert die Stufen, die guenstiger sind als der
+// Grundpreis. Sie tragen Gold — siehe Kommentar an .stufen.
+const stufen = [
+  {
+    menge: "bis 11 Unterrichtsstunden im Monat",
+    preis: "28,95 €",
+    hinweis: "Grundpreis",
+    nachlass: false,
+  },
+  {
+    menge: "ab 12 Unterrichtsstunden im Monat",
+    preis: "25,95 €",
+    hinweis: "z. B. 6 Termine zu je 90 Minuten",
+    nachlass: true,
+  },
+  {
+    menge: "ab 16 Unterrichtsstunden im Monat",
+    preis: "22,50 €",
+    hinweis: "z. B. 8 Termine zu je 90 Minuten",
+    nachlass: true,
+  },
+];
+---
+
+<section class="preise" id="preise" aria-labelledby="preise-titel">
+  <div class="wrap">
+    <div class="kopf">
+      <p class="vorzeile">Preise</p>
+      <h2 id="preise-titel">Sie zahlen nur, was stattfindet</h2>
+      <p class="einleitung">
+        Kein Vertrag, kein Abo, keine Kündigungsfrist. Sie entscheiden nach
+        jeder Stunde neu, ob es weitergeht.
+      </p>
+    </div>
+
+    {/* Grundpreis und Leistungen ------------------------------------ */}
+    <div class="grundpreis">
+      <div class="betrag-block">
+        <p class="betrag">28,95&nbsp;€</p>
+        <p class="einheit">je Unterrichtsstunde (45&nbsp;Minuten)</p>
+      </div>
+
+      <ul class="leistungen">
+        {leistungen.map((l) => <li>{l}</li>)}
+      </ul>
+    </div>
+
+    {/* Preisleiste -------------------------------------------------- */}
+    <div class="nachlass">
+      <h3>Wer mehr lernt, zahlt automatisch weniger</h3>
+
+      <ol class="stufen">
+        {
+          stufen.map((s) => (
+            <li class:list={{ rabatt: s.nachlass }}>
+              <span class="menge">{s.menge}</span>
+              <span class="stufe-preis">{s.preis}</span>
+              <span class="hinweis">{s.hinweis}</span>
+            </li>
+          ))
+        }
+      </ol>
+
+      <p class="abrechnung">
+        Nichts buchen, nichts ankündigen: Am Monatsende rechnen wir ab, was
+        tatsächlich stattgefunden hat. Erreicht der Monat eine Stufe, gilt der
+        günstigere Satz für alle Stunden dieses Monats.
+      </p>
+    </div>
+
+    {/* Aktion ------------------------------------------------------- */}
+    <div class="aktion">
+      <a class="knopf" href="#probestunde">Gratis Probestunde sichern</a>
+      <p class="anruf">
+        oder anrufen: <a href={telefonHref}>{telefon}</a>
+        <span class="zeiten">Mo bis Fr, 9 bis 20 Uhr</span>
+      </p>
+    </div>
+
+    {/* Vergleich ---------------------------------------------------- */}
+    <div class="vergleich">
+      <h3>Worauf Sie beim Vergleichen achten sollten</h3>
+      <div class="fragen">
+        <div>
+          <p class="frage">Einzelunterricht oder Gruppe?</p>
+          <p>
+            Die niedrigen Preise, mit denen große Anbieter werben, sind fast
+            immer Gruppenpreise. Der Einzelunterricht kostet dort ein
+            Vielfaches.
+          </p>
+        </div>
+        <div>
+          <p class="frage">Gilt der Preis nur mit Laufzeit?</p>
+          <p>
+            Die günstigsten Angebote setzen oft eine Bindung von 24 Monaten
+            voraus. Rechnen Sie die Gesamtsumme aus, bevor Sie unterschreiben.
+          </p>
+        </div>
+      </div>
+      <p class="fazit">Unser Preis gilt ab der ersten Stunde und ohne Bindung.</p>
+    </div>
+  </div>
+</section>
+
+<style>
+  .preise {
+    background: var(--color-surface-inverse);
+    color: var(--color-text-inverse);
+    padding: var(--space-18) 0;
+    /* Die Kopfleiste ist sticky. Ohne diesen Abstand verschwaende die
+       Vorzeile beim Sprung ueber „Preise" in der Navigation darunter. */
+    scroll-margin-top: var(--layout-header-height);
+  }
+
+  .wrap {
+    width: 100%;
+    max-width: var(--layout-content-max);
+    margin: 0 auto;
+    padding: 0 var(--layout-gutter);
+  }
+
+  /* Kopf — wie Sektion 3 und 5 ----------------------------------------- */
+
+  .kopf {
+    text-align: center;
+  }
+
+  .vorzeile {
+    margin: 0;
+    color: var(--color-action);
+    font-size: var(--font-size-md);
+    font-weight: var(--font-weight-bold);
+    line-height: var(--line-height-relaxed);
+  }
+
+  h2 {
+    margin: var(--space-2) auto 0;
+    max-width: 28ch;
+    font-size: var(--font-size-4xl);
+    font-weight: var(--font-weight-bold);
+    line-height: var(--line-height-snug);
+  }
+
+  .einleitung {
+    margin: var(--space-6) auto 0;
+    max-width: var(--measure-wide);
+    color: var(--color-text-inverse-subtle);
+  }
+
+  h3 {
+    margin: 0;
+    font-size: var(--font-size-xl);
+    font-weight: var(--font-weight-bold);
+    line-height: var(--line-height-snug);
+  }
+
+  /* Grundpreis ----------------------------------------------------------
+     Die groesste Zahl der Sektion, in 5xl wie die Hero-Ueberschrift.
+     Dunkel, nicht rot: Rot als Preis liest sich wie ein Sonderangebot,
+     und das Gold gehoert den Stufen darunter. */
+
+  .grundpreis {
+    margin-top: var(--space-12);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-8);
+  }
+
+  .betrag-block {
+    text-align: center;
+  }
+
+  .betrag {
+    margin: 0;
+    font-size: var(--font-size-5xl);
+    font-weight: var(--font-weight-bold);
+    line-height: var(--line-height-tight);
+  }
+
+  .einheit {
+    margin: var(--space-2) 0 0;
+    color: var(--color-text-inverse-subtle);
+  }
+
+  /* Haekchen wie in Sektion 3 — Geometrie der Zeichnung, nicht der
+     Abstandsskala. */
+  .leistungen {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: grid;
+    gap: var(--space-3) var(--space-8);
+  }
+
+  .leistungen li {
+    --haken-breite: 12px;
+    --haken-hoehe: 7px;
+    --haken-strich: 2px;
+    --haken-oben: 9px;
+    --haken-einzug: 28px;
+
+    position: relative;
+    padding-left: var(--haken-einzug);
+  }
+
+  .leistungen li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: var(--haken-oben);
+    width: var(--haken-breite);
+    height: var(--haken-hoehe);
+    border-left: var(--haken-strich) solid var(--color-brand);
+    border-bottom: var(--haken-strich) solid var(--color-brand);
+    transform: rotate(-45deg);
+  }
+
+  @media (min-width: 768px) {
+    .leistungen {
+      grid-template-columns: repeat(2, auto);
+    }
+  }
+
+  @media (min-width: 1120px) {
+    .grundpreis {
+      flex-direction: row;
+      justify-content: center;
+      gap: var(--space-18);
+    }
+
+    .betrag-block {
+      text-align: left;
+    }
+  }
+
+  /* Preisleiste ---------------------------------------------------------
+     Eine Linie mit drei Punkten statt drei Karten: Man steht nicht vor
+     einer Wahl, man bewegt sich auf der Linie weiter.
+
+     GOLD fuer die Stufen mit Nachlass. Die Rolle ist in tokens.css als
+     „markiert Erreichtes, fordert zu nichts auf" angelegt — genau das
+     ist eine Stufe, die man durch Lernen erreicht. Gold auf Weiss
+     ergibt 4,7:1, also auch fuer die kleineren Zeilen sauber.
+
+     Die Linie zwischen zwei Punkten zeichnet jeweils der linke (oben:
+     der obere) Punkt als ::after. So braucht es keine Hoehen- oder
+     Breitenrechnung ueber die ganze Liste.
+
+     --punkt-gr, --linie, --punkt-oben: Geometrie der Leiste.
+     --punkt-oben setzt den Punkt auf die Mitte der ersten Textzeile
+     (17 px Schrift, Zeilenhoehe 1,6 = rund 27 px; (27 - 16) / 2). */
+
+  .nachlass {
+    margin-top: var(--space-18);
+    text-align: center;
+  }
+
+  .stufen {
+    --punkt-gr: 16px;
+    --linie: 2px;
+    --punkt-oben: 5px;
+
+    margin: var(--space-8) auto 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-8);
+    /* measure-default statt narrow: Bei 30ch brach „bis 11
+       Unterrichtsstunden im Monat" vor dem letzten Wort um. Die
+       Leiste bleibt trotzdem als schmaler Block mittig. */
+    max-width: var(--measure-default);
+    text-align: left;
+  }
+
+  .stufen li {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    padding-left: var(--space-8);
+  }
+
+  .stufen li::before {
+    content: "";
+    position: absolute;
+    z-index: 1;
+    left: 0;
+    top: var(--punkt-oben);
+    width: var(--punkt-gr);
+    height: var(--punkt-gr);
+    box-sizing: border-box;
+    border-radius: var(--radius-full);
+    border: var(--linie) solid var(--color-text-inverse-subtle);
+    background: var(--color-surface-inverse);
+  }
+
+  .stufen li.rabatt::before {
+    border-color: var(--color-accent);
+    background: var(--color-accent);
+  }
+
+  /* Senkrechte Linie zum naechsten Punkt: von der Punktmitte bis ueber
+     den Abstand zur naechsten Stufe. Gold, sobald sie auf eine Stufe
+     mit Nachlass zulaeuft — also ab dem ersten Punkt. */
+  .stufen li:not(:last-child)::after {
+    content: "";
+    position: absolute;
+    left: calc((var(--punkt-gr) - var(--linie)) / 2);
+    top: calc(var(--punkt-oben) + var(--punkt-gr) / 2);
+    width: var(--linie);
+    height: calc(100% + var(--space-8));
+    background: var(--color-accent);
+  }
+
+  .menge {
+    font-weight: var(--font-weight-semibold);
+  }
+
+  .stufe-preis {
+    font-size: var(--font-size-2xl);
+    font-weight: var(--font-weight-bold);
+    line-height: var(--line-height-normal);
+  }
+
+  .rabatt .stufe-preis {
+    color: var(--color-accent);
+  }
+
+  .hinweis {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-inverse-subtle);
+  }
+
+  .abrechnung {
+    margin: var(--space-8) auto 0;
+    max-width: var(--measure-wide);
+    color: var(--color-text-inverse-subtle);
+  }
+
+  /* Ab 1120: waagerecht. Punkte oben mittig ueber jeder Stufe, die Linie
+     laeuft von Punktmitte zu Punktmitte. */
+  @media (min-width: 1120px) {
+    .stufen {
+      max-width: none;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--space-8);
+      text-align: center;
+    }
+
+    .stufen li {
+      padding-left: 0;
+      padding-top: calc(var(--punkt-gr) + var(--space-4));
+    }
+
+    .stufen li::before {
+      top: 0;
+      left: calc(50% - var(--punkt-gr) / 2);
+    }
+
+    .stufen li:not(:last-child)::after {
+      top: calc((var(--punkt-gr) - var(--linie)) / 2);
+      left: 50%;
+      width: calc(100% + var(--space-8));
+      height: var(--linie);
+    }
+  }
+
+  /* Aktion — Knopf wie Sektion 3, Telefon als Textverweis ------------ */
+
+  .aktion {
+    margin-top: var(--space-12);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-4);
+    text-align: center;
+  }
+
+  .knopf {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    min-height: var(--tap-target-min);
+    padding: var(--space-3) var(--space-8);
+    border-radius: var(--radius-sm);
+    background: var(--color-action);
+    color: var(--color-text-on-action);
+    font-size: var(--font-size-md);
+    font-weight: var(--font-weight-bold);
+    text-decoration: none;
+  }
+
+  .knopf:hover {
+    background: var(--color-action-strong);
+  }
+
+  .knopf:active {
+    background: var(--color-action-stronger);
+    transform: translateY(1px);
+  }
+
+  .knopf:focus-visible,
+  .anruf a:focus-visible {
+    outline: var(--focus-ring-width) solid var(--color-text-inverse);
+    outline-offset: var(--focus-ring-offset);
+  }
+
+  @media (min-width: 768px) {
+    .knopf {
+      width: auto;
+    }
+  }
+
+  .anruf {
+    margin: 0;
+    color: var(--color-text-inverse-subtle);
+  }
+
+  /* Blau wie der Telefonweg im Rest der Seite. 8,05:1 auf Weiss. */
+  .anruf a {
+    color: var(--color-action);
+    font-weight: var(--font-weight-bold);
+    white-space: nowrap;
+  }
+
+  .zeiten {
+    display: block;
+    font-size: var(--font-size-sm);
+  }
+
+  /* Vergleich -----------------------------------------------------------
+     Bewusst leiser als der Preis: kleinere Ueberschrift, grauer Text.
+     Er beantwortet einen Einwand, er ist nicht das Angebot. */
+
+  /* Zwei Spalten zu je --measure-default plus Spaltenabstand. Ueber die
+     volle Inhaltsbreite liefen die Zeilen auf ueber 80 Zeichen. */
+  .vergleich {
+    margin: var(--space-18) auto 0;
+    max-width: calc(2 * var(--measure-default) + var(--space-12));
+    text-align: center;
+  }
+
+  .vergleich h3 {
+    font-size: var(--font-size-lg);
+  }
+
+  .fragen {
+    margin-top: var(--space-6);
+    display: grid;
+    gap: var(--space-6) var(--space-12);
+    text-align: left;
+  }
+
+  @media (min-width: 768px) {
+    .fragen {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  .fragen p {
+    margin: 0;
+    color: var(--color-text-inverse-subtle);
+  }
+
+  .fragen .frage {
+    color: var(--color-text-inverse);
+    font-weight: var(--font-weight-bold);
+  }
+
+  .fragen .frage + p {
+    margin-top: var(--space-2);
+  }
+
+  .fazit {
+    margin: var(--space-6) 0 0;
+    font-weight: var(--font-weight-bold);
+  }
+</style>
