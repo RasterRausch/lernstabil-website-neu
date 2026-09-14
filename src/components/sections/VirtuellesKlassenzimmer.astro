@@ -1,0 +1,203 @@
+---
+// Sektion: Echte Nachhilfe im virtuellen Klassenzimmer (Startseite, 5)
+//
+// Aufbau und Bild von der bestehenden Seite lernstabil.de.
+//
+// FLAECHE: Weiss. Darueber steht die rote Vorteile-Flaeche, darunter
+// die dunkle Kreidetafel — Weiss trennt beide, statt dass zwei
+// kraeftige Flaechen aneinanderstossen. Kopf und Knopf deshalb wie in
+// Sektion 3, die ebenfalls weiss ist.
+//
+// BILD: Die alte Seite setzt das Tablet in einen weissen Kasten mit
+// Schatten. Das Bild hat aber einen Alphakanal, das Tablet ist also
+// freigestellt — und freigestellte Motive stehen im Projekt ohne
+// Kasten, ohne Rundung, ohne Schatten auf der Flaeche.
+//
+// TEXT: Die alte Fassung sagte „direkt" dreimal, „echt" dreimal und
+// „Whiteboard" zweimal auf wenigen Zeilen. Inhalt unveraendert,
+// Wiederholungen raus.
+
+const vorzeile = "Individuell. Interaktiv. Online.";
+---
+
+<section class="klassenzimmer" aria-labelledby="klassenzimmer-titel">
+  <div class="wrap">
+    <div class="kopf">
+      <p class="vorzeile">{vorzeile}</p>
+      <h2 id="klassenzimmer-titel">
+        Echte Nachhilfe –<br />direkt im virtuellen Klassenzimmer
+      </h2>
+      <p class="einleitung">
+        Der Schüler sieht seinen Dozenten, spricht mit ihm und arbeitet mit ihm
+        auf demselben Whiteboard. So wird aus dem Bildschirm ein Lernraum –
+        flexibel, unkompliziert und persönlich.
+      </p>
+    </div>
+
+    <div class="spalten">
+      <div class="bild">
+        {
+          /* Das Bild traegt Information — so sieht eine Stunde aus —,
+             deshalb hier ein Alternativtext, anders als beim Hero. */
+        }
+        <img
+          src="/bilder/whiteboard.webp"
+          width="900"
+          height="649"
+          alt="Nachhilfestunde auf dem Tablet: gemeinsames Whiteboard mit einer Übung zum Simple Present, daneben zwei Videobilder"
+          loading="lazy"
+          decoding="async"
+        />
+      </div>
+
+      <div class="inhalt">
+        <p>
+          Die Stunde läuft per Videokonferenz, ganz bequem von zu Hause. Seine
+          Aufgaben löst der Schüler gemeinsam mit dem Dozenten auf dem digitalen
+          Whiteboard – fast wie am Schultisch, nur ohne den Weg zur Nachhilfe.
+        </p>
+        <p>
+          Das spart Zeit und Nerven und bringt echten Fortschritt – egal ob
+          am <strong>Desktop, Laptop, Tablet oder Smartphone</strong>.
+        </p>
+
+        <a class="knopf" href="#probestunde">Gratis Probestunde sichern</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .klassenzimmer {
+    background: var(--color-surface-inverse);
+    color: var(--color-text-inverse);
+    padding: var(--space-18) 0;
+  }
+
+  .wrap {
+    width: 100%;
+    max-width: var(--layout-content-max);
+    margin: 0 auto;
+    padding: 0 var(--layout-gutter);
+  }
+
+  /* Kopf — wie Sektion 3 ------------------------------------------------ */
+
+  .kopf {
+    text-align: center;
+  }
+
+  .vorzeile {
+    margin: 0;
+    color: var(--color-action);
+    font-size: var(--font-size-md);
+    font-weight: var(--font-weight-bold);
+    line-height: var(--line-height-relaxed);
+  }
+
+  /* 36ch statt 28 wie in Sektion 3: Der Umbruch steht hier fest im
+     Text (<br>), und „direkt im virtuellen Klassenzimmer" braucht
+     34 Zeichen. Bei 28 brach die zweite Zeile noch einmal. */
+  h2 {
+    margin: var(--space-2) auto 0;
+    max-width: 36ch;
+    font-size: var(--font-size-4xl);
+    font-weight: var(--font-weight-bold);
+    line-height: var(--line-height-snug);
+  }
+
+  .einleitung {
+    margin: var(--space-6) auto 0;
+    max-width: var(--measure-wide);
+    color: var(--color-text-inverse-subtle);
+  }
+
+  /* Spalten -------------------------------------------------------------
+     Im Quelltext steht das Bild vorn: Auf dem Telefon kommt es so vor
+     dem Text, und der Knopf bleibt das Letzte der Sektion. Auf breiten
+     Schirmen dreht row-reverse es nach rechts, wie in der Vorlage. */
+
+  .spalten {
+    margin-top: var(--space-12);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-12);
+  }
+
+  .bild img {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  .inhalt p {
+    margin: 0;
+    color: var(--color-text-inverse-subtle);
+  }
+
+  .inhalt p + p {
+    margin-top: var(--space-4);
+  }
+
+  .inhalt strong {
+    color: var(--color-text-inverse);
+    font-weight: var(--font-weight-bold);
+  }
+
+  /* Knopf — wie Sektion 3 ---------------------------------------------- */
+  .knopf {
+    margin-top: var(--space-8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: var(--tap-target-min);
+    padding: var(--space-3) var(--space-8);
+    border-radius: var(--radius-sm);
+    background: var(--color-action);
+    color: var(--color-text-on-action);
+    font-size: var(--font-size-md);
+    font-weight: var(--font-weight-bold);
+    text-align: center;
+    text-decoration: none;
+  }
+
+  .knopf:hover {
+    background: var(--color-action-strong);
+  }
+
+  .knopf:active {
+    background: var(--color-action-stronger);
+    transform: translateY(1px);
+  }
+
+  .knopf:focus-visible {
+    outline: var(--focus-ring-width) solid var(--color-text-inverse);
+    outline-offset: var(--focus-ring-offset);
+  }
+
+  /* ab 768 — Knopf nicht mehr ueber die volle Breite ------------------- */
+
+  @media (min-width: 768px) {
+    .knopf {
+      display: inline-flex;
+    }
+  }
+
+  /* ab 1120 — zweispaltig ------------------------------------------------ */
+
+  @media (min-width: 1120px) {
+    .spalten {
+      margin-top: var(--space-18);
+      flex-direction: row-reverse;
+      align-items: center;
+    }
+
+    /* Beide Spalten gleich breit. Das Bild ist 900 px breit und wird in
+       der halben Inhaltsbreite nie hochskaliert. */
+    .bild,
+    .inhalt {
+      flex: 1 1 0;
+      min-width: 0;
+    }
+  }
+</style>
