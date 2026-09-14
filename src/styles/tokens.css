@@ -90,6 +90,14 @@
      beieinander. */
   --color-surface-inverse: var(--color-neutral-0);
 
+  /* Abdunklung ueber Hintergrundbildern. Angelegt am 14. September 2026
+     fuer die Kreidetafel in Sektion 5. Die hellste Stelle der Tafel
+     liegt bei #464646; --color-text-subtle erreicht dort nur 4,35:1.
+     Mit 10 % Schwarz darueber sind es 4,85:1 — AA auch fuer kleine
+     Grade, und die Kreidespuren bleiben sichtbar. Wird ein helleres
+     Bild eingesetzt, muss dieser Wert neu gemessen werden. */
+  --color-scrim: color-mix(in srgb, var(--color-neutral-950) 10%, transparent);
+
   /* --- Text ---------------------------------------------------------- */
   --color-text-default: var(--color-neutral-0);
   --color-text-subtle: var(--color-neutral-400);

@@ -1,0 +1,228 @@
+---
+// Sektion: Nachhilfe fuer alle Schulfaecher (Startseite, 5)
+//
+// Aufbau, Faecherliste und Kreidetafel von der bestehenden Seite
+// lernstabil.de. Anders sind die Icons und der Einleitungstext.
+//
+// ICONS: Alexanders Zeichnungen vom 14. September 2026 statt der
+// Symbolschrift der alten Seite — dieselbe Filzstiftlinie im gezogenen
+// Ring wie in Sektion 4. Aufgeraeumt nach demselben Verfahren (siehe
+// Kopf von VorteileOnline.astro): Klassen aufgeloest, Helles entfernt,
+// Dunkles auf currentColor, Zeichenflaeche 120 x 120.
+//
+// TEXT: Die alte Einleitung lief ueber fuenf Zeilen und sagte zweimal
+// „Erfahrung". Gekuerzt auf die zwei Aussagen, die zaehlen: wer
+// unterrichtet, und was passiert, wenn ein Fach fehlt.
+
+import geisteswissenschaften from "../../icons/geisteswissenschaften.svg?raw";
+import naturwissenschaften from "../../icons/naturwissenschaften.svg?raw";
+import sozialwissenschaften from "../../icons/sozialwissenschaften.svg?raw";
+import sprachen from "../../icons/sprachen.svg?raw";
+
+const vorzeile = "Unser Angebot";
+const ueberschrift = "Nachhilfe für alle Schulfächer";
+
+// \u00AD ist ein weiches Trennzeichen. Auf dem Telefon stehen zwei
+// Spalten nebeneinander, dort passt „Geisteswissenschaften" nicht in
+// eine Zeile. Der Browser trennt dann an der Wortfuge statt irgendwo —
+// und nur, wenn es noetig ist.
+const bereiche = [
+  {
+    titel: "Geistes\u00ADwissenschaften",
+    icon: geisteswissenschaften,
+    faecher: ["Philosophie", "Ethik", "Religion", "Musik"],
+  },
+  {
+    titel: "Natur\u00ADwissenschaften",
+    icon: naturwissenschaften,
+    faecher: [
+      "Mathematik",
+      "Physik",
+      "Biologie",
+      "Chemie",
+      "Erdkunde/Geographie",
+      "Informatik",
+    ],
+  },
+  {
+    titel: "Sozial\u00ADwissenschaften",
+    icon: sozialwissenschaften,
+    faecher: ["Geschichte", "Sozialkunde"],
+  },
+  {
+    titel: "Sprachen",
+    icon: sprachen,
+    faecher: ["Deutsch", "Englisch", "Latein", "Französisch"],
+  },
+];
+---
+
+<section class="faecher" aria-labelledby="faecher-titel">
+  <div class="wrap">
+    <div class="kopf">
+      <p class="vorzeile">{vorzeile}</p>
+      <h2 id="faecher-titel">{ueberschrift}</h2>
+      <p class="einleitung">
+        Bei uns unterrichten ausschließlich qualifizierte Fachkräfte – mit
+        fundiertem Fachwissen und viel Erfahrung im Unterrichten. Ihr Fach steht
+        nicht dabei? Sprechen Sie uns an: Wir finden den passenden Dozenten.
+      </p>
+    </div>
+
+    {
+      /* Die Zeichnungen wiederholen nur den Titel daneben. aria-hidden
+         steht in den Dateien selbst. */
+    }
+    <ul class="bereiche">
+      {
+        bereiche.map((b) => (
+          <li>
+            <span class="icon" set:html={b.icon} />
+            <h3>{b.titel}</h3>
+            <ul class="liste">
+              {b.faecher.map((f) => (
+                <li>{f}</li>
+              ))}
+            </ul>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>
+
+<style>
+  /* Kreidetafel. Das Bild ist 768 x 576 und wird auf volle Breite
+     gezogen — bei einer weichen Kreidetextur ohne Kanten faellt das
+     nicht auf, und es bleibt bei 22 KB. Die Grundfarbe darunter steht
+     da, bis das Bild geladen ist, und liegt im Ton der Tafel.
+     Zur Abdunklung siehe --color-scrim in tokens.css. */
+  .faecher {
+    background-color: var(--color-surface-sunken);
+    background-image:
+      linear-gradient(var(--color-scrim), var(--color-scrim)),
+      url("/bilder/kreidetafel.webp");
+    background-size: cover;
+    background-position: center;
+    color: var(--color-text-default);
+    padding: var(--space-18) 0;
+  }
+
+  .wrap {
+    width: 100%;
+    max-width: var(--layout-content-max);
+    margin: 0 auto;
+    padding: 0 var(--layout-gutter);
+  }
+
+  /* Kopf — wie Sektion 4, die ebenfalls auf einer farbigen Flaeche
+     steht: Vorzeile weiss in Versalien, Blau waere auf der Tafel nicht
+     lesbar. ------------------------------------------------------------ */
+
+  .kopf {
+    text-align: center;
+  }
+
+  .vorzeile {
+    margin: 0;
+    font-size: var(--font-size-md);
+    font-weight: var(--font-weight-bold);
+    line-height: var(--line-height-relaxed);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  h2 {
+    margin: var(--space-2) auto 0;
+    /* 28ch wie in Sektion 3. Bei 22 brach die kurze Ueberschrift
+       unnoetig auf zwei Zeilen. */
+    max-width: 28ch;
+    font-size: var(--font-size-4xl);
+    font-weight: var(--font-weight-bold);
+    line-height: var(--line-height-snug);
+  }
+
+  .einleitung {
+    margin: var(--space-6) auto 0;
+    max-width: var(--measure-wide);
+    color: var(--color-text-subtle);
+  }
+
+  /* Raster --------------------------------------------------------------
+     Vier Bereiche: 2 / 4 Spalten, beides geht auf. Schon auf dem Telefon
+     zwei Spalten — einspaltig wuerden vier Icons mit ihren Listen die
+     Sektion auf weit ueber einen Bildschirm strecken, und die Listen
+     sind kurz genug fuer die halbe Breite. */
+  .bereiche {
+    margin: var(--space-12) 0 0;
+    padding: 0;
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-12) var(--space-6);
+  }
+
+  @media (min-width: 1120px) {
+    .bereiche {
+      margin-top: var(--space-18);
+      grid-template-columns: repeat(4, 1fr);
+      gap: var(--space-12) var(--space-8);
+    }
+  }
+
+  .bereiche > li {
+    text-align: center;
+  }
+
+  /* Auf dem Telefon md statt lg, sonst traegt „wissenschaften" allein
+     schon ueber die halbe Breite hinaus. */
+  h3 {
+    margin: var(--space-4) 0 0;
+    font-size: var(--font-size-md);
+    font-weight: var(--font-weight-bold);
+    line-height: var(--line-height-snug);
+    hyphens: manual;
+  }
+
+  .liste {
+    margin: var(--space-3) 0 0;
+    padding: 0;
+    list-style: none;
+    color: var(--color-text-subtle);
+  }
+
+  @media (min-width: 768px) {
+    h3 {
+      margin-top: var(--space-6);
+      font-size: var(--font-size-lg);
+    }
+  }
+
+  /* Icons ---------------------------------------------------------------
+     --icon-gr: 120px ist die Kantenlaenge der Zeichenflaeche, wie in
+     Sektion 4 — gleiche Ringe sollen auf der Seite gleich gross sein.
+     Auf dem Telefon 96px (80 %), weil die Spalte dort halb so breit ist;
+     kleiner nicht, die Zeichnungen tragen feine Linien.
+
+     :global(), weil der Inhalt ueber set:html eingesetzt wird. */
+  .icon {
+    --icon-gr: 96px;
+
+    display: block;
+    width: var(--icon-gr);
+    height: var(--icon-gr);
+    margin: 0 auto;
+  }
+
+  @media (min-width: 768px) {
+    .icon {
+      --icon-gr: 120px;
+    }
+  }
+
+  .icon :global(svg) {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+</style>
