@@ -180,8 +180,15 @@
        3xl  40   Überschrift der Vertrauensleiste
        4xl  52   frei
        5xl  64   Hero-Überschrift, Displayschrift
+       6xl  80   der Grundpreis in Sektion 7   (ab 768: 112, ab 1120: 144)
 
-     `md` ist die einzige Stufe, die mit der Breite wächst.            */
+     `md` und `6xl` sind die einzigen Stufen, die mit der Breite wachsen.
+
+     6xl angelegt am 25. September 2026. Der Grundpreis soll die
+     lauteste Zahl der Seite sein, lauter als die Hero-Ueberschrift —
+     64 px reichten dafuer nicht. Auf dem Handy passt „28,95 €" in der
+     Displayschrift bei 80 px gerade noch in 335 px Inhaltsbreite,
+     deshalb waechst die Stufe erst mit den Breakpoints.              */
   --font-size-xs: 13px;
   --font-size-sm: 15px;
   --font-size-md: 17px;
@@ -191,6 +198,7 @@
   --font-size-3xl: 40px;
   --font-size-4xl: 52px;
   --font-size-5xl: 64px;
+  --font-size-6xl: 80px;
 
   /* --- Zeilenhöhen ---------------------------------------------------
      Ohne Einheit, damit sie sich auf die jeweilige Schriftgröße
@@ -270,6 +278,7 @@
 @media (min-width: 768px) {
   :root {
     --font-size-md: 18px;
+    --font-size-6xl: 112px;
     --layout-gutter: 48px;
     --layout-header-height: 58px;
   }
@@ -280,6 +289,7 @@
    ====================================================================== */
 @media (min-width: 1120px) {
   :root {
+    --font-size-6xl: 144px;
     --layout-header-height: 64px;
   }
 }

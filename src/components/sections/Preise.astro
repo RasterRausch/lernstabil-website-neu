@@ -18,47 +18,74 @@
 //   (Gruppenpreis, 24 Monate Laufzeit — belegt in der
 //   Wettbewerbsrecherche, Commit 4fd1997).
 //
+// Gestaltung neu am 25. September 2026. Alexanders Kritik an der
+// ersten Fassung: weiss, ohne Kontrast, „wie mit dem Textprogramm
+// gemacht". Die Sektion uebernimmt jetzt die Mittel des Hero —
+// dunkle Flaeche, Displayschrift, rote Kante, Stempel, das weisse
+// Blatt — statt eine eigene, leisere Sprache zu sprechen:
+//
+// - Der Grundpreis steht in der Displayschrift und ist die lauteste
+//   Zahl der Seite.
+// - Neben ihm wird durchgestrichen, was andere berechnen. Das zeigt
+//   den Vorteil, statt ihn als Haekchenliste aufzuzaehlen.
+// - Die Nachlassstufen sind eine Treppe aus massiven Bloecken.
+// - Der Vergleich liegt als Zettel auf der Flaeche, wie das Blatt,
+//   das die Schuelerin im Hero haelt.
+//
 // Preise, Stufen, Absage- und Ferienregel von Alexander bestaetigt am
-// 14. September 2026. Die Terminangaben an den Stufen sind reine
-// Umrechnung (12 Unterrichtsstunden = 6 Termine zu je 90 Minuten).
+// 14. September 2026. Die Terminangaben an den Stufen und die
+// Ersparnis in den Stempeln sind reine Umrechnung
+// (12 Unterrichtsstunden = 6 Termine zu je 90 Minuten;
+// 28,95 − 25,95 = 3,00; 28,95 − 22,50 = 6,45).
 
 const telefon = "0341 658 329 18";
 const telefonHref = "tel:+4934165832918";
 
-const leistungen = [
-  "Einzelunterricht mit festem Dozenten",
-  "Alle Fächer, alle Klassenstufen",
-  "Keine Anmeldegebühr, keine Materialkosten",
-  "Keine Laufzeit, keine Kündigung",
-  "Absage bis 24 Stunden vorher kostenfrei",
-  "In den Ferien zahlen Sie nichts",
+// Was bei uns nicht dazukommt. Jeder Posten wird durchgestrichen;
+// `zusatz` steht darunter und bleibt lesbar, weil er die Bedingung
+// nennt.
+const posten = [
+  { name: "Anmeldegebühr" },
+  { name: "Materialkosten" },
+  { name: "Vertragslaufzeit" },
+  { name: "Kündigungsfrist" },
+  { name: "Ausfallgebühr", zusatz: "bei Absage bis 24 Stunden vorher" },
+  { name: "Zahlung in den Ferien" },
 ];
 
-// nachlass: markiert die Stufen, die guenstiger sind als der
-// Grundpreis. Sie tragen Gold — siehe Kommentar an .stufen.
+// ersparnis: nur an den Stufen mit Nachlass. Sie tragen Gold und einen
+// Stempel — siehe Kommentar an .stufen.
 const stufen = [
   {
     menge: "bis 11 Unterrichtsstunden im Monat",
     preis: "28,95 €",
     hinweis: "Grundpreis",
-    nachlass: false,
   },
   {
     menge: "ab 12 Unterrichtsstunden im Monat",
     preis: "25,95 €",
     hinweis: "z. B. 6 Termine zu je 90 Minuten",
-    nachlass: true,
+    ersparnis: "3,00 €",
   },
   {
     menge: "ab 16 Unterrichtsstunden im Monat",
     preis: "22,50 €",
     hinweis: "z. B. 8 Termine zu je 90 Minuten",
-    nachlass: true,
+    ersparnis: "6,45 €",
   },
 ];
+
+// Gezeichneter Markerstrich, einmal fuer das Durchstreichen, einmal
+// fuer die Unterstreichung am Zettel. Die Welle ist leicht
+// unregelmaessig, damit der Strich nicht nach Textauszeichnung
+// aussieht. viewBox 100 x 10, gestreckt ueber preserveAspectRatio.
+const strich = "M1 6 C 18 3, 34 7, 52 5 S 82 3, 99 5";
 ---
 
 <section class="preise" id="preise" aria-labelledby="preise-titel">
+  {/* Rote Kante oben. Rein dekorativ, deshalb ohne Inhalt. */}
+  <div class="keil"></div>
+
   <div class="wrap">
     <div class="kopf">
       <p class="vorzeile">Preise</p>
@@ -69,29 +96,77 @@ const stufen = [
       </p>
     </div>
 
-    {/* Grundpreis und Leistungen ------------------------------------ */}
+    {/* Grundpreis und was nicht dazukommt ---------------------------- */}
     <div class="grundpreis">
       <div class="betrag-block">
         <p class="betrag">28,95&nbsp;€</p>
         <p class="einheit">je Unterrichtsstunde (45&nbsp;Minuten)</p>
+        <p class="inklusive">
+          Einzelunterricht mit festem Dozenten.
+          <br />Alle Fächer, alle Klassenstufen.
+        </p>
       </div>
 
-      <ul class="leistungen">
-        {leistungen.map((l) => <li>{l}</li>)}
-      </ul>
+      <div class="ohne">
+        <h3>Was bei uns nicht dazukommt</h3>
+        <ul class="posten">
+          {
+            posten.map((p) => (
+              <li>
+                <span class="posten-name">
+                  {p.name}
+                  <svg
+                    class="strich"
+                    viewBox="0 0 100 10"
+                    preserveAspectRatio="none"
+                    aria-hidden="true"
+                    focusable="false"
+                  >
+                    <path d={strich} />
+                  </svg>
+                </span>
+                {p.zusatz && <span class="posten-zusatz">{p.zusatz}</span>}
+              </li>
+            ))
+          }
+        </ul>
+
+        {
+          /* Hand, die die Posten streicht. Erzeugtes Bild (Firefly),
+             von Alexander freigestellt, 520 x 550. Rein dekorativ:
+             Sie zeigt nur, was die Striche ohnehin sagen. Das Skript
+             unten bewegt sie; ohne Skript bleibt sie unsichtbar. */
+        }
+        <img
+          class="hand"
+          src="/bilder/hand-stift.webp"
+          width="520"
+          height="550"
+          alt=""
+          aria-hidden="true"
+          loading="lazy"
+          decoding="async"
+        />
+      </div>
     </div>
 
-    {/* Preisleiste -------------------------------------------------- */}
+    {/* Treppe ------------------------------------------------------- */}
     <div class="nachlass">
       <h3>Wer mehr lernt, zahlt automatisch weniger</h3>
 
       <ol class="stufen">
         {
-          stufen.map((s) => (
-            <li class:list={{ rabatt: s.nachlass }}>
+          stufen.map((s, i) => (
+            <li class:list={{ rabatt: s.ersparnis }} style={`--stufe: ${i}`}>
               <span class="menge">{s.menge}</span>
               <span class="stufe-preis">{s.preis}</span>
               <span class="hinweis">{s.hinweis}</span>
+              {s.ersparnis && (
+                <span class="stempel">
+                  <span class="stempel-betrag">{s.ersparnis}</span>
+                  <span class="stempel-satz">weniger je Stunde</span>
+                </span>
+              )}
             </li>
           ))
         }
@@ -104,48 +179,241 @@ const stufen = [
       </p>
     </div>
 
-    {/* Aktion ------------------------------------------------------- */}
+    {/* Aktion — dieselben zwei Knoepfe wie im Hero ------------------- */}
     <div class="aktion">
-      <a class="knopf" href="#probestunde">Gratis Probestunde sichern</a>
-      <p class="anruf">
-        oder anrufen: <a href={telefonHref}>{telefon}</a>
-        <span class="zeiten">Mo bis Fr, 9 bis 20 Uhr</span>
-      </p>
+      <div class="knoepfe">
+        <a class="knopf-probe" href="#probestunde">Gratis Probestunde sichern</a>
+        <a class="knopf-telefon" href={telefonHref}>
+          {/* Die Nummer steht im Linktext, das Icon ist dekorativ. */}
+          <svg
+            class="icon-telefon"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+            focusable="false"
+          >
+            <path
+              d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"
+            ></path>
+          </svg>
+          <span>{telefon}</span>
+        </a>
+      </div>
+      <p class="zeiten">Mo bis Fr, 9 bis 20 Uhr</p>
     </div>
 
-    {/* Vergleich ---------------------------------------------------- */}
-    <div class="vergleich">
-      <h3>Worauf Sie beim Vergleichen achten sollten</h3>
-      <div class="fragen">
-        <div>
+    {/* Vergleich als Zettel ----------------------------------------- */}
+    <div class="zettel">
+      <h3>Bevor Sie woanders unterschreiben:</h3>
+      <ol class="fragen">
+        <li>
           <p class="frage">Einzelunterricht oder Gruppe?</p>
           <p>
             Die niedrigen Preise, mit denen große Anbieter werben, sind fast
             immer Gruppenpreise. Der Einzelunterricht kostet dort ein
             Vielfaches.
           </p>
-        </div>
-        <div>
+        </li>
+        <li>
           <p class="frage">Gilt der Preis nur mit Laufzeit?</p>
           <p>
             Die günstigsten Angebote setzen oft eine Bindung von 24 Monaten
             voraus. Rechnen Sie die Gesamtsumme aus, bevor Sie unterschreiben.
           </p>
-        </div>
-      </div>
-      <p class="fazit">Unser Preis gilt ab der ersten Stunde und ohne Bindung.</p>
+        </li>
+      </ol>
+      <p class="fazit">
+        <span class="unterstrichen">
+          Unser Preis gilt ab der ersten Stunde und ohne Bindung.
+          <svg
+            class="strich"
+            viewBox="0 0 100 10"
+            preserveAspectRatio="none"
+            aria-hidden="true"
+            focusable="false"
+          >
+            <path d={strich} />
+          </svg>
+        </span>
+      </p>
     </div>
   </div>
 </section>
 
+<script>
+  // Die Hand streicht die Posten — Doodly-Art, einmal beim ersten
+  // Hineinscrollen.
+  //
+  // Ablauf: Die Hand kommt von rechts unten (Rechtshaender), setzt die
+  // Stiftspitze am Anfang des ersten Postens an und zieht den Strich.
+  // Strich und Hand laufen mit derselben Dauer und derselben Kurve,
+  // deshalb sitzt die Spitze immer genau am Ende des sichtbaren
+  // Strichs. Dann hebt sie kurz ab, springt zum naechsten Posten und
+  // verschwindet am Ende wieder nach rechts unten.
+  //
+  // Wer Bewegung abbestellt hat oder keinen IntersectionObserver hat,
+  // bekommt .animiert gar nicht erst und sieht die Striche sofort. Laesst
+  // sich das Bild nicht laden, werden die Striche ebenfalls sofort
+  // gezeigt.
+  //
+  // Die Positionen werden beim Start einmal gemessen. Aendert jemand
+  // waehrend der gut fuenf Sekunden die Fenstergroesse, landet die
+  // Hand kurz neben den Strichen; die Striche selbst stimmen trotzdem.
+
+  // Stiftspitze im Bild, als Anteil von Breite und Hoehe. Gemessen am
+  // 25. September 2026 an der Vorlage (965 x 1022, Spitze bei 19 / 106).
+  const SPITZE_X = 19 / 965;
+  const SPITZE_Y = 106 / 1022;
+
+  // Zeiten in Millisekunden. Der Strich wie am 25. September 2026
+  // festgelegt (0,5 s, „mit Gewicht"). Der Sprung ist kurz, damit die
+  // Pausen zwischen den Strichen nicht laenger werden als vorher.
+  const ZEIT = { auftritt: 700, strich: 500, sprung: 350, abgang: 600 };
+
+  // Wie ein Stift, der mit Druck gefuehrt wird: langsam angesetzt,
+  // schnell durchgezogen, hart abgebremst.
+  const KURVE_STRICH = "cubic-bezier(0.7, 0, 0.25, 1)";
+  const KURVE_WEG = "cubic-bezier(0.3, 0, 0.2, 1)";
+
+  // Beim Sprung hebt die Hand ab: Der Mittelpunkt der Bahn liegt um
+  // diesen Anteil der Handhoehe hoeher.
+  const ABHEBEN = 0.04;
+
+  type Punkt = { x: number; y: number };
+
+  const bereich = document.querySelector<HTMLElement>(".preise .ohne");
+  const liste = bereich?.querySelector<HTMLElement>(".posten");
+  const hand = bereich?.querySelector<HTMLImageElement>(".hand");
+  const ruhig = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  if (bereich && liste && hand && !ruhig && "IntersectionObserver" in window) {
+    liste.classList.add("animiert");
+
+    const beobachter = new IntersectionObserver(
+      async (eintraege) => {
+        if (!eintraege.some((e) => e.isIntersecting)) return;
+        beobachter.disconnect();
+        try {
+          await hand.decode();
+          await streichen(bereich, liste, hand);
+        } catch {
+          hand.style.visibility = "hidden";
+          liste.classList.remove("animiert");
+        }
+      },
+      { threshold: 0.5 },
+    );
+
+    beobachter.observe(liste);
+  }
+
+  async function streichen(
+    bereich: HTMLElement,
+    liste: HTMLElement,
+    hand: HTMLImageElement,
+  ) {
+    const box = bereich.getBoundingClientRect();
+    const dx = hand.offsetWidth * SPITZE_X;
+    const dy = hand.offsetHeight * SPITZE_Y;
+    const lage = (p: Punkt) => `translate(${p.x - dx}px, ${p.y - dy}px)`;
+
+    // Anfang und Ende jedes Strichs, relativ zum Bereich. Die
+    // Strich-Grafik reicht genau von Anfang bis Ende des Zugs.
+    const posten = [...liste.querySelectorAll<HTMLElement>("li")].map((li) => {
+      const strich = li.querySelector<SVGElement>(".strich")!;
+      const r = strich.getBoundingClientRect();
+      const y = r.top - box.top + r.height / 2;
+      return {
+        li,
+        strich,
+        von: { x: r.left - box.left, y },
+        bis: { x: r.right - box.left, y },
+      };
+    });
+
+    // Ausserhalb rechts unten: Die Spitze liegt so weit draussen, dass
+    // die Hand ausserhalb des Bereichs beginnt.
+    const draussen: Punkt = {
+      x: box.width + hand.offsetWidth * 0.3,
+      y: box.height + hand.offsetHeight * 0.6,
+    };
+
+    let jetzt = draussen;
+    const fahre = async (
+      nach: Punkt,
+      dauer: number,
+      kurve: string,
+      abheben = false,
+    ) => {
+      const bahn = [{ transform: lage(jetzt) }, { transform: lage(nach) }];
+      if (abheben) {
+        const mitte = {
+          x: (jetzt.x + nach.x) / 2,
+          y: (jetzt.y + nach.y) / 2 - hand.offsetHeight * ABHEBEN,
+        };
+        bahn.splice(1, 0, { transform: lage(mitte) });
+      }
+      await hand.animate(bahn, {
+        duration: dauer,
+        easing: kurve,
+        fill: "forwards",
+      }).finished;
+      jetzt = nach;
+    };
+
+    hand.style.visibility = "visible";
+
+    for (const [i, p] of posten.entries()) {
+      if (i === 0) await fahre(p.von, ZEIT.auftritt, KURVE_WEG);
+      else await fahre(p.von, ZEIT.sprung, KURVE_WEG, true);
+
+      p.strich.animate(
+        [{ clipPath: "inset(0 100% 0 0)" }, { clipPath: "inset(0 0 0 0)" }],
+        { duration: ZEIT.strich, easing: KURVE_STRICH, fill: "forwards" },
+      );
+      await fahre(p.bis, ZEIT.strich, KURVE_STRICH);
+      p.li.classList.add("erledigt");
+    }
+
+    await fahre(draussen, ZEIT.abgang, KURVE_WEG);
+    hand.style.visibility = "hidden";
+  }
+</script>
+
 <style>
   .preise {
-    background: var(--color-surface-inverse);
-    color: var(--color-text-inverse);
-    padding: var(--space-18) 0;
+    position: relative;
+    background: var(--color-surface-default);
+    color: var(--color-text-default);
+    padding: 0 0 var(--space-28);
+    /* Die Hand der Strich-Animation kommt von rechts ausserhalb herein.
+       Ohne das entstuende waehrenddessen eine waagerechte Scrollleiste.
+       clip statt hidden: Es entsteht kein Scrollcontainer, die sticky
+       Kopfleiste und scroll-margin bleiben unberuehrt. */
+    overflow-x: clip;
     /* Die Kopfleiste ist sticky. Ohne diesen Abstand verschwaende die
        Vorzeile beim Sprung ueber „Preise" in der Navigation darunter. */
     scroll-margin-top: var(--layout-header-height);
+  }
+
+  /* Rote Kante ------------------------------------------------------------
+     Trennt die Sektion von der Kreidetafel davor — beide sind dunkel.
+     Dieselbe Farbe wie der Sockel im Hero, aber schraeg: links volle
+     Hoehe, rechts laeuft sie auf ein Viertel aus. Die Schraege ist der
+     Keil aus tokens.css (--color-brand, „Sockel, Keil").
+
+     --keil-rest: Hoehe der Kante am rechten Rand, als Anteil. Geometrie
+     der Form, keine Abstandsstufe. */
+  .keil {
+    --keil-rest: 25%;
+
+    height: var(--space-12);
+    background: var(--color-brand-strong);
+    clip-path: polygon(0 0, 100% 0, 100% var(--keil-rest), 0 100%);
   }
 
   .wrap {
@@ -155,18 +423,23 @@ const stufen = [
     padding: 0 var(--layout-gutter);
   }
 
-  /* Kopf — wie Sektion 3 und 5 ----------------------------------------- */
+  /* Kopf ------------------------------------------------------------------
+     Aufbau wie Sektion 3 und 5. Die Vorzeile in Weiss und Versalien wie
+     in Sektion 6: Das Blau der hellen Sektionen erreicht auf dieser
+     Flaeche nicht genug Kontrast. */
 
   .kopf {
+    padding-top: var(--space-18);
     text-align: center;
   }
 
   .vorzeile {
     margin: 0;
-    color: var(--color-action);
     font-size: var(--font-size-md);
     font-weight: var(--font-weight-bold);
     line-height: var(--line-height-relaxed);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
   }
 
   h2 {
@@ -180,173 +453,286 @@ const stufen = [
   .einleitung {
     margin: var(--space-6) auto 0;
     max-width: var(--measure-wide);
-    color: var(--color-text-inverse-subtle);
+    color: var(--color-text-subtle);
   }
 
   h3 {
     margin: 0;
-    font-size: var(--font-size-xl);
     font-weight: var(--font-weight-bold);
     line-height: var(--line-height-snug);
   }
 
-  /* Grundpreis ----------------------------------------------------------
-     Die groesste Zahl der Sektion, in 5xl wie die Hero-Ueberschrift.
-     Dunkel, nicht rot: Rot als Preis liest sich wie ein Sonderangebot,
-     und das Gold gehoert den Stufen darunter. */
+  /* Grundpreis ------------------------------------------------------------
+     Links die Zahl, rechts die gestrichenen Posten. Unter 1120 px
+     untereinander. */
 
   .grundpreis {
-    margin-top: var(--space-12);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: var(--space-8);
-  }
-
-  .betrag-block {
-    text-align: center;
-  }
-
-  .betrag {
-    margin: 0;
-    font-size: var(--font-size-5xl);
-    font-weight: var(--font-weight-bold);
-    line-height: var(--line-height-tight);
-  }
-
-  .einheit {
-    margin: var(--space-2) 0 0;
-    color: var(--color-text-inverse-subtle);
-  }
-
-  /* Haekchen wie in Sektion 3 — Geometrie der Zeichnung, nicht der
-     Abstandsskala. */
-  .leistungen {
-    margin: 0;
-    padding: 0;
-    list-style: none;
+    margin-top: var(--space-18);
     display: grid;
-    gap: var(--space-3) var(--space-8);
-  }
-
-  .leistungen li {
-    --haken-breite: 12px;
-    --haken-hoehe: 7px;
-    --haken-strich: 2px;
-    --haken-oben: 9px;
-    --haken-einzug: 28px;
-
-    position: relative;
-    padding-left: var(--haken-einzug);
-  }
-
-  .leistungen li::before {
-    content: "";
-    position: absolute;
-    left: 0;
-    top: var(--haken-oben);
-    width: var(--haken-breite);
-    height: var(--haken-hoehe);
-    border-left: var(--haken-strich) solid var(--color-brand);
-    border-bottom: var(--haken-strich) solid var(--color-brand);
-    transform: rotate(-45deg);
-  }
-
-  @media (min-width: 768px) {
-    .leistungen {
-      grid-template-columns: repeat(2, auto);
-    }
+    gap: var(--space-12);
   }
 
   @media (min-width: 1120px) {
     .grundpreis {
-      flex-direction: row;
-      justify-content: center;
+      grid-template-columns: 1fr 1fr;
+      align-items: center;
       gap: var(--space-18);
-    }
-
-    .betrag-block {
-      text-align: left;
     }
   }
 
-  /* Preisleiste ---------------------------------------------------------
-     Eine Linie mit drei Punkten statt drei Karten: Man steht nicht vor
-     einer Wahl, man bewegt sich auf der Linie weiter.
+  /* Die Zahl in der Displayschrift und in 6xl, der einzigen Stufe
+     ueber der Hero-Ueberschrift. Weiss, nicht rot und nicht gold: Rot
+     liest sich als Sonderangebot, und das Gold gehoert den Stufen. Die
+     Neigung ist dieselbe wie bei „ONLINE NACHHILFE" im Hero. */
+  .betrag {
+    --neigung: -1.5deg;
+
+    margin: 0;
+    font-family: var(--font-family-display);
+    font-size: var(--font-size-6xl);
+    font-weight: var(--font-weight-bold);
+    line-height: var(--line-height-tight);
+    white-space: nowrap;
+    transform: rotate(var(--neigung));
+    transform-origin: left center;
+  }
+
+  .einheit {
+    margin: var(--space-4) 0 0;
+    font-size: var(--font-size-lg);
+    color: var(--color-text-subtle);
+  }
+
+  .inklusive {
+    margin: var(--space-6) 0 0;
+    padding-left: var(--space-4);
+    border-left: var(--space-1) solid var(--color-brand);
+    font-weight: var(--font-weight-semibold);
+  }
+
+  /* Gestrichene Posten ----------------------------------------------------
+     Die Posten stehen in der Displayschrift, der Strich ist ein
+     gezeichneter Markerzug in Rot — wie mit dem Stift auf einer
+     Rechnung gestrichen. Er steht ueber dem Wort, nicht dahinter, und
+     laesst es trotzdem lesbar: 4 px Strich auf rund 26 px Schrift.
+
+     Kein <s> und kein <del>: Die Posten sind nicht geloescht, sie
+     fallen weg. Das sagt die Ueberschrift, und die liest ein
+     Screenreader mit.
+
+     --strich-dicke, --strich-ueberstand, --strich-hoehe: Geometrie der
+     Zeichnung. Der Ueberstand laesst den Strich links und rechts ueber
+     das Wort hinausragen, so wie man von Hand streicht. */
+
+  .ohne h3 {
+    font-size: var(--font-size-md);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--color-text-subtle);
+  }
+
+  .posten {
+    margin: var(--space-6) 0 0;
+    padding: 0;
+    list-style: none;
+    display: grid;
+    gap: var(--space-4) var(--space-8);
+  }
+
+  @media (min-width: 768px) {
+    .posten {
+      grid-template-columns: repeat(2, auto);
+      justify-content: start;
+    }
+  }
+
+  .posten li {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .posten-name {
+    --strich-ueberstand: 6px;
+
+    position: relative;
+    font-family: var(--font-family-display);
+    font-size: var(--font-size-xl);
+    line-height: var(--line-height-normal);
+    /* Endzustand: gestrichen und zurueckgetreten. Die Animation setzt
+       das Wort vorher auf volle Helligkeit. */
+    color: var(--color-text-subtle);
+  }
+
+  .posten-zusatz {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-subtle);
+  }
+
+  .strich {
+    --strich-dicke: 4px;
+    --strich-hoehe: 0.4em;
+
+    position: absolute;
+    left: calc(-1 * var(--strich-ueberstand, 0px));
+    width: calc(100% + 2 * var(--strich-ueberstand, 0px));
+    top: 50%;
+    height: var(--strich-hoehe);
+    transform: translateY(-50%);
+    overflow: visible;
+    pointer-events: none;
+  }
+
+  /* Animation: Eine Hand zieht die Striche, Posten fuer Posten.
+     Ablauf und Zeiten stehen im Skript oben — Hand und Strich muessen
+     dieselbe Dauer und Kurve haben, deshalb steuert beides das Skript.
+
+     Ohne Skript und bei abbestellter Bewegung stehen die Striche
+     einfach da. Das Skript setzt .animiert nur, wenn es laufen darf;
+     erst dann sind die Striche verdeckt, bis die Hand sie zieht.
+
+     clip-path statt stroke-dashoffset: Der Strich hat
+     vector-effect: non-scaling-stroke, und Strichmuster rechnen dann
+     in Bildschirmpixeln statt in Pfadlaenge. Das Abdecken von rechts
+     ist davon unabhaengig.
+
+     Nach dem Strich tritt das Wort in --color-text-subtle zurueck
+     (8,4:1 auf der Flaeche, bleibt also lesbar). Der Strich hat damit
+     eine Folge: Der Posten ist sichtbar erledigt. Ohne Animation gilt
+     derselbe Endzustand, siehe .posten-name. */
+
+  /* 7 statt 4 px: kraeftiger als die Unterstreichung am Zettel. Das
+     Wort bleibt trotzdem lesbar, weil es danach grau zuruecktritt und
+     der rote Strich davor steht. */
+  .posten .strich {
+    --strich-dicke: 7px;
+  }
+
+  .posten.animiert .strich {
+    clip-path: inset(0 100% 0 0);
+  }
+
+  .posten.animiert .posten-name {
+    color: var(--color-text-default);
+  }
+
+  .posten.animiert li.erledigt .posten-name {
+    --wort-dauer: 0.4s;
+
+    color: var(--color-text-subtle);
+    transition: color var(--wort-dauer) ease-out;
+  }
+
+  /* Die Hand ------------------------------------------------------------
+     Liegt ueber dem Bereich, links oben verankert; das Skript verschiebt
+     sie per transform, sodass die Stiftspitze auf dem Strich sitzt.
+
+     --hand-breite: Groesse des Bildes, gewaehlt nach der Schrift der
+     Posten — die Stiftspitze soll etwa so breit wirken wie der Strich.
+     Ausserhalb der Animation unsichtbar; visibility statt display,
+     damit das Skript die Groesse messen kann. */
+  .ohne {
+    position: relative;
+  }
+
+  .hand {
+    --hand-breite: 200px;
+
+    position: absolute;
+    left: 0;
+    top: 0;
+    z-index: 2;
+    width: var(--hand-breite);
+    height: auto;
+    max-width: none;
+    pointer-events: none;
+    visibility: hidden;
+
+    /* Das Bild endet rechts unten mit einer geraden Schnittkante durch
+       den Aermel. Im Video laege sie ausserhalb des Bildes, hier steht
+       die Hand mitten auf der Seite. Die Maske blendet den Aermel zur
+       Ecke hin aus; dunkler Strick auf dunkler Flaeche verlaeuft
+       unauffaellig. Der Uebergang beginnt hinter dem Handgelenk, das
+       bei rund 63 % der Diagonale liegt. */
+    --aermel-von: 72%;
+    --aermel-bis: 90%;
+    mask-image: linear-gradient(
+      135deg,
+      #000 var(--aermel-von),
+      transparent var(--aermel-bis)
+    );
+  }
+
+  @media (min-width: 768px) {
+    .hand {
+      --hand-breite: 260px;
+    }
+  }
+
+  .strich path {
+    fill: none;
+    stroke: var(--color-brand);
+    stroke-width: var(--strich-dicke);
+    stroke-linecap: round;
+    vector-effect: non-scaling-stroke;
+  }
+
+  /* Treppe ----------------------------------------------------------------
+     Drei massive Bloecke statt einer Linie mit Punkten. Jede Stufe ist
+     hoeher als die vorige: Mehr Stunden heben einen eine Stufe hinauf,
+     der Preis darin sinkt.
 
      GOLD fuer die Stufen mit Nachlass. Die Rolle ist in tokens.css als
      „markiert Erreichtes, fordert zu nichts auf" angelegt — genau das
-     ist eine Stufe, die man durch Lernen erreicht. Gold auf Weiss
-     ergibt 4,7:1, also auch fuer die kleineren Zeilen sauber.
+     ist eine Stufe, die man durch Lernen erreicht. Weiss auf Gold
+     4,7:1. Die erste Stufe liegt auf --color-surface-raised mit einer
+     Linie in --color-border-default, damit sie sich von der Flaeche
+     abhebt, ohne mit den goldenen zu konkurrieren.
 
-     Die Linie zwischen zwei Punkten zeichnet jeweils der linke (oben:
-     der obere) Punkt als ::after. So braucht es keine Hoehen- oder
-     Breitenrechnung ueber die ganze Liste.
+     --stufe kommt als Index aus dem Markup (0, 1, 2). Die Hoehe waechst
+     ueber den Innenabstand unten; der Text sitzt deshalb immer oben im
+     Block, und die Unterkanten stehen auf einer Linie.
 
-     --punkt-gr, --linie, --punkt-oben: Geometrie der Leiste.
-     --punkt-oben setzt den Punkt auf die Mitte der ersten Textzeile
-     (17 px Schrift, Zeilenhoehe 1,6 = rund 27 px; (27 - 16) / 2). */
+     Unter 1120 px: untereinander, jede Stufe breiter als die vorige.
+     Dieselbe Idee, um 90 Grad gedreht. */
 
   .nachlass {
-    margin-top: var(--space-18);
+    margin-top: var(--space-28);
+  }
+
+  .nachlass h3 {
     text-align: center;
+    font-size: var(--font-size-3xl);
   }
 
   .stufen {
-    --punkt-gr: 16px;
-    --linie: 2px;
-    --punkt-oben: 5px;
+    --stufe-hub: var(--space-12);
 
-    margin: var(--space-8) auto 0;
+    margin: var(--space-18) 0 0;
     padding: 0;
     list-style: none;
     display: flex;
     flex-direction: column;
-    gap: var(--space-8);
-    /* measure-default statt narrow: Bei 30ch brach „bis 11
-       Unterrichtsstunden im Monat" vor dem letzten Wort um. Die
-       Leiste bleibt trotzdem als schmaler Block mittig. */
-    max-width: var(--measure-default);
-    text-align: left;
+    gap: var(--space-6);
   }
 
   .stufen li {
     position: relative;
     display: flex;
     flex-direction: column;
-    padding-left: var(--space-8);
+    gap: var(--space-1);
+    margin-right: calc(var(--stufe-hub) * (2 - var(--stufe)));
+    padding: var(--space-6);
+    background: var(--color-surface-raised);
+    border-top: var(--space-1) solid var(--color-border-default);
   }
 
-  .stufen li::before {
-    content: "";
-    position: absolute;
-    z-index: 1;
-    left: 0;
-    top: var(--punkt-oben);
-    width: var(--punkt-gr);
-    height: var(--punkt-gr);
-    box-sizing: border-box;
-    border-radius: var(--radius-full);
-    border: var(--linie) solid var(--color-text-inverse-subtle);
-    background: var(--color-surface-inverse);
-  }
-
-  .stufen li.rabatt::before {
-    border-color: var(--color-accent);
+  .stufen li.rabatt {
+    /* Platz rechts oben fuer den Stempel, der ueber die Ecke ragt. */
+    padding-right: calc(var(--stempel-gr) / 2 + var(--space-6));
     background: var(--color-accent);
-  }
-
-  /* Senkrechte Linie zum naechsten Punkt: von der Punktmitte bis ueber
-     den Abstand zur naechsten Stufe. Gold, sobald sie auf eine Stufe
-     mit Nachlass zulaeuft — also ab dem ersten Punkt. */
-  .stufen li:not(:last-child)::after {
-    content: "";
-    position: absolute;
-    left: calc((var(--punkt-gr) - var(--linie)) / 2);
-    top: calc(var(--punkt-oben) + var(--punkt-gr) / 2);
-    width: var(--linie);
-    height: calc(100% + var(--space-8));
-    background: var(--color-accent);
+    border-top-color: var(--color-accent);
+    color: var(--color-text-on-accent);
   }
 
   .menge {
@@ -354,146 +740,282 @@ const stufen = [
   }
 
   .stufe-preis {
-    font-size: var(--font-size-2xl);
+    font-family: var(--font-family-display);
+    font-size: var(--font-size-3xl);
     font-weight: var(--font-weight-bold);
     line-height: var(--line-height-normal);
   }
 
-  .rabatt .stufe-preis {
-    color: var(--color-accent);
-  }
-
   .hinweis {
     font-size: var(--font-size-sm);
-    color: var(--color-text-inverse-subtle);
+    color: var(--color-text-subtle);
   }
 
-  .abrechnung {
-    margin: var(--space-8) auto 0;
-    max-width: var(--measure-wide);
-    color: var(--color-text-inverse-subtle);
+  .rabatt .hinweis {
+    color: var(--color-text-on-accent);
   }
 
-  /* Ab 1120: waagerecht. Punkte oben mittig ueber jeder Stufe, die Linie
-     laeuft von Punktmitte zu Punktmitte. */
   @media (min-width: 1120px) {
     .stufen {
-      max-width: none;
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: var(--space-8);
-      text-align: center;
+      align-items: end;
+      gap: var(--space-4);
     }
 
     .stufen li {
-      padding-left: 0;
-      padding-top: calc(var(--punkt-gr) + var(--space-4));
+      margin-right: 0;
+      padding: var(--space-8);
+      padding-bottom: calc(var(--space-8) + var(--stufe-hub) * var(--stufe));
     }
 
-    .stufen li::before {
-      top: 0;
-      left: calc(50% - var(--punkt-gr) / 2);
+    /* Ab 1120 sitzt der Stempel zur Haelfte ueber der Oberkante und
+       ist breit genug vom Text entfernt — kein Freiraum rechts noetig,
+       sonst bricht die Mengenangabe unnoetig um. */
+    .stufen li.rabatt {
+      padding-right: var(--space-8);
     }
 
-    .stufen li:not(:last-child)::after {
-      top: calc((var(--punkt-gr) - var(--linie)) / 2);
-      left: 50%;
-      width: calc(100% + var(--space-8));
-      height: var(--linie);
+    /* .stufen davor, weil die Grundregel des Stempels weiter unten
+       steht und sonst gewinnt. */
+    .stufen .stempel {
+      top: calc(-1 * var(--stempel-gr) / 2);
     }
   }
 
-  /* Aktion — Knopf wie Sektion 3, Telefon als Textverweis ------------ */
+  /* Stempel an den Stufen --------------------------------------------------
+     Wie der Stempel im Hero: Kreis, leicht gedreht, Schriftgroessen als
+     Bruchteile des Durchmessers (1em = Durchmesser). Rot statt Gold,
+     weil er auf einem goldenen Block sitzt; Weiss auf --color-brand
+     5,7:1.
 
-  .aktion {
-    margin-top: var(--space-12);
+     Er ragt ueber die rechte obere Ecke hinaus — halb auf dem Block,
+     halb auf der Flaeche. So sieht er aufgebracht aus und nicht
+     eingesetzt. */
+  .stufen {
+    --stempel-gr: 104px;
+  }
+
+  .stempel {
+    --stempel-drehung: 8deg;
+
+    position: absolute;
+    top: calc(-1 * var(--stempel-gr) / 3);
+    right: calc(-1 * var(--stempel-gr) / 4);
+    z-index: 1;
+
+    width: var(--stempel-gr);
+    height: var(--stempel-gr);
+    border-radius: var(--radius-full);
+    background: var(--color-brand);
+    color: var(--color-text-on-brand);
+
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: var(--space-4);
+    justify-content: center;
+    text-align: center;
+    text-wrap: balance;
+    padding: 0 0.16em;
+
+    font-size: var(--stempel-gr);
+    line-height: var(--line-height-snug);
+    box-shadow: var(--shadow-sm);
+    transform: rotate(var(--stempel-drehung));
+  }
+
+  .stempel-betrag {
+    font-size: 0.22em;
+    font-weight: var(--font-weight-bold);
+    line-height: var(--line-height-tight);
+  }
+
+  .stempel-satz {
+    margin-top: 0.03em;
+    font-size: 0.12em;
+    font-weight: var(--font-weight-semibold);
+  }
+
+  /* Auf schmalen Geraeten ragt der Stempel nicht rechts hinaus — dort
+     laege er im Gutter und stiesse an den Bildschirmrand. Er sitzt
+     stattdessen zur Haelfte ueber der Oberkante, und der Text beginnt
+     erst unter ihm: 48 px Innenabstand oben gegen 44 px, die der
+     Stempel in den Block hineinreicht. */
+  @media (max-width: 767px) {
+    .stufen {
+      --stempel-gr: 88px;
+    }
+
+    .stufen li.rabatt {
+      padding-top: var(--space-12);
+      padding-right: var(--space-6);
+    }
+
+    .stempel {
+      top: calc(-1 * var(--stempel-gr) / 2);
+      right: var(--space-2);
+    }
+  }
+
+  .abrechnung {
+    margin: var(--space-12) auto 0;
+    max-width: var(--measure-wide);
+    text-align: center;
+    color: var(--color-text-subtle);
+  }
+
+  /* Aktion — Knoepfe wie im Hero -------------------------------------------
+     Rot fuer die Probestunde, Blau fuer das Telefon. Dieselben Farben,
+     dieselbe Form wie oben auf der Seite: Wer bis hierher gelesen hat,
+     erkennt die Handlung wieder. */
+
+  .aktion {
+    margin-top: var(--space-12);
     text-align: center;
   }
 
-  .knopf {
+  .knoepfe {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+  }
+
+  @media (min-width: 768px) {
+    .knoepfe {
+      flex-direction: row;
+      justify-content: center;
+    }
+  }
+
+  .knopf-probe,
+  .knopf-telefon {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 100%;
+    gap: var(--space-2);
     min-height: var(--tap-target-min);
     padding: var(--space-3) var(--space-8);
     border-radius: var(--radius-sm);
-    background: var(--color-action);
-    color: var(--color-text-on-action);
     font-size: var(--font-size-md);
-    font-weight: var(--font-weight-bold);
+    font-weight: var(--font-weight-semibold);
     text-decoration: none;
   }
 
-  .knopf:hover {
+  .knopf-probe {
+    background: var(--color-brand);
+    color: var(--color-text-on-brand);
+  }
+
+  .knopf-probe:hover {
+    background: var(--color-brand-strong);
+  }
+
+  .knopf-probe:active {
+    background: var(--color-brand-stronger);
+    transform: translateY(1px);
+  }
+
+  .knopf-telefon {
+    background: var(--color-action);
+    color: var(--color-text-on-action);
+  }
+
+  .knopf-telefon:hover {
     background: var(--color-action-strong);
   }
 
-  .knopf:active {
+  .knopf-telefon:active {
     background: var(--color-action-stronger);
     transform: translateY(1px);
   }
 
-  .knopf:focus-visible,
-  .anruf a:focus-visible {
-    outline: var(--focus-ring-width) solid var(--color-text-inverse);
+  .knopf-probe:focus-visible,
+  .knopf-telefon:focus-visible {
+    outline: var(--focus-ring-width) solid var(--color-focus-ring);
     outline-offset: var(--focus-ring-offset);
   }
 
-  @media (min-width: 768px) {
-    .knopf {
-      width: auto;
-    }
-  }
-
-  .anruf {
-    margin: 0;
-    color: var(--color-text-inverse-subtle);
-  }
-
-  /* Blau wie der Telefonweg im Rest der Seite. 8,05:1 auf Weiss. */
-  .anruf a {
-    color: var(--color-action);
-    font-weight: var(--font-weight-bold);
-    white-space: nowrap;
+  .icon-telefon {
+    width: 1.1em;
+    height: 1.1em;
+    flex-shrink: 0;
   }
 
   .zeiten {
-    display: block;
+    margin: var(--space-4) 0 0;
     font-size: var(--font-size-sm);
+    color: var(--color-text-subtle);
   }
 
-  /* Vergleich -----------------------------------------------------------
-     Bewusst leiser als der Preis: kleinere Ueberschrift, grauer Text.
-     Er beantwortet einen Einwand, er ist nicht das Angebot. */
+  /* Zettel ----------------------------------------------------------------
+     Der Vergleich liegt als weisses Blatt auf der dunklen Flaeche,
+     leicht schraeg — wie das Blatt, das die Schuelerin im Hero haelt.
+     Ohne Rundung: Papier hat Ecken.
 
-  /* Zwei Spalten zu je --measure-default plus Spaltenabstand. Ueber die
-     volle Inhaltsbreite liefen die Zeilen auf ueber 80 Zeichen. */
-  .vergleich {
-    margin: var(--space-18) auto 0;
-    max-width: calc(2 * var(--measure-default) + var(--space-12));
-    text-align: center;
+     Er ist der einzige helle Bereich der Sektion und zieht damit den
+     Blick, obwohl er inhaltlich nur einen Einwand beantwortet. Das ist
+     gewollt: Der Vergleich ist das staerkste Argument gegen die
+     beworbenen Kettenpreise.
+
+     Innen gelten die Textrollen fuer --color-surface-inverse. */
+  .zettel {
+    --zettel-drehung: -1deg;
+
+    margin: var(--space-28) auto 0;
+    max-width: calc(2 * var(--measure-default) + var(--space-12) * 3);
+    padding: var(--space-12) var(--space-6);
+    background: var(--color-surface-inverse);
+    color: var(--color-text-inverse);
+    box-shadow: var(--shadow-sm);
+    transform: rotate(var(--zettel-drehung));
   }
 
-  .vergleich h3 {
-    font-size: var(--font-size-lg);
+  @media (min-width: 768px) {
+    .zettel {
+      padding: var(--space-12);
+    }
   }
 
+  .zettel h3 {
+    font-family: var(--font-family-display);
+    font-size: var(--font-size-2xl);
+    line-height: var(--line-height-normal);
+  }
+
+  /* Die Ziffern kommen als Zaehler in der Displayschrift und in Rot:
+     wie am Rand eines Blatts von Hand nummeriert. */
   .fragen {
-    margin-top: var(--space-6);
+    margin: var(--space-8) 0 0;
+    padding: 0;
+    list-style: none;
+    counter-reset: frage;
     display: grid;
-    gap: var(--space-6) var(--space-12);
-    text-align: left;
+    gap: var(--space-8) var(--space-12);
   }
 
   @media (min-width: 768px) {
     .fragen {
       grid-template-columns: repeat(2, 1fr);
     }
+  }
+
+  .fragen li {
+    counter-increment: frage;
+    display: grid;
+    /* Feste Ziffernspalte: Die „2" ist in der Displayschrift breiter
+       als die „1", bei `auto` staenden die Texte versetzt. */
+    grid-template-columns: var(--space-12) 1fr;
+    column-gap: var(--space-4);
+    align-items: start;
+  }
+
+  .fragen li::before {
+    content: counter(frage);
+    grid-row: span 2;
+    font-family: var(--font-family-display);
+    font-size: var(--font-size-5xl);
+    line-height: var(--line-height-tight);
+    color: var(--color-brand);
   }
 
   .fragen p {
@@ -503,15 +1025,43 @@ const stufen = [
 
   .fragen .frage {
     color: var(--color-text-inverse);
+    font-size: var(--font-size-lg);
     font-weight: var(--font-weight-bold);
+    line-height: var(--line-height-normal);
   }
 
   .fragen .frage + p {
     margin-top: var(--space-2);
   }
 
+  /* Unterstrichen mit demselben Markerzug wie die gestrichenen Posten,
+     nur unter der Zeile statt durch sie hindurch. */
   .fazit {
-    margin: var(--space-6) 0 0;
+    margin: var(--space-12) 0 0;
+    font-size: var(--font-size-lg);
     font-weight: var(--font-weight-bold);
+    text-align: center;
+  }
+
+  .unterstrichen {
+    position: relative;
+    display: inline-block;
+  }
+
+  .unterstrichen .strich {
+    top: 100%;
+    transform: none;
+  }
+
+  /* Wer Bewegung im Browser abbestellt hat, bekommt alles gerade. Die
+     Neigungen sind Dekoration; sie tragen keine Information. */
+  @media (prefers-reduced-motion: reduce) {
+    .betrag,
+    .stempel,
+    .zettel {
+      --neigung: 0deg;
+      --stempel-drehung: 0deg;
+      --zettel-drehung: 0deg;
+    }
   }
 </style>
