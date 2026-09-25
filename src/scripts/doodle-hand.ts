@@ -42,6 +42,10 @@ const ZEIT = { auftritt: 700, sprung: 350, abgang: 600 };
 // diesen Anteil der Handhoehe hoeher.
 const ABHEBEN = 0.04;
 
+// Seitlicher Weg (Hand mit `seitlich`): so weit rechts vom
+// Bildschirmrand beginnt und endet die Spitze, in px.
+const ABSTAND_RAND = 24;
+
 // Deckt eine Linie von links nach rechts auf. Der Rand von 6 px
 // laesst die runden Strichenden stehen, die ueber die Grafik ragen.
 // Links beginnt er bei 0, sonst waere das Strichende schon vor dem
@@ -99,9 +103,17 @@ export class Hand {
   private draussen: Punkt;
   private jetzt: Punkt;
 
+  /** `seitlich`: Die Hand kommt waagerecht von rechts ausserhalb des
+      Bildschirms auf der Hoehe, auf der sie ansetzt, und geht am Ende
+      ebenso wieder — statt von rechts unten. Fuer Stellen, unter denen
+      noch Inhalt liegt: Beim Geschwister-Kreis fuhr sie sonst quer ueber
+      den Zettel darunter (Alexander, 25. September 2026). Ein- und
+      Ausblenden war die erste Loesung und wirkte wie ein Effekt, nicht
+      wie eine Hand — verworfen. */
   constructor(
     private bild: HTMLImageElement,
     private bereich: HTMLElement,
+    private seitlich = false,
   ) {
     const box = bereich.getBoundingClientRect();
     // Ausserhalb rechts unten (Rechtshaender): Die Spitze liegt so weit
@@ -134,6 +146,7 @@ export class Hand {
       danach mit kurzem Abheben. */
   async hin(nach: Punkt) {
     if (this.jetzt === this.draussen) {
+      if (this.seitlich) this.jetzt = { x: this.rechtsDraussen(), y: nach.y };
       this.bild.style.visibility = "visible";
       await this.bewege([nach], ZEIT.auftritt, KURVE_WEG);
       return;
@@ -158,10 +171,21 @@ export class Hand {
     await this.bewege(punkte, dauer, kurve, anteile);
   }
 
-  /** Zurueck nach rechts unten, dann unsichtbar. */
+  /** Zurueck nach draussen, dann unsichtbar: nach rechts unten, bei
+      `seitlich` (siehe Konstruktor) waagerecht nach rechts. */
   async weg() {
-    await this.bewege([this.draussen], ZEIT.abgang, KURVE_WEG);
+    const ziel = this.seitlich
+      ? { x: this.rechtsDraussen(), y: this.jetzt.y }
+      : this.draussen;
+    await this.bewege([ziel], ZEIT.abgang, KURVE_WEG);
     this.bild.style.visibility = "hidden";
+  }
+
+  /** x-Wert der Spitze, bei dem die ganze Hand rechts ausserhalb des
+      Bildschirms liegt — sie haengt rechts unterhalb der Spitze. */
+  private rechtsDraussen() {
+    const box = this.bereich.getBoundingClientRect();
+    return document.documentElement.clientWidth - box.left + ABSTAND_RAND;
   }
 
   private lage(p: Punkt) {
@@ -259,8 +283,13 @@ export function hakenAbhaken(bereich: HTMLElement) {
 // verworfen. Jetzt fast gleichmaessig, nur sanft angesetzt und
 // ausgelaufen, wie eine Hand, die einen Kreis zieht. Dauer von 1400 auf
 // 1900 angehoben.
-const KREIS_DAUER = 1900;
-const KURVE_KREIS = "cubic-bezier(0.35, 0.1, 0.55, 0.95)";
+//
+// Nochmals ruhiger am selben Tag („soll nicht gehastet wirken, sondern
+// ruhig, souveraen"): Die Kurve ist jetzt fast gleichmaessig — in der
+// Mitte nur etwa 1,3-mal so schnell wie im Schnitt, vorher gut doppelt
+// —, die Dauer 2800 ms.
+const KREIS_DAUER = 2800;
+const KURVE_KREIS = "cubic-bezier(0.33, 0.1, 0.67, 0.9)";
 
 /**
  * Ein von Hand gezogener Kreis um ein Rechteck (Mitte cx/cy, halbe
@@ -370,12 +399,14 @@ export function kreisZiehen(rahmen: HTMLElement) {
       pfad.style.strokeDasharray = `${laenge}`;
       pfad.style.strokeDashoffset = `${laenge}`;
 
-      const hand = new Hand(bild, rahmen);
+      const hand = new Hand(bild, rahmen, true);
       const r = hand.rahmen(svg);
       // Die Bahn der Hand folgt dem Pfad; der Anteil jedes Punktes an
       // der Laenge ist zugleich sein Anteil an der Zeit — so bleibt die
       // Spitze bei gleicher Kurve genau am Ende des Strichs.
-      const schritte = 48;
+      // 96 Stuetzpunkte: Bei 48 lag die Spitze im langsamen Kreis bis
+      // zu 3 px neben dem Strichende.
+      const schritte = 96;
       const punkte: Punkt[] = [];
       const anteile: number[] = [0];
       for (let i = 1; i <= schritte; i++) {
