@@ -145,11 +145,17 @@ export class Hand {
     await this.bewege([mitte, nach], ZEIT.sprung, KURVE_WEG);
   }
 
-  /** Zieht eine Linie ueber die Punkte, mit KURVE_ZUG. `anteile` legt
-      fest, bei welchem Anteil der Zeit jeder Punkt erreicht wird
-      (erster Wert 0 fuer die aktuelle Lage, letzter 1). */
-  async zieh(punkte: Punkt[], dauer: number, anteile?: number[]) {
-    await this.bewege(punkte, dauer, KURVE_ZUG, anteile);
+  /** Zieht eine Linie ueber die Punkte, standardmaessig mit KURVE_ZUG.
+      `anteile` legt fest, bei welchem Anteil der Zeit jeder Punkt
+      erreicht wird (erster Wert 0 fuer die aktuelle Lage, letzter 1).
+      Die Linie selbst muss mit derselben Kurve laufen. */
+  async zieh(
+    punkte: Punkt[],
+    dauer: number,
+    anteile?: number[],
+    kurve = KURVE_ZUG,
+  ) {
+    await this.bewege(punkte, dauer, kurve, anteile);
   }
 
   /** Zurueck nach rechts unten, dann unsichtbar. */
@@ -239,5 +245,154 @@ export function hakenAbhaken(bereich: HTMLElement) {
       await hand.weg();
     },
     () => liste.classList.remove("animiert"),
+  );
+}
+
+// Kreis ----------------------------------------------------------------
+
+// Dauer des Kreises in Millisekunden. Laenger als ein Strich (500),
+// weil der Weg ein ganzer Umlauf ist.
+//
+// Eigene Kurve statt KURVE_ZUG: Die schiesst in der Mitte los und bremst
+// hart — fuer einen kurzen Strich richtig, fuer einen Kreis nicht. Am
+// 25. September 2026 von Alexander als „zu schnell, nicht natuerlich"
+// verworfen. Jetzt fast gleichmaessig, nur sanft angesetzt und
+// ausgelaufen, wie eine Hand, die einen Kreis zieht. Dauer von 1400 auf
+// 1900 angehoben.
+const KREIS_DAUER = 1900;
+const KURVE_KREIS = "cubic-bezier(0.35, 0.1, 0.55, 0.95)";
+
+/**
+ * Ein von Hand gezogener Kreis um ein Rechteck (Mitte cx/cy, halbe
+ * Breite/Hoehe hb/hh), in Pixeln. Er beginnt oben links, laeuft im
+ * Uhrzeigersinn und schiesst ueber den Anfang hinaus — so zieht man einen
+ * Kreis mit dem Stift. Der Radius schwankt leicht und zieht sich zum
+ * Ende etwas zusammen, damit Anfang und Ende nicht aufeinanderliegen.
+ *
+ * Form: Superellipse mit Exponent 3 statt Ellipse. Eine Ellipse muesste
+ * 1,41-mal so gross sein wie das Rechteck, um dessen Ecken nicht
+ * anzuschneiden, und liefe auf dem Handy ueber den Bildschirmrand. Die
+ * Superellipse braucht nur 2^(1/3) = 1,26 und wirkt trotzdem rund.
+ */
+function kreisPfad(cx: number, cy: number, hb: number, hh: number) {
+  const exponent = 3;
+  const umfassen = Math.pow(2, 1 / exponent);
+  const luft = 6;
+  const rx = hb * umfassen + luft;
+  const ry = hh * umfassen + luft;
+  const anfang = -2.3;
+  const bogen = 2 * Math.PI + 0.5;
+  const schritte = 96;
+  const kurve = (w: number) =>
+    Math.sign(w) * Math.pow(Math.abs(w), 2 / exponent);
+
+  const punkte: string[] = [];
+  for (let i = 0; i <= schritte; i++) {
+    const p = i / schritte;
+    const t = anfang + bogen * p;
+    const wackeln = 1 + 0.02 * Math.sin(3 * t + 1);
+    // Zum Ende zieht sich der Strich etwas nach innen — aber erst auf
+    // dem Ueberschuss nach dem vollen Umlauf, damit er vorher keine
+    // Textecke streift.
+    const ueberschuss = Math.max(0, (bogen * p - 2 * Math.PI) / 0.5);
+    const enger = 1 - 0.06 * ueberschuss;
+    const x = cx + rx * wackeln * enger * kurve(Math.cos(t));
+    const y = cy + ry * wackeln * enger * kurve(Math.sin(t));
+    punkte.push(`${i === 0 ? "M" : "L"}${x.toFixed(1)} ${y.toFixed(1)}`);
+  }
+  return punkte.join(" ");
+}
+
+/**
+ * Zieht mit der Hand einen roten Kreis um den Inhalt von `rahmen`,
+ * einmal beim ersten Hineinscrollen. Genutzt in Sektion 7 fuer den
+ * Geschwister-Hinweis.
+ *
+ * Erwartet im Markup: `rahmen` mit position: relative, darin den Text
+ * mit dem Attribut data-kreis-inhalt, <svg class="kreis"><path/></svg>
+ * ueber dem ganzen Rahmen und <img class="hand">. Der Pfad wird hier in Pixeln der tatsaechlichen
+ * Groesse erzeugt: Gestreckt waere der Strich ungleichmaessig dick, und
+ * das Ziehen per stroke-dashoffset braucht eine echte Laenge.
+ *
+ * Bei reduzierter Bewegung steht der Kreis sofort da. Ohne Skript gibt
+ * es keinen Kreis; der Hinweis bleibt lesbar.
+ */
+export function kreisZiehen(rahmen: HTMLElement) {
+  const svg = rahmen.querySelector<SVGSVGElement>(".kreis");
+  const pfad = svg?.querySelector<SVGPathElement>("path");
+  const bild = rahmen.querySelector<HTMLImageElement>(".hand");
+  if (!svg || !pfad || !bild) return;
+
+  // Der Kreis umschliesst den Text selbst, nicht den Block mit seinem
+  // Innenabstand: Gemessen wird die Flaeche der Textzeilen.
+  const inhalt = rahmen.querySelector<HTMLElement>("[data-kreis-inhalt]");
+  const zeichnen = () => {
+    const r = svg.getBoundingClientRect();
+    const bereich = document.createRange();
+    bereich.selectNodeContents(inhalt ?? rahmen);
+    const t = bereich.getBoundingClientRect();
+    svg.setAttribute("viewBox", `0 0 ${r.width} ${r.height}`);
+    pfad.setAttribute(
+      "d",
+      kreisPfad(
+        t.left - r.left + t.width / 2,
+        t.top - r.top + t.height / 2,
+        t.width / 2,
+        t.height / 2,
+      ),
+    );
+  };
+
+  // Nach dem Ziehen (oder sofort) folgt der Kreis der Groesse des
+  // Blocks, etwa wenn das Handy gedreht wird.
+  const fertig = () => {
+    pfad.style.strokeDasharray = "";
+    pfad.getAnimations().forEach((a) => a.cancel());
+    zeichnen();
+    window.addEventListener("resize", zeichnen);
+  };
+
+  const ruhig = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if (ruhig || !("IntersectionObserver" in window)) {
+    fertig();
+    return;
+  }
+
+  beimErstenBlick(
+    rahmen,
+    bild,
+    () => {},
+    async () => {
+      zeichnen();
+      const laenge = pfad.getTotalLength();
+      pfad.style.strokeDasharray = `${laenge}`;
+      pfad.style.strokeDashoffset = `${laenge}`;
+
+      const hand = new Hand(bild, rahmen);
+      const r = hand.rahmen(svg);
+      // Die Bahn der Hand folgt dem Pfad; der Anteil jedes Punktes an
+      // der Laenge ist zugleich sein Anteil an der Zeit — so bleibt die
+      // Spitze bei gleicher Kurve genau am Ende des Strichs.
+      const schritte = 48;
+      const punkte: Punkt[] = [];
+      const anteile: number[] = [0];
+      for (let i = 1; i <= schritte; i++) {
+        const p = pfad.getPointAtLength((laenge * i) / schritte);
+        punkte.push({ x: r.x + p.x, y: r.y + p.y });
+        anteile.push(i / schritte);
+      }
+      const start = pfad.getPointAtLength(0);
+
+      await hand.hin({ x: r.x + start.x, y: r.y + start.y });
+      pfad.animate(
+        [{ strokeDashoffset: laenge }, { strokeDashoffset: 0 }],
+        { duration: KREIS_DAUER, easing: KURVE_KREIS, fill: "forwards" },
+      );
+      await hand.zieh(punkte, KREIS_DAUER, anteile, KURVE_KREIS);
+      await hand.weg();
+      pfad.style.strokeDashoffset = "0";
+      fertig();
+    },
+    fertig,
   );
 }

@@ -33,11 +33,18 @@ import Unterstrichen from "../Unterstrichen.astro";
 // - Der Vergleich liegt als Zettel auf der Flaeche, wie das Blatt,
 //   das die Schuelerin im Hero haelt.
 //
-// Preise, Stufen, Absage- und Ferienregel von Alexander bestaetigt am
-// 14. September 2026. Die Terminangaben an den Stufen und die
-// Ersparnis in den Stempeln sind reine Umrechnung
-// (12 Unterrichtsstunden = 6 Termine zu je 90 Minuten;
-// 28,95 − 25,95 = 3,00; 28,95 − 22,50 = 6,45).
+// Preise, Absage- und Ferienregel von Alexander bestaetigt am
+// 14. September 2026. Stufen neu am 25. September 2026, Vorgabe von
+// Alexander: bis 8 Unterrichtsstunden 28,95 € (1x pro Woche 90
+// Minuten), 9 bis 16 25,95 € (bis 8 Termine zu je 90 Minuten), ab 17
+// 22,50 € (mehr als 8 Termine), nach oben offen. Die Stunden einer Familie zaehlen zusammen — auch
+// das seine Vorgabe („das muss ja nicht immer ein Schueler sein").
+//
+// Die Beispiele an den Stufen und die Ersparnis in den Stempeln sind
+// reine Umrechnung (1 Termin = 90 Minuten = 2 Unterrichtsstunden;
+// 28,95 − 25,95 = 3,00; 28,95 − 22,50 = 6,45). Die Stufen sind ueber
+// Termine pro Woche erklaert, weil „16 Unterrichtsstunden" nach viel
+// klingt — Alexanders Einwand.
 
 const telefon = "0341 658 329 18";
 const telefonHref = "tel:+4934165832918";
@@ -45,33 +52,45 @@ const telefonHref = "tel:+4934165832918";
 // Was bei uns nicht dazukommt. Jeder Posten wird durchgestrichen;
 // `zusatz` steht darunter und bleibt lesbar, weil er die Bedingung
 // nennt.
+//
+// `klartext` erscheint als Infobox beim Ueberfahren, Antippen oder
+// Fokussieren — durchgestrichen ist der Posten schwer zu lesen
+// (Alexander, 25. September 2026). Dieselben Aussagen wie in der
+// bestaetigten Liste vom 14. September 2026, nur ausgeschrieben.
 const posten = [
-  { name: "Anmeldegebühr" },
-  { name: "Materialkosten" },
-  { name: "Vertragslaufzeit" },
-  { name: "Kündigungsfrist" },
-  { name: "Ausfallgebühr", zusatz: "bei Absage bis 24 Stunden vorher" },
-  { name: "Zahlung in den Ferien" },
+  { name: "Anmeldegebühr", klartext: "Keine Anmeldegebühr" },
+  { name: "Materialkosten", klartext: "Keine Materialkosten" },
+  { name: "Vertragslaufzeit", klartext: "Keine Vertragslaufzeit" },
+  { name: "Kündigungsfrist", klartext: "Keine Kündigungsfrist" },
+  {
+    name: "Ausfallgebühr",
+    zusatz: "bei Absage bis 24 Stunden vorher",
+    klartext: "Keine Ausfallgebühr, wenn Sie bis 24 Stunden vorher absagen",
+  },
+  {
+    name: "Zahlung in den Ferien",
+    klartext: "In den Ferien zahlen Sie nichts",
+  },
 ];
 
 // ersparnis: nur an den Stufen mit Nachlass. Sie tragen Gold und einen
 // Stempel — siehe Kommentar an .stufen.
 const stufen = [
   {
-    menge: "bis 11 Unterrichtsstunden im Monat",
+    menge: "bis 8 Unterrichtsstunden im Monat",
     preis: "28,95 €",
-    hinweis: "Grundpreis",
+    hinweis: "z. B. 1× pro Woche 90 Minuten",
   },
   {
-    menge: "ab 12 Unterrichtsstunden im Monat",
+    menge: "ab 9 Unterrichtsstunden im Monat",
     preis: "25,95 €",
-    hinweis: "z. B. 6 Termine zu je 90 Minuten",
+    hinweis: "z. B. 8 Termine zu je 90 Minuten",
     ersparnis: "3,00 €",
   },
   {
-    menge: "ab 16 Unterrichtsstunden im Monat",
+    menge: "ab 17 Unterrichtsstunden im Monat",
     preis: "22,50 €",
-    hinweis: "z. B. 8 Termine zu je 90 Minuten",
+    hinweis: "mehr als 8 Termine zu je 90 Minuten",
     ersparnis: "6,45 €",
   },
 ];
@@ -105,6 +124,15 @@ const strich = "M1 6 C 18 3, 34 7, 52 5 S 82 3, 99 5";
       <div class="betrag-block">
         <p class="betrag">28,95&nbsp;€</p>
         <p class="einheit">je Unterrichtsstunde (45&nbsp;Minuten)</p>
+        {
+          /* Der Preis gilt fuer 45 Minuten, ein Termin dauert aber meist
+             90. Ohne diesen Satz rechnet jemand die Stufen („16
+             Unterrichtsstunden") in Termine um und erschrickt. */
+        }
+        <p class="termin">
+          Ein Termin dauert in der Regel 90&nbsp;Minuten – also zwei
+          Unterrichtsstunden.
+        </p>
         <p class="inklusive">
           Einzelunterricht mit festem Dozenten.
           <br />Alle Fächer, alle Klassenstufen.
@@ -115,8 +143,8 @@ const strich = "M1 6 C 18 3, 34 7, 52 5 S 82 3, 99 5";
         <h3>Was bei uns nicht dazukommt</h3>
         <ul class="posten">
           {
-            posten.map((p) => (
-              <li>
+            posten.map((p, i) => (
+              <li tabindex="0" aria-describedby={`posten-klartext-${i}`}>
                 <span class="posten-name">
                   {p.name}
                   <svg
@@ -130,6 +158,13 @@ const strich = "M1 6 C 18 3, 34 7, 52 5 S 82 3, 99 5";
                   </svg>
                 </span>
                 {p.zusatz && <span class="posten-zusatz">{p.zusatz}</span>}
+                <span
+                  class="klartext"
+                  role="tooltip"
+                  id={`posten-klartext-${i}`}
+                >
+                  {p.klartext}
+                </span>
               </li>
             ))
           }
@@ -176,6 +211,38 @@ const strich = "M1 6 C 18 3, 34 7, 52 5 S 82 3, 99 5";
         }
       </ol>
 
+      {
+        /* Geschwister: Die Stunden einer Familie zaehlen zusammen.
+           Das Rechenbeispiel ist reine Umrechnung der Stufen.
+
+           Die Doodly-Hand zieht einen roten Kreis darum, wenn der
+           Hinweis ins Bild kommt — Wunsch von Alexander statt der
+           roten Linie. Die Form berechnet scripts/doodle-hand.ts aus der
+           Groesse des Blocks (kreisZiehen). */
+      }
+      <div class="familie-rahmen">
+        <p class="familie" data-kreis-inhalt>
+          <strong>Für Geschwister:</strong> Die Stunden aller Kinder einer
+          Familie zählen zusammen. Zwei Kinder mit je einem 90-Minuten-Termin
+          pro Woche kommen auf 16 Unterrichtsstunden und zahlen 25,95&nbsp;€
+          statt 28,95&nbsp;€ – bei drei Kindern sind es nur noch
+          22,50&nbsp;€.
+        </p>
+        <svg class="kreis" aria-hidden="true" focusable="false">
+          <path></path>
+        </svg>
+        <img
+          class="hand"
+          src="/bilder/hand-marker.webp"
+          width="520"
+          height="550"
+          alt=""
+          aria-hidden="true"
+          loading="lazy"
+          decoding="async"
+        />
+      </div>
+
       <p class="abrechnung">
         Nichts buchen, nichts ankündigen: Am Monatsende rechnen wir ab, was
         tatsächlich stattgefunden hat. Erreicht der Monat eine Stufe, gilt der
@@ -186,28 +253,37 @@ const strich = "M1 6 C 18 3, 34 7, 52 5 S 82 3, 99 5";
     {/* Aktion — dieselben zwei Knoepfe wie im Hero ------------------- */}
     <div class="aktion">
       <div class="knoepfe">
-        <a class="knopf-probe" href="#probestunde">Gratis Probestunde sichern</a>
+        <a
+          class="knopf-probe"
+          href="#probestunde"
+          aria-describedby="probestunde-hinweis-preise"
+          >Gratis Probestunde sichern<span aria-hidden="true">*</span></a
+        >
         <a class="knopf-telefon" href={telefonHref}>
           {/* Die Nummer steht im Linktext, das Icon ist dekorativ. */}
           <svg
             class="icon-telefon"
             viewBox="0 0 24 24"
-            fill="none"
+            fill="currentColor"
             stroke="currentColor"
             stroke-width="2"
-            stroke-linecap="round"
             stroke-linejoin="round"
             aria-hidden="true"
             focusable="false"
           >
             <path
-              d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"
+              d="M4 3h4l2 5-2.5 1.5a12.5 12.5 0 0 0 7 7L16 14l5 2v4h-1C11 20 4 13 4 4V3z"
             ></path>
           </svg>
           <span>{telefon}</span>
         </a>
       </div>
       <p class="zeiten">Mo bis Fr, 9 bis 20 Uhr</p>
+      {/* Fussnote zum Sternchen, Wortlaut wie im Hero. */}
+      <p class="fussnote" id="probestunde-hinweis-preise">
+        <span aria-hidden="true">*</span> Die Gratis-Probestunde dauert 45
+        Minuten und dient zugleich als Leistungsanalyse.
+      </p>
     </div>
 
     {/* Vergleich als Zettel ----------------------------------------- */}
@@ -258,6 +334,7 @@ const strich = "M1 6 C 18 3, 34 7, 52 5 S 82 3, 99 5";
     Hand,
     KURVE_ZUG,
     beimErstenBlick,
+    kreisZiehen,
   } from "../../scripts/doodle-hand";
 
   // Dauer eines Strichs in Millisekunden. Am 25. September 2026 von
@@ -294,6 +371,12 @@ const strich = "M1 6 C 18 3, 34 7, 52 5 S 82 3, 99 5";
       () => liste.classList.remove("animiert"),
     );
   }
+
+  // Roter Kreis um den Geschwister-Hinweis.
+  const familie = document.querySelector<HTMLElement>(
+    ".preise .familie-rahmen",
+  );
+  if (familie) kreisZiehen(familie);
 </script>
 
 <style>
@@ -415,6 +498,11 @@ const strich = "M1 6 C 18 3, 34 7, 52 5 S 82 3, 99 5";
     color: var(--color-text-subtle);
   }
 
+  .termin {
+    margin: var(--space-1) 0 0;
+    color: var(--color-text-subtle);
+  }
+
   .inklusive {
     margin: var(--space-6) 0 0;
     padding-left: var(--space-4);
@@ -459,9 +547,89 @@ const strich = "M1 6 C 18 3, 34 7, 52 5 S 82 3, 99 5";
   }
 
   .posten li {
+    position: relative;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
+    cursor: default;
+  }
+
+  /* Fokus fuer Tastatur und Antippen: derselbe Ring wie im Rest der
+     Seite, mit etwas Luft um das Wort. */
+  .posten li:focus-visible {
+    outline: var(--focus-ring-width) solid var(--color-focus-ring);
+    outline-offset: var(--space-1);
+  }
+
+  /* Infobox mit dem Klartext ---------------------------------------------
+     Ueber dem Posten, weiss auf der dunklen Flaeche wie der Zettel
+     weiter unten. Erscheint beim Ueberfahren, beim Fokussieren mit der
+     Tastatur und beim Antippen auf dem Handy (das fokussiert den Posten,
+     dafuer das tabindex im Markup). Ohne Skript.
+
+     --spitze: Groesse des kleinen Dreiecks unter der Box, Geometrie der
+     Zeichnung. Bleibt die Maus auf der Box, bleibt sie offen (WCAG
+     1.4.13, „hoverable") — sie liegt im Posten, also zaehlt sie zu
+     dessen :hover. Eine unsichtbare Bruecke (::before) ueberspannt die
+     Luecke zwischen Wort und Box, damit sie beim Hinueberfahren nicht
+     zuklappt. */
+  .klartext {
+    --spitze: 7px;
+
+    position: absolute;
+    left: 0;
+    bottom: calc(100% + var(--spitze) + var(--space-1));
+    z-index: 3;
+    width: max-content;
+    max-width: 22em;
+    padding: var(--space-2) var(--space-3);
+    border-radius: var(--radius-sm);
+    background: var(--color-surface-inverse);
+    color: var(--color-text-inverse);
+    box-shadow: var(--shadow-sm);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-semibold);
+    line-height: var(--line-height-normal);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(var(--space-1));
+    transition:
+      opacity 0.15s ease-out,
+      transform 0.15s ease-out,
+      visibility 0.15s;
+    pointer-events: none;
+  }
+
+  .klartext::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 100%;
+    height: calc(var(--spitze) + var(--space-1));
+  }
+
+  .klartext::after {
+    content: "";
+    position: absolute;
+    left: var(--space-4);
+    top: 100%;
+    border: var(--spitze) solid transparent;
+    border-top-color: var(--color-surface-inverse);
+  }
+
+  .posten li:hover .klartext,
+  .posten li:focus .klartext {
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+    pointer-events: auto;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .klartext {
+      transition: none;
+    }
   }
 
   .posten-name {
@@ -779,6 +947,52 @@ const strich = "M1 6 C 18 3, 34 7, 52 5 S 82 3, 99 5";
     }
   }
 
+  /* Geschwister-Hinweis: eine Zusage, die man nicht ueberlesen soll.
+     Die Doodly-Hand zieht einen roten Kreis darum (vorher eine rote
+     Linie links, Alexander fand sie langweilig). Der Rahmen gibt Hand
+     und Kreis ihren Bezug; der Innenabstand haelt den Text vom Kreis
+     frei. */
+  .familie-rahmen {
+    position: relative;
+    margin: var(--space-12) auto 0;
+    max-width: calc(var(--measure-wide) + 2 * var(--space-8));
+  }
+
+  .familie {
+    margin: 0;
+    padding: var(--space-6) var(--space-8);
+    text-align: center;
+    color: var(--color-text-subtle);
+  }
+
+  /* Die Zeichnung liegt ueber dem ganzen Rahmen. Pfad und viewBox setzt
+     das Skript in Pixeln der tatsaechlichen Groesse, damit der Strich
+     beim Ziehen gleichmaessig bleibt — gestreckt wuerde er dick und
+     duenn. --kreis-dicke wie der Strich bei den Posten. */
+  .kreis {
+    --kreis-dicke: 5px;
+
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+    pointer-events: none;
+  }
+
+  .kreis path {
+    fill: none;
+    stroke: var(--color-brand);
+    stroke-width: var(--kreis-dicke);
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .familie strong {
+    color: var(--color-text-default);
+    font-weight: var(--font-weight-bold);
+  }
+
   .abrechnung {
     margin: var(--space-12) auto 0;
     max-width: var(--measure-wide);
@@ -823,7 +1037,10 @@ const strich = "M1 6 C 18 3, 34 7, 52 5 S 82 3, 99 5";
     text-decoration: none;
   }
 
+  /* Ohne Abstand: Er ist fuer das Telefon-Symbol im Nachbarknopf da.
+     Hier stuende er zwischen Text und Sternchen. */
   .knopf-probe {
+    gap: 0;
     background: var(--color-brand);
     color: var(--color-text-on-brand);
   }
@@ -866,6 +1083,16 @@ const strich = "M1 6 C 18 3, 34 7, 52 5 S 82 3, 99 5";
   .zeiten {
     margin: var(--space-4) 0 0;
     font-size: var(--font-size-sm);
+    color: var(--color-text-subtle);
+  }
+
+  /* Fussnote zum Sternchen am Knopf — wie im Hero: klein, gedaempft,
+     nicht kursiv. */
+  .fussnote {
+    margin: var(--space-2) auto 0;
+    max-width: var(--measure-wide);
+    font-size: var(--font-size-sm);
+    line-height: var(--line-height-normal);
     color: var(--color-text-subtle);
   }
 
