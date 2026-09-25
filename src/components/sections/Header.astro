@@ -256,10 +256,17 @@ const links: { text: string; href: string; marke?: string }[] = [
 
   /* Kontakt --------------------------------------------------------- */
 
+  /* Mindestens 44 x 44 px Tippflaeche (WCAG 2.2, Target Size). Auf dem
+     Handy steht nur der Hoerer da, 22 px — ohne Mindestgroesse war der
+     wichtigste Knopf der Seite das kleinste Tippziel (gemessen am
+     25. September 2026). */
   .kontakt {
     margin-left: auto;
     display: inline-flex;
     align-items: center;
+    justify-content: center;
+    min-width: var(--tap-target-min);
+    min-height: var(--tap-target-min);
     gap: var(--space-2);
     color: var(--color-text-on-action);
     text-decoration: none;
