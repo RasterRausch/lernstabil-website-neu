@@ -210,80 +210,92 @@ const strich = "M1 6 C 18 3, 34 7, 52 5 S 82 3, 99 5";
           ))
         }
       </ol>
-
-      {
-        /* Geschwister: Die Stunden einer Familie zaehlen zusammen.
-           Das Rechenbeispiel ist reine Umrechnung der Stufen.
-
-           Die Doodly-Hand zieht einen roten Kreis darum, wenn der
-           Hinweis ins Bild kommt — Wunsch von Alexander statt der
-           roten Linie. Die Form berechnet scripts/doodle-hand.ts aus der
-           Groesse des Blocks (kreisZiehen). */
-      }
-      <div class="familie-rahmen">
-        <p class="familie" data-kreis-inhalt>
-          <strong>Für Geschwister:</strong> Die Stunden aller Kinder einer
-          Familie zählen zusammen. Zwei Kinder mit je einem 90-Minuten-Termin
-          pro Woche kommen auf 16 Unterrichtsstunden und zahlen 25,95&nbsp;€
-          statt 28,95&nbsp;€ – bei drei Kindern sind es nur noch
-          22,50&nbsp;€.
-        </p>
-        <svg class="kreis" aria-hidden="true" focusable="false">
-          <path></path>
-        </svg>
-        <img
-          class="hand"
-          src="/bilder/hand-marker.webp"
-          width="520"
-          height="550"
-          alt=""
-          aria-hidden="true"
-          loading="lazy"
-          decoding="async"
-        />
-      </div>
-
-      <p class="abrechnung">
-        Nichts buchen, nichts ankündigen: Am Monatsende rechnen wir ab, was
-        tatsächlich stattgefunden hat. Erreicht der Monat eine Stufe, gilt der
-        günstigere Satz für alle Stunden dieses Monats.
-      </p>
     </div>
 
-    {/* Aktion — dieselben zwei Knoepfe wie im Hero ------------------- */}
-    <div class="aktion">
-      <div class="knoepfe">
-        <a
-          class="knopf-probe"
-          href="#probestunde"
-          aria-describedby="probestunde-hinweis-preise"
-          >Gratis Probestunde sichern<span aria-hidden="true">*</span></a
-        >
-        <a class="knopf-telefon" href={telefonHref}>
-          {/* Die Nummer steht im Linktext, das Icon ist dekorativ. */}
-          <svg
-            class="icon-telefon"
-            viewBox="0 0 24 24"
-            fill="currentColor"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linejoin="round"
-            aria-hidden="true"
-            focusable="false"
-          >
-            <path
-              d="M4 3h4l2 5-2.5 1.5a12.5 12.5 0 0 0 7 7L16 14l5 2v4h-1C11 20 4 13 4 4V3z"
-            ></path>
+    {
+      /* Abschluss der Preise: ab 1120 px zweispaltig — links der
+         eingekreiste Geschwister-Hinweis als Blickfang, rechts
+         Abrechnung und Handlung. Vorher stand alles mittig
+         untereinander und nahm viel zu viel Hoehe ein (Alexander,
+         25. September 2026).
+
+         Geschwister: Die Stunden einer Familie zaehlen zusammen. Das
+         Rechenbeispiel ist reine Umrechnung der Stufen. Die Doodly-Hand
+         zieht einen roten Kreis darum, wenn der Hinweis ins Bild kommt;
+         die Form berechnet scripts/doodle-hand.ts (kreisZiehen). */
+    }
+    <div class="abschluss">
+        <div class="familie-rahmen">
+          <p class="familie" data-kreis-inhalt>
+            <strong>Für Geschwister:</strong> Die Stunden aller Kinder einer
+            Familie zählen zusammen. Zwei Kinder mit je einem 90-Minuten-Termin
+            pro Woche kommen auf 16 Unterrichtsstunden und zahlen 25,95&nbsp;€
+            statt 28,95&nbsp;€ – bei drei Kindern sind es nur noch
+            22,50&nbsp;€.
+          </p>
+          <svg class="kreis" aria-hidden="true" focusable="false">
+            <path></path>
           </svg>
-          <span>{telefon}</span>
-        </a>
+          <img
+            class="hand"
+            src="/bilder/hand-marker.webp"
+            width="520"
+            height="550"
+            alt=""
+            aria-hidden="true"
+            loading="lazy"
+            decoding="async"
+          />
+        </div>
+
+      <div class="aktion">
+        {
+          /* Der Satz zu den Monaten gehoert zur Abrechnung und steht
+             deshalb hier statt als eigener Block. Nachgerechnet: 1x pro
+             Woche in fuenf Wochen = 10 Unterrichtsstunden (Stufe 2),
+             2x pro Woche = 20 (Stufe 3). */
+        }
+        <p class="abrechnung">
+          Nichts buchen, nichts ankündigen: Am Monatsende rechnen wir ab, was
+          tatsächlich stattgefunden hat. Erreicht der Monat eine Stufe, gilt
+          der günstigere Satz für alle Stunden dieses Monats. Die Beispiele an
+          den Stufen rechnen mit vier Wochen – hat ein Monat fünf Termine,
+          kann er dadurch schon die nächste Stufe erreichen.
+        </p>
+
+        <div class="knoepfe">
+          <a
+            class="knopf-probe"
+            href="#probestunde"
+            aria-describedby="probestunde-hinweis-preise"
+            >Gratis Probestunde sichern<span aria-hidden="true">*</span></a
+          >
+          <a class="knopf-telefon" href={telefonHref}>
+            {/* Die Nummer steht im Linktext, das Icon ist dekorativ. */}
+            <svg
+              class="icon-telefon"
+              viewBox="0 0 24 24"
+              fill="currentColor"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linejoin="round"
+              aria-hidden="true"
+              focusable="false"
+            >
+              <path
+                d="M4 3h4l2 5-2.5 1.5a12.5 12.5 0 0 0 7 7L16 14l5 2v4h-1C11 20 4 13 4 4V3z"
+              ></path>
+            </svg>
+            <span>{telefon}</span>
+          </a>
+        </div>
+        <p class="zeiten">Mo bis Fr, 9 bis 20 Uhr</p>
+        {/* Fussnote zum Sternchen, Wortlaut wie im Hero. */}
+        <p class="fussnote" id="probestunde-hinweis-preise">
+          <span aria-hidden="true">*</span> Die Gratis-Probestunde dauert 45
+          Minuten und dient zugleich als Leistungsanalyse.
+        </p>
       </div>
-      <p class="zeiten">Mo bis Fr, 9 bis 20 Uhr</p>
-      {/* Fussnote zum Sternchen, Wortlaut wie im Hero. */}
-      <p class="fussnote" id="probestunde-hinweis-preise">
-        <span aria-hidden="true">*</span> Die Gratis-Probestunde dauert 45
-        Minuten und dient zugleich als Leistungsanalyse.
-      </p>
     </div>
 
     {/* Vergleich als Zettel ----------------------------------------- */}
@@ -929,15 +941,18 @@ const strich = "M1 6 C 18 3, 34 7, 52 5 S 82 3, 99 5";
   /* Auf schmalen Geraeten ragt der Stempel nicht rechts hinaus — dort
      laege er im Gutter und stiesse an den Bildschirmrand. Er sitzt
      stattdessen zur Haelfte ueber der Oberkante, und der Text beginnt
-     erst unter ihm: 48 px Innenabstand oben gegen 44 px, die der
-     Stempel in den Block hineinreicht. */
+     erst unter ihm: Der Innenabstand oben ist der halbe Durchmesser plus
+     8 px.
+
+     100 px statt 88 (25. September 2026): Bei 88 war der Satz „weniger
+     je Stunde" nur 10,6 px gross (0,12 des Durchmessers). Jetzt 12 px. */
   @media (max-width: 767px) {
     .stufen {
-      --stempel-gr: 88px;
+      --stempel-gr: 100px;
     }
 
     .stufen li.rabatt {
-      padding-top: var(--space-12);
+      padding-top: calc(var(--stempel-gr) / 2 + var(--space-2));
       padding-right: var(--space-6);
     }
 
@@ -947,6 +962,13 @@ const strich = "M1 6 C 18 3, 34 7, 52 5 S 82 3, 99 5";
     }
   }
 
+  /* Abschluss: untereinander, ab 1120 px zwei Spalten ---------------- */
+  .abschluss {
+    margin-top: var(--space-18);
+    display: grid;
+    gap: var(--space-12);
+  }
+
   /* Geschwister-Hinweis: eine Zusage, die man nicht ueberlesen soll.
      Die Doodly-Hand zieht einen roten Kreis darum (vorher eine rote
      Linie links, Alexander fand sie langweilig). Der Rahmen gibt Hand
@@ -954,7 +976,7 @@ const strich = "M1 6 C 18 3, 34 7, 52 5 S 82 3, 99 5";
      frei. */
   .familie-rahmen {
     position: relative;
-    margin: var(--space-12) auto 0;
+    margin: 0 auto;
     max-width: calc(var(--measure-wide) + 2 * var(--space-8));
   }
 
@@ -994,9 +1016,8 @@ const strich = "M1 6 C 18 3, 34 7, 52 5 S 82 3, 99 5";
   }
 
   .abrechnung {
-    margin: var(--space-12) auto 0;
+    margin: 0 auto;
     max-width: var(--measure-wide);
-    text-align: center;
     color: var(--color-text-subtle);
   }
 
@@ -1006,11 +1027,11 @@ const strich = "M1 6 C 18 3, 34 7, 52 5 S 82 3, 99 5";
      erkennt die Handlung wieder. */
 
   .aktion {
-    margin-top: var(--space-12);
     text-align: center;
   }
 
   .knoepfe {
+    margin-top: var(--space-8);
     display: flex;
     flex-direction: column;
     gap: var(--space-4);
@@ -1094,6 +1115,34 @@ const strich = "M1 6 C 18 3, 34 7, 52 5 S 82 3, 99 5";
     font-size: var(--font-size-sm);
     line-height: var(--line-height-normal);
     color: var(--color-text-subtle);
+  }
+
+  /* Ab 1120 px: Kreis links, Abrechnung und Knoepfe rechts, beide
+     Spalten mittig zueinander. Rechts linksbuendig — die Knoepfe stehen
+     dann unter dem Text, den sie abschliessen. */
+  @media (min-width: 1120px) {
+    .abschluss {
+      grid-template-columns: 1fr 1fr;
+      align-items: center;
+      gap: var(--space-18);
+    }
+
+    .familie-rahmen {
+      max-width: none;
+    }
+
+    .aktion {
+      text-align: left;
+    }
+
+    .abrechnung,
+    .fussnote {
+      margin-left: 0;
+    }
+
+    .knoepfe {
+      justify-content: flex-start;
+    }
   }
 
   /* Zettel ----------------------------------------------------------------

@@ -277,7 +277,9 @@ const KURVE_KREIS = "cubic-bezier(0.35, 0.1, 0.55, 0.95)";
 function kreisPfad(cx: number, cy: number, hb: number, hh: number) {
   const exponent = 3;
   const umfassen = Math.pow(2, 1 / exponent);
-  const luft = 6;
+  // Abstand zum Text. 6 px reichten nicht: Durch das Wackeln kam der
+  // Strich in der schmaleren Spalte bis auf 4 px an den Text heran.
+  const luft = 12;
   const rx = hb * umfassen + luft;
   const ry = hh * umfassen + luft;
   const anfang = -2.3;
