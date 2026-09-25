@@ -1,4 +1,5 @@
 ---
+import Unterstrichen from "../Unterstrichen.astro";
 // Sektion: Vorteile der Online-Nachhilfe (Startseite, 4)
 //
 // Aufbau nach einer Vorlage, die Alexander am 2. September 2026
@@ -36,14 +37,19 @@ import individuell from "../../icons/individuell.svg?raw";
 import support from "../../icons/support.svg?raw";
 
 const vorzeile = "Digitales Lernen";
-const ueberschrift = "Vorteile der Online-Nachhilfe";
+// Das Kernwort traegt den roten Marker-Unterstrich wie jede
+// Sektionsueberschrift (components/Unterstrichen.astro).
+const ueberschrift = { kern: "Vorteile", nach: "der Online-Nachhilfe" };
 ---
 
 <section class="vorteile" aria-labelledby="vorteile-titel">
   <div class="wrap">
     <div class="kopf">
       <p class="vorzeile">{vorzeile}</p>
-      <h2 id="vorteile-titel">{ueberschrift}</h2>
+      <h2 id="vorteile-titel">
+        <Unterstrichen>{ueberschrift.kern}</Unterstrichen>{" "}
+        {ueberschrift.nach}
+      </h2>
       <p class="einleitung">
         Geben Sie Ihrem Kind die besten Chancen: Flexibles und effizientes
         Lernen – ganz bequem von zu Hause.

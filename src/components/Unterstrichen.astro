@@ -1,0 +1,77 @@
+---
+// Roter Marker-Unterstrich unter dem Kernwort einer Sektionsueberschrift.
+//
+// Eingefuehrt am 25. September 2026 in Sektion 3 („Echte Foerderung"),
+// danach auf Alexanders Wunsch in jede Sektionsueberschrift uebernommen,
+// damit es ueberall gleich aussieht. Derselbe Markerzug wie unter dem
+// Schlusssatz am Zettel in Sektion 7.
+//
+// Gebrauch: <h2><Unterstrichen>Kernwort</Unterstrichen>{" "}Rest</h2>
+// Das {" "} ist noetig — Astro verschluckt den Zeilenumbruch nach der
+// Komponente sonst, und das Leerzeichen fehlt.
+//
+// Nur kurze Wortgruppen unterstreichen: Der Zug liegt unter dem ganzen
+// Kasten. Bricht die Gruppe auf schmalen Geraeten doch um, steht er
+// unter der letzten Zeile ueber die volle Breite.
+
+// Gezeichnete Linie in viewBox-Koordinaten (100 x 10), leicht
+// unregelmaessig, damit sie nicht nach Textauszeichnung aussieht.
+const zug = "M1 6 C 18 3, 34 7, 52 5 S 82 3, 99 5";
+---
+
+<span class="unterstrichen"
+  ><slot /><svg
+    class="zug"
+    viewBox="0 0 100 10"
+    preserveAspectRatio="none"
+    aria-hidden="true"
+    focusable="false"><path d={zug}></path></svg
+  ></span
+>
+
+<style>
+  /* --zug-dicke, --zug-abstand: Geometrie der Zeichnung. Der Abstand
+     setzt den Zug knapp unter die Grundlinie, sodass er die
+     Unterlaengen nicht durchschneidet.
+
+     Rot auf dunklen Flaechen erreicht nur rund 3:1. Fuer Schrift waere
+     das zu wenig, fuer eine Linie ohne eigene Information genuegt es —
+     sie hebt hervor, was die Ueberschrift ohnehin sagt. */
+  .unterstrichen {
+    --zug-dicke: 6px;
+    --zug-abstand: -0.08em;
+
+    position: relative;
+    display: inline-block;
+    max-width: 100%;
+  }
+
+  /* Unter 768 px brechen zweiwortige Gruppen bei 52 px Schrift um. Ein
+     umbrechender Kasten nimmt die volle Zeilenbreite ein, und der Zug
+     liefe weit ueber das letzte Wort hinaus. min-content macht den
+     Kasten so breit wie das laengste Wort — in allen Ueberschriften
+     steht das unten, der Zug sitzt also genau darunter. */
+  @media (max-width: 767px) {
+    .unterstrichen {
+      width: min-content;
+    }
+  }
+
+  .zug {
+    position: absolute;
+    left: 0;
+    bottom: var(--zug-abstand);
+    width: 100%;
+    height: 0.2em;
+    overflow: visible;
+    pointer-events: none;
+  }
+
+  .zug path {
+    fill: none;
+    stroke: var(--color-brand);
+    stroke-width: var(--zug-dicke);
+    stroke-linecap: round;
+    vector-effect: non-scaling-stroke;
+  }
+</style>

@@ -1,8 +1,15 @@
 ---
+import Unterstrichen from "../Unterstrichen.astro";
 // Sektion: Vertrauensleiste (Startseite, 2)
 
 // PLATZHALTER — noch nicht durch endgueltigen Text ersetzt.
-const platzhalterUeberschrift = "Mission: Verlässliche Nachhilfe.";
+// Das Kernwort traegt den roten Marker-Unterstrich wie jede
+// Sektionsueberschrift (components/Unterstrichen.astro).
+const platzhalterUeberschrift = {
+  vor: "Mission:",
+  kern: "Verlässliche",
+  nach: "Nachhilfe.",
+};
 
 // Trustindex-Karussell aus Alexanders Konto.
 const trustindexKarussell = "808d4748020846902d868e6fc63";
@@ -44,7 +51,11 @@ const zahlen = [
     <div class="wrap">
       <div class="spalten">
         <div class="einstieg">
-          <h2 id="vertrauen-titel">{platzhalterUeberschrift}</h2>
+          <h2 id="vertrauen-titel">
+            {platzhalterUeberschrift.vor}{" "}
+            <Unterstrichen>{platzhalterUeberschrift.kern}</Unterstrichen>{" "}
+            {platzhalterUeberschrift.nach}
+          </h2>
           <p class="unterzeile">
             Wir unterrichten <strong>ausschließlich</strong> im Einzelunterricht.
           </p>

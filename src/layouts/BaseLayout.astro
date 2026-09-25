@@ -74,6 +74,20 @@ const { title, description, lang = 'de' } = Astro.props;
     box-sizing: border-box;
   }
 
+  /* Der Markenname „#Lernstabil" steht ueberall in der Schrift des
+     Logos, auch mitten im Fliesstext und in der Navigation — Wunsch von
+     Alexander am 25. September 2026. Global, weil er in jeder Sektion
+     vorkommen kann.
+
+     Comic Neue ist nur im fetten Schnitt geladen (siehe oben). Kursiv
+     gibt es nicht; ohne font-style: normal wuerde der Browser sie in
+     der kursiven Navigation kuenstlich schraegstellen. */
+  .marke {
+    font-family: var(--font-family-logo);
+    font-weight: var(--font-weight-bold);
+    font-style: normal;
+  }
+
   /* Aus dem Blickfeld, aber nicht aus dem Fokusbaum: display:none oder
      visibility:hidden wuerden die Marke auch fuer die Tastatur
      entfernen. Bei Fokus springt sie sichtbar in die linke obere Ecke. */

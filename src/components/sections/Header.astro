@@ -8,10 +8,12 @@
 const telefon = "0341 658 329 18";
 const telefonHref = "tel:+4934165832918";
 
-const links = [
+// marke: Markenname hinter dem Text, in der Schrift des Logos (globale
+// Klasse .marke im BaseLayout).
+const links: { text: string; href: string; marke?: string }[] = [
   { text: "Fächer", href: "#faecher" },
   { text: "Dozent werden", href: "/fuer-dozenten" },
-  { text: "Warum #Lernstabil", href: "#warum" },
+  { text: "Warum", marke: "#Lernstabil", href: "#warum" },
   { text: "Preise", href: "#preise" },
 ];
 ---
@@ -28,7 +30,15 @@ const links = [
         {
           links.map((l) => (
             <li>
-              <a href={l.href}>{l.text}</a>
+              <a href={l.href}>
+                {l.text}
+                {l.marke && (
+                  <>
+                    {" "}
+                    <span class="marke">{l.marke}</span>
+                  </>
+                )}
+              </a>
             </li>
           ))
         }
