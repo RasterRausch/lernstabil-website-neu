@@ -46,14 +46,16 @@ const links: { text: string; href: string; marke?: string }[] = [
     </nav>
 
     <a class="kontakt" href={telefonHref} aria-label={`Anrufen: ${telefon}`}>
-      {/* Selbst gezeichnet, kein Icon-Paket. Umriss, Strichstärke 2. */}
+      {/* Selbst gezeichnet, kein Icon-Paket. Flaechig seit dem
+          25. September 2026 (vorher Umriss), Wunsch von Alexander. Die
+          Kontur in derselben Farbe rundet die Ecken ab. Dieselbe Form
+          steht in den Anruf-Knoepfen von Hero und Preisen. */}
       <svg
         class="hoerer"
         viewBox="0 0 24 24"
-        fill="none"
+        fill="currentColor"
         stroke="currentColor"
         stroke-width="2"
-        stroke-linecap="round"
         stroke-linejoin="round"
         aria-hidden="true"
       >

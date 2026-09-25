@@ -13,6 +13,18 @@
 // Das Bild ist am selben Tag mitgeloescht worden. Zum Zurueckholen:
 // Es stammt aus Alexanders Trustindex-Konto (Format 436 x 90). Die
 // Kennung des zugehoerigen Widgets lautet 3bfd6d6807be50304926958dc7a.
+// Punkte im Hero. Haken im Stil der Sektionen 3 und 5 (Marker-Haken,
+// viewBox 0 0 30 24), hier weiss. Seit dem 25. September 2026 —
+// vorher dünne CSS-Häkchen, die nicht zum Rest passten.
+const punkte = [
+  "Individueller Einzelunterricht",
+  "Volle Flexibilität (Fächerwechsel)",
+  // Ohne Smartphone, wie in Sektion 5 — Vorgabe von Alexander am
+  // 25. September 2026.
+  "Einfach per PC, Laptop oder Tablet",
+];
+const haken = "M0 12 C 3 14, 6 17, 9 21 C 14 12, 21 6, 30 1";
+
 const siegel = [
   { id: "67c6a0b8012c503e17061c29e56" },
   { id: "d7ec3be801f95047135619f0996" },
@@ -76,9 +88,22 @@ const siegel = [
              sie stehen ohnehin unter den Knoepfen. */
         }
         <ul class="punkte">
-          <li>Individueller Einzelunterricht</li>
-          <li>Volle Flexibilität (Fächerwechsel)</li>
-          <li>Einfach per PC, Laptop, Tablet oder Smartphone</li>
+          {
+            punkte.map((p) => (
+              <li>
+                <svg
+                  class="haken"
+                  viewBox="0 0 30 24"
+                  preserveAspectRatio="none"
+                  aria-hidden="true"
+                  focusable="false"
+                >
+                  <path d={haken} />
+                </svg>
+                {p}
+              </li>
+            ))
+          }
         </ul>
 
         <div class="aktionen">
@@ -90,21 +115,30 @@ const siegel = [
             <svg
               class="icon-telefon"
               viewBox="0 0 24 24"
-              fill="none"
+              fill="currentColor"
               stroke="currentColor"
               stroke-width="2"
-              stroke-linecap="round"
               stroke-linejoin="round"
               aria-hidden="true"
               focusable="false"
             >
               <path
-                d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"
+                d="M4 3h4l2 5-2.5 1.5a12.5 12.5 0 0 0 7 7L16 14l5 2v4h-1C11 20 4 13 4 4V3z"
               ></path>
             </svg>
             <span>0341 658 329 18</span>
           </a>
-          <a class="knopf-sekundaer" href="#probestunde">Jetzt gratis testen</a>
+          {
+            /* Sternchen verweist auf die Fussnote bei den Siegeln.
+               aria-describedby liest sie Screenreadern zum Knopf vor;
+               das Sternchen selbst bleibt fuer sie stumm. */
+          }
+          <a
+            class="knopf-sekundaer"
+            href="#probestunde"
+            aria-describedby="probestunde-hinweis"
+            >Jetzt gratis testen<span aria-hidden="true">*</span></a
+          >
         </div>
 
         <p class="zeiten"><em>Mo bis Fr, 9 bis 20 Uhr</em></p>
@@ -131,6 +165,17 @@ const siegel = [
               </div>
             ))
           }
+
+          {
+            /* Fussnote zum Sternchen am Knopf. Inhalt von Alexander,
+               25. September 2026. Steht neben den Siegeln, mittig zu
+               ihnen — so bleibt sie ueber dem roten Sockel, auf den
+               die Siegel hinunterreichen. */
+          }
+          <p class="fussnote" id="probestunde-hinweis">
+            <span aria-hidden="true">*</span> Die Gratis-Probestunde dauert 45
+            Minuten und dient zugleich als Leistungsanalyse.
+          </p>
         </div>
       </div>
 
@@ -281,9 +326,20 @@ const siegel = [
      damit der Durchmesser.
      ------------------------------------------------------------------ */
   .stempel {
-    --stempel-gr: 128px;
-    --stempel-rechts: 8px;
-    --stempel-unten: 24px;
+    /* 147 = 128 x 1,15, am 25. September 2026 um 15 % vergroessert,
+       Vorgabe von Alexander. */
+    --stempel-gr: 147px;
+    /* Am 25. September 2026 nach unten und rechts versetzt, Wunsch von
+       Alexander: Der Stempel ragt jetzt so tief in den roten Sockel wie
+       die Siegel links (--space-8) und verdeckt weniger von Blatt und
+       Hand. Vorher 24 px ueber der Unterkante. Negativ = ueber die
+       Kante des Motivs hinaus.
+
+       Nach rechts versetzt wird er erst ab 1120 px (siehe unten):
+       Darunter reicht das Motiv bis an den Bildschirmrand, und der
+       Stempel wuerde angeschnitten. */
+    --stempel-rechts: var(--space-2);
+    --stempel-unten: calc(-1 * var(--space-8));
     /* Leichte Drehung nach rechts. Ein Stempel, der exakt gerade
        sitzt, sieht nach Platzhalter aus; die Schraege laesst ihn
        wirken, als waere er aufgebracht worden. Positiv = im
@@ -378,7 +434,7 @@ const siegel = [
     --neigung: -1.5deg;
 
     font-family: var(--font-family-display);
-    font-size: var(--font-size-5xl);
+    font-size: var(--font-size-hero);
     font-weight: var(--font-weight-bold);
     line-height: var(--line-height-tight);
 
@@ -430,34 +486,38 @@ const siegel = [
     gap: var(--space-3);
   }
 
-  /* Das Haekchen ist gezeichnet, kein Zeichen und kein Icon-Paket:
-     zwei Rahmenkanten eines Kaestchens, um 45 Grad gedreht. Die fuenf
-     Werte unten sind Geometrie dieser Zeichnung und stammen deshalb
-     NICHT aus der Abstandsskala — sie stehen zueinander im
-     Verhaeltnis, nicht zum Raster der Seite. Nur --haken-einzug
-     beruehrt das Layout: Er haelt den Text frei vom Haken. */
-  .punkte li {
-    --haken-breite: 12px;
-    --haken-hoehe: 7px;
-    --haken-strich: 2px;
-    --haken-links: 2px;
-    --haken-oben: 8px;
-    --haken-einzug: 28px;
+  /* Marker-Haken wie in den Sektionen 3 und 5, hier weiss auf der
+     dunklen Flaeche. Kleiner als dort, weil daneben Fliesstext steht und
+     keine Ueberschrift: 22 x 18 bei 17/18 px Schrift, dort 32 x 26 bei
+     26 px. Die Werte sind Geometrie der Zeichnung.
 
-    position: relative;
-    padding-left: var(--haken-einzug);
+     --haken-oben setzt den Haken auf die Mitte der ersten Textzeile. */
+  .punkte li {
+    --haken-breite: 22px;
+    --haken-hoehe: 18px;
+    --haken-dicke: 4px;
+    --haken-oben: 3px;
+
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-3);
   }
 
-  .punkte li::before {
-    content: "";
-    position: absolute;
-    left: var(--haken-links);
-    top: var(--haken-oben);
+  .haken {
+    flex: 0 0 auto;
     width: var(--haken-breite);
     height: var(--haken-hoehe);
-    border-left: var(--haken-strich) solid var(--color-text-default);
-    border-bottom: var(--haken-strich) solid var(--color-text-default);
-    transform: rotate(-45deg);
+    margin-top: var(--haken-oben);
+    overflow: visible;
+  }
+
+  .haken path {
+    fill: none;
+    stroke: var(--color-text-default);
+    stroke-width: var(--haken-dicke);
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    vector-effect: non-scaling-stroke;
   }
 
   .aktionen {
@@ -591,11 +651,27 @@ const siegel = [
      ein Loch. zoom rechnet die Verkleinerung ins Layout ein.
 
      --siegel-massstab gilt fuer beide Widgets. Ein Wert, eine Stelle. */
+  /* Fussnote: klein, gedaempft, nicht kursiv. --color-text-subtle auf
+     der Heroflaeche rund 8:1. Die Breite haelt sie auf drei kurze
+     Zeilen neben den Siegeln. */
+  .fussnote {
+    flex: 1 1 18ch;
+    max-width: 26ch;
+    align-self: center;
+    margin: 0;
+    font-size: var(--font-size-sm);
+    line-height: var(--line-height-normal);
+    color: var(--color-text-subtle);
+  }
+
   .siegel-widget {
     /* 0,78125 = 0,5 x 1,25 x 1,25. Am 1. September 2026 dreimal
        angepasst: erst auf die Haelfte, dann zweimal um ein Viertel
-       wieder hinauf. */
-    --siegel-massstab: 0.65;
+       wieder hinauf.
+
+       Am 25. September 2026 von 0,65 um 15 % vergroessert, Vorgabe von
+       Alexander: 0,65 x 1,15 = 0,7475. */
+    --siegel-massstab: 0.7475;
 
     flex: 0 0 auto;
     zoom: var(--siegel-massstab);
@@ -620,6 +696,13 @@ const siegel = [
   /* ab 1120 — zweispaltig ------------------------------------------- */
 
   @media (min-width: 1120px) {
+    /* Stempel ueber die rechte Kante des Motivs hinaus, damit er
+       weniger von Blatt und Hand verdeckt. Rechts ist hier Platz: Das
+       Motiv endet vor dem Bildschirmrand. */
+    .stempel {
+      --stempel-rechts: -16px;
+    }
+
     /* Die Textspalte wird zur Flex-Spalte, damit die Siegel per
        margin-top: auto an ihren unteren Rand rutschen. Ohne das haengen
        sie direkt unter den Oeffnungszeiten und der Abstand zum Sockel

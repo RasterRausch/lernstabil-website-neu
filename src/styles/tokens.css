@@ -200,6 +200,16 @@
   --font-size-5xl: 64px;
   --font-size-6xl: 80px;
 
+  /* Eigene Rolle fuer „ONLINE NACHHILFE" im Hero, angelegt am
+     25. September 2026. Keine Stufe der Skala: Alexander wollte die
+     Zeile „einen Tick groesser" als 5xl (64), 6xl ist mit 144 px auf
+     dem Desktop viel zu gross. 5xl zu aendern haette die Ziffern am
+     Zettel in Sektion 7 mitgezogen.
+
+     Auf dem Handy 52 px: „NACHHILFE" war bei 64 px 382 px breit, die
+     Spalte nur 338 px — die Zeile lief ueber den Rand. Ab 768 px 72. */
+  --font-size-hero: 52px;
+
   /* --- Zeilenhöhen ---------------------------------------------------
      Ohne Einheit, damit sie sich auf die jeweilige Schriftgröße
      beziehen. Je größer die Schrift, desto enger die Zeile.           */
@@ -279,6 +289,7 @@
   :root {
     --font-size-md: 18px;
     --font-size-6xl: 112px;
+    --font-size-hero: 72px;
     --layout-gutter: 48px;
     --layout-header-height: 58px;
   }
