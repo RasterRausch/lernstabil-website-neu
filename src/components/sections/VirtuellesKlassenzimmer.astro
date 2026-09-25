@@ -90,7 +90,17 @@ const haken = "M0 12 C 3 14, 6 17, 9 21 C 14 12, 21 6, 30 1";
         }
       </ul>
 
-      <a class="knopf" href="#probestunde">Gratis Probestunde sichern</a>
+      <a
+        class="knopf"
+        href="#probestunde"
+        aria-describedby="probestunde-hinweis-klassenzimmer"
+        >Gratis Probestunde sichern<span aria-hidden="true">*</span></a
+      >
+      {/* Fussnote zum Sternchen, Wortlaut wie im Hero. */}
+      <p class="fussnote" id="probestunde-hinweis-klassenzimmer">
+        <span aria-hidden="true">*</span> Die Gratis-Probestunde dauert 45
+        Minuten und dient zugleich als Leistungsanalyse.
+      </p>
 
       {/* Doodly-Hand wie in Sektion 3, sie hakt die Punkte ab. */}
       <img
@@ -607,6 +617,15 @@ const haken = "M0 12 C 3 14, 6 17, 9 21 C 14 12, 21 6, 30 1";
     stroke: var(--color-brand);
   }
 
+  /* Fussnote zum Sternchen am Knopf — wie im Hero: klein, gedaempft,
+     nicht kursiv. Auf Weiss --color-text-inverse-subtle, 5,3:1. */
+  .fussnote {
+    margin: var(--space-3) 0 0;
+    font-size: var(--font-size-sm);
+    line-height: var(--line-height-normal);
+    color: var(--color-text-inverse-subtle);
+  }
+
   /* Knopf — wie Sektion 3: rot, weil die Probestunde auf der ganzen
      Seite rot ist (Hero, Sektion 3, Preise). Blau gehoert dem Telefon.
      Umgestellt am 25. September 2026. Weiss auf --color-brand 5,70:1. */
@@ -670,9 +689,12 @@ const haken = "M0 12 C 3 14, 6 17, 9 21 C 14 12, 21 6, 30 1";
       gap: var(--space-28);
     }
 
-    /* 330 px: Das Bild hat 661 px, bleibt also auf Retina scharf. */
+    /* 400 px, am 25. September 2026 von 330 angehoben: Neben dem
+       grossen Jitsi-Bild wirkte sie zu klein, darueber stand zu viel
+       Leerraum. Das Bild hat 661 px — auf Retina also etwas weicher als
+       ideal (1,65-fach statt 2-fach). */
     .maedchen {
-      --maedchen-breite: 330px;
+      --maedchen-breite: 400px;
 
       order: 1;
       flex: 0 0 auto;
@@ -689,14 +711,14 @@ const haken = "M0 12 C 3 14, 6 17, 9 21 C 14 12, 21 6, 30 1";
 
     /* Pfeil vom rechten Rand ihres Tablets quer durch die Luecke ins
        Jitsi-Bild, Notiz darueber. */
-    /* 210 x 144 im Seitenverhaeltnis der Zeichnung (160 x 110). Der
+    /* 240 x 165 im Seitenverhaeltnis der Zeichnung (160 x 110). Der
        Anfang liegt an der rechten Kante ihres Tablets, die Spitze
        reicht ueber die Luecke (--space-28) in den Rahmen des Bildes. */
     .pfeil {
       left: 70%;
       top: 30%;
-      width: 210px;
-      height: 144px;
+      width: 240px;
+      height: 165px;
     }
 
     .pfeil .breit {

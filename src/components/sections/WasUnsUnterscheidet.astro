@@ -91,7 +91,17 @@ const haken = "M0 12 C 3 14, 6 17, 9 21 C 14 12, 21 6, 30 1";
           }
         </ul>
 
-        <a class="knopf" href="#probestunde">Gratis Probestunde sichern</a>
+        <a
+          class="knopf"
+          href="#probestunde"
+          aria-describedby="probestunde-hinweis-anders"
+          >Gratis Probestunde sichern<span aria-hidden="true">*</span></a
+        >
+        {/* Fussnote zum Sternchen, Wortlaut wie im Hero. */}
+        <p class="fussnote" id="probestunde-hinweis-anders">
+          <span aria-hidden="true">*</span> Die Gratis-Probestunde dauert 45
+          Minuten und dient zugleich als Leistungsanalyse.
+        </p>
 
         {
           /* Doodly-Hand, dieselbe wie in Sektion 7. Rein dekorativ; das
@@ -358,6 +368,15 @@ const haken = "M0 12 C 3 14, 6 17, 9 21 C 14 12, 21 6, 30 1";
       #000 calc(var(--schnitt) - var(--schnitt-weich)),
       transparent var(--schnitt)
     );
+  }
+
+  /* Fussnote zum Sternchen am Knopf — wie im Hero: klein, gedaempft,
+     nicht kursiv. Auf Weiss --color-text-inverse-subtle, 5,3:1. */
+  .fussnote {
+    margin: var(--space-3) 0 0;
+    font-size: var(--font-size-sm);
+    line-height: var(--line-height-normal);
+    color: var(--color-text-inverse-subtle);
   }
 
   /* Knopf --------------------------------------------------------------
