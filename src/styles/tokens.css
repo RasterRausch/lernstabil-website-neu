@@ -41,6 +41,7 @@
   /* Neutralskala. Höhere Zahl = dunkler, wie in gängigen Systemen.
      Die Seite ist dunkel, deshalb liegt das Gewicht am oberen Ende. */
   --color-neutral-0: #ffffff;
+  --color-neutral-100: #efeeec;
   --color-neutral-400: #b0b0b0;
   --color-neutral-500: #6b6b6b;
   --color-neutral-700: #3a3a3a;
@@ -89,6 +90,14 @@
      lichste Fehler dieses Systems. Deshalb liegen beide direkt
      beieinander. */
   --color-surface-inverse: var(--color-neutral-0);
+
+  /* Gedaempfte helle Flaeche: warmes Hellgrau, eine Stufe unter Weiss.
+     Angelegt am 25. September 2026 fuer die Fragen-Sektion, auf der
+     weisse Zettel liegen — auf reinem Weiss waeren sie nicht zu sehen.
+     Dieselben Textrollen wie auf --color-surface-inverse:
+       inverse         #1a1a1a  auf #efeeec  15,0:1
+       inverse-subtle  #6b6b6b  auf #efeeec   4,6:1  (knapp ueber AA) */
+  --color-surface-inverse-muted: var(--color-neutral-100);
 
   /* Abdunklung ueber Hintergrundbildern. Angelegt am 14. September 2026
      fuer die Kreidetafel in Sektion 5. Die hellste Stelle der Tafel
@@ -259,6 +268,11 @@
 
   /* --- Schatten -------------------------------------------------------- */
   --shadow-sm: 0 2px 6px rgb(0 0 0 / 0.3);
+  /* Groesserer, weicherer Schatten fuer etwas, das angehoben wird — der
+     aufgeklappte Zettel in der Fragen-Sektion. Angelegt am
+     25. September 2026. Auf heller Flaeche, deshalb schwaecher deckend
+     als --shadow-sm, das fuer dunkle Flaechen gedacht ist. */
+  --shadow-md: 0 12px 28px rgb(0 0 0 / 0.16);
 
   /* --- Icons -----------------------------------------------------------
      Für Icons, die neben Text in fester Größe stehen. Icons INNERHALB

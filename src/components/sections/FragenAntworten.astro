@@ -1,0 +1,459 @@
+---
+import Unterstrichen from "../Unterstrichen.astro";
+// Sektion: Fragen und Antworten (Startseite, 8)
+//
+// Angelegt am 25. September 2026. Entwurf mit Alexander abgestimmt:
+//
+// - HELLE FLAECHE. Die Preise darueber sind dunkel. Warmes Hellgrau
+//   statt Weiss, weil darauf weisse Zettel liegen.
+// - DIE FRAGEN SIND ZETTEL wie „Bevor Sie woanders unterschreiben" in
+//   den Preisen: weiss, leicht schraeg, abwechselnd gekippt, rote
+//   Marker-Ziffer. Aufgeklappt hebt sich der Zettel an und
+//   bleibt dabei schraeg, das rote Plus dreht sich zum Minus.
+// - DER JUNGE steht links auf der Unterkante und zeigt auf die Fragen —
+//   dieselbe Figur wie in Sektion 3, erzeugte Person, ohne Namen.
+//
+// AUFKLAPPEN mit <details>/<summary>: ohne Skript, mit Tastatur und
+// Screenreader bedienbar. name="fragen" macht die Zettel zu einer
+// Gruppe, in der immer nur einer offen ist — die Liste bleibt ruhig.
+//
+// ANTWORTEN nur aus Fakten, die Alexander bestaetigt hat (25. September
+// 2026): Probestunde 45 Minuten, zugleich Leistungsanalyse mit
+// Unterrichtsplan am Ende; kein Vertrag; Absage bis 24 Stunden vorher
+// kostenfrei; Jitsi im Browser ohne Installation, Kamera und Mikrofon
+// noetig; Dozentenwechsel moeglich; Zahlung per Ueberweisung oder
+// Lastschrift. Bewusst NICHT genannt, auf seinen Wunsch: spaetere
+// Absagen werden berechnet; ein PC braucht eine Webcam. Die Texte sind
+// so formuliert, dass sie dadurch nichts Falsches versprechen.
+
+const telefon = "0341 658 329 18";
+const telefonHref = "tel:+4934165832918";
+
+const fragen = [
+  {
+    frage: "Wie läuft die kostenlose Probestunde ab?",
+    antwort:
+      "Die Probestunde dauert 45 Minuten und kostet nichts. Der Dozent schaut dabei genau hin: Wo liegen die Stärken Ihres Kindes, wo hakt es? Am Ende bekommen Sie einen Unterrichtsplan – wie wir die Stunden gestalten würden und was wir empfehlen. Verpflichtet sind Sie zu nichts.",
+  },
+  {
+    frage: "Gibt es einen Vertrag oder eine Kündigungsfrist?",
+    antwort:
+      "Nein. Bei uns gibt es keinen Vertrag, keine Laufzeit und deshalb auch nichts zu kündigen. Sie entscheiden nach jeder Stunde neu, ob es weitergeht.",
+  },
+  {
+    frage: "Was ist, wenn mein Kind krank ist?",
+    antwort:
+      "Dann sagen Sie die Stunde einfach ab – bis 24 Stunden vorher ist das kostenfrei. Und in den Ferien zahlen Sie ohnehin nichts.",
+  },
+  {
+    frage: "Welche Technik braucht mein Kind?",
+    antwort:
+      "Ein Laptop oder Tablet mit Kamera und Mikrofon – das ist heute in praktisch jedem Gerät eingebaut. Der Unterricht läuft direkt im Browser, installieren müssen Sie nichts.",
+  },
+  {
+    frage: "Wer unterrichtet mein Kind?",
+    antwort:
+      "Ihr Kind hat einen festen Dozenten – eine qualifizierte Fachkraft für sein Fach, immer im Einzelunterricht. Und wenn es einmal nicht passt, wechseln wir den Dozenten.",
+  },
+  {
+    frage: "Wie wird abgerechnet und bezahlt?",
+    antwort:
+      "Einmal im Monat, am Monatsende – und nur für die Stunden, die wirklich stattgefunden haben. Die günstigere Stufe gilt automatisch, Geschwister zählen zusammen. Bezahlen können Sie per Überweisung oder bequem per Lastschrift, ganz wie Sie möchten.",
+  },
+];
+
+// Gezeichnetes Plus: zwei leicht unregelmaessige Markerzuege,
+// viewBox 0 0 24 24. Der senkrechte dreht sich beim Aufklappen in die
+// Waagerechte — aus Plus wird Minus.
+const plusWaagerecht = "M3 12.5 C 8 11.5, 15 12.8, 21 11.8";
+const plusSenkrecht = "M12.3 3 C 11.6 8, 12.6 15, 11.8 21";
+---
+
+<section class="fragen-sektion" id="fragen" aria-labelledby="fragen-titel">
+  <div class="wrap">
+    <div class="spalten">
+      <div class="junge">
+        {
+          /* Freigestellt, von Alexander mit Firefly erzeugt (Referenz:
+             der Junge aus Sektion 3) und auf 866 x 2716 hochskaliert.
+             Ausgeliefert 520 x 1631 — doppelt so breit wie die Anzeige
+             auf dem Desktop, also auch auf Retina scharf. alt="" wie bei
+             den anderen Figuren: Stimmung, keine Information. */
+        }
+        <img
+          src="/bilder/junge-zeigt-scharf.webp"
+          width="520"
+          height="1631"
+          alt=""
+          loading="lazy"
+          decoding="async"
+        />
+      </div>
+
+      {
+        /* .kopf ist im Raster „durchsichtig" (display: contents): Titel
+           und Einleitung bekommen eigene Felder. So laeuft die
+           Ueberschrift auf dem Handy ueber die volle Breite, und der
+           Junge steht neben der Einleitung statt neben der Ueberschrift. */
+      }
+      <div class="kopf">
+        <div class="titel">
+          <p class="vorzeile">Gut zu wissen</p>
+          <h2 id="fragen-titel">
+            Fragen, die{" "}<Unterstrichen>Eltern</Unterstrichen>{" "}uns stellen
+          </h2>
+        </div>
+        <p class="einleitung">
+          Ihre Frage ist nicht dabei? Rufen Sie uns an:{" "}
+          <a href={telefonHref}>{telefon}</a>, Mo bis Fr von 9 bis 20 Uhr.
+        </p>
+      </div>
+
+      <div class="liste">
+        {
+          fragen.map((f, i) => (
+            <details class="zettel" name="fragen">
+              <summary>
+                <span class="nummer" aria-hidden="true">
+                  {i + 1}
+                </span>
+                <span class="frage">{f.frage}</span>
+                <svg
+                  class="plus"
+                  viewBox="0 0 24 24"
+                  aria-hidden="true"
+                  focusable="false"
+                >
+                  <path d={plusWaagerecht} />
+                  <path class="senkrecht" d={plusSenkrecht} />
+                </svg>
+              </summary>
+              <div class="antwort">
+                <p>{f.antwort}</p>
+              </div>
+            </details>
+          ))
+        }
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .fragen-sektion {
+    background: var(--color-surface-inverse-muted);
+    color: var(--color-text-inverse);
+    padding: var(--space-18) 0;
+    /* Der Junge steht auf der Unterkante; clip statt hidden, damit kein
+       Scrollcontainer entsteht. */
+    overflow-x: clip;
+    scroll-margin-top: var(--layout-header-height);
+  }
+
+  .wrap {
+    width: 100%;
+    max-width: var(--layout-content-max);
+    margin: 0 auto;
+    padding: 0 var(--layout-gutter);
+  }
+
+  /* Raster ----------------------------------------------------------------
+     Unter 1120 px: Ueberschrift ueber die volle Breite, darunter der
+     Junge klein links neben der Einleitung, dann die Zettel. Ab 1120 px:
+     der Junge links ueber die ganze Hoehe, rechts Ueberschrift,
+     Einleitung und Zettel. Er zeigt immer nach rechts, auf Text und
+     Zettel. */
+  .spalten {
+    --junge-breite: 110px;
+
+    display: grid;
+    grid-template-columns: var(--junge-breite) 1fr;
+    grid-template-areas:
+      "titel titel"
+      "junge text"
+      "liste liste";
+    column-gap: var(--space-6);
+    row-gap: var(--space-8);
+  }
+
+  .junge {
+    grid-area: junge;
+    align-self: end;
+  }
+
+  .junge img {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  .kopf {
+    display: contents;
+  }
+
+  .titel {
+    grid-area: titel;
+  }
+
+  .einleitung {
+    grid-area: text;
+    align-self: center;
+  }
+
+  .liste {
+    grid-area: liste;
+  }
+
+  /* Kopf — wie die anderen hellen Sektionen, hier linksbuendig, weil er
+     neben dem Jungen steht. */
+  .vorzeile {
+    margin: 0;
+    color: var(--color-action);
+    font-size: var(--font-size-md);
+    font-weight: var(--font-weight-bold);
+    line-height: var(--line-height-relaxed);
+  }
+
+  h2 {
+    margin: var(--space-2) 0 0;
+    font-size: var(--font-size-4xl);
+    font-weight: var(--font-weight-bold);
+    line-height: var(--line-height-snug);
+  }
+
+  .einleitung {
+    margin: 0;
+    max-width: var(--measure-default);
+    color: var(--color-text-inverse-subtle);
+  }
+
+  /* Telefon wie ueberall auf der Seite blau. 7,0:1 auf dieser Flaeche. */
+  .einleitung a {
+    color: var(--color-action);
+    font-weight: var(--font-weight-bold);
+    white-space: nowrap;
+  }
+
+  .einleitung a:focus-visible {
+    outline: var(--focus-ring-width) solid var(--color-text-inverse);
+    outline-offset: var(--focus-ring-offset);
+  }
+
+  /* Zettel ----------------------------------------------------------------
+     Weisses Blatt auf der hellgrauen Flaeche, abwechselnd leicht gekippt
+     wie hingelegt. Aufgeklappt hebt es sich an und bleibt schraeg:
+     groesserer Schatten, ein Stueck nach oben.
+
+     --kippen: Winkel der Zeichnung, keine Stufe der Skala.
+     interpolate-size erlaubt das weiche Aufklappen auf „auto" — derzeit
+     nur Chromium; Safari und Firefox klappen ohne Animation auf. */
+  .liste {
+    interpolate-size: allow-keywords;
+    display: grid;
+    gap: var(--space-6);
+  }
+
+  .zettel {
+    --kippen: -0.8deg;
+    --nummer-breite: var(--space-8);
+
+    background: var(--color-surface-inverse);
+    box-shadow: var(--shadow-sm);
+    transform: rotate(var(--kippen));
+    transition:
+      transform 0.25s ease-out,
+      box-shadow 0.25s ease-out;
+  }
+
+  .zettel:nth-child(even) {
+    --kippen: 0.6deg;
+  }
+
+  /* Aufgeklappt bleibt der Zettel schraeg — Wunsch von Alexander am
+     25. September 2026, vorher richtete er sich gerade auf. Er hebt sich
+     nur an: ein Stueck nach oben, groesserer Schatten. Bei unter einem
+     Grad Neigung bleibt auch die laengere Antwort gut lesbar. */
+  .zettel[open] {
+    transform: rotate(var(--kippen)) translateY(calc(-1 * var(--space-1)));
+    box-shadow: var(--shadow-md);
+  }
+
+  summary {
+    display: grid;
+    grid-template-columns: var(--nummer-breite) 1fr auto;
+    align-items: center;
+    column-gap: var(--space-3);
+    padding: var(--space-4);
+    cursor: pointer;
+    list-style: none;
+  }
+
+  summary::-webkit-details-marker {
+    display: none;
+  }
+
+  summary:focus-visible {
+    outline: var(--focus-ring-width) solid var(--color-text-inverse);
+    outline-offset: var(--focus-ring-offset);
+  }
+
+  /* Ziffer wie am Zettel in den Preisen: Displayschrift, Rot. */
+  .nummer {
+    font-family: var(--font-family-display);
+    font-size: var(--font-size-3xl);
+    line-height: var(--line-height-tight);
+    color: var(--color-brand);
+    text-align: center;
+  }
+
+  .frage {
+    font-family: var(--font-family-display);
+    font-size: var(--font-size-lg);
+    line-height: var(--line-height-snug);
+  }
+
+  /* Plus aus zwei Markerzuegen. Der senkrechte dreht sich beim Oeffnen
+     um 90 Grad um seine eigene Mitte — dann liegt er auf dem
+     waagerechten, aus Plus wird Minus.
+
+     --plus-groesse, --plus-dicke: Geometrie der Zeichnung. */
+  .plus {
+    --plus-groesse: 28px;
+    --plus-dicke: 3.5px;
+
+    width: var(--plus-groesse);
+    height: var(--plus-groesse);
+    overflow: visible;
+  }
+
+  .plus path {
+    fill: none;
+    stroke: var(--color-brand);
+    stroke-width: var(--plus-dicke);
+    stroke-linecap: round;
+  }
+
+  .plus .senkrecht {
+    transform-box: fill-box;
+    transform-origin: center;
+    transition: transform 0.25s ease-out;
+  }
+
+  .zettel[open] .plus .senkrecht {
+    transform: rotate(90deg);
+  }
+
+  /* Antwort: buendig unter der Frage, nicht unter der Ziffer. */
+  .antwort {
+    padding: 0 var(--space-4) var(--space-6)
+      calc(var(--space-4) + var(--nummer-breite) + var(--space-3));
+  }
+
+  .antwort p {
+    margin: 0;
+    max-width: var(--measure-wide);
+    color: var(--color-text-inverse-subtle);
+  }
+
+  /* Weiches Aufklappen, wo der Browser es kann. */
+  .zettel::details-content {
+    block-size: 0;
+    overflow: hidden;
+    transition:
+      block-size 0.3s ease-out,
+      content-visibility 0.3s allow-discrete;
+  }
+
+  .zettel[open]::details-content {
+    block-size: auto;
+  }
+
+  /* Ohne Bewegung: gerade Zettel, kein Gleiten. */
+  @media (prefers-reduced-motion: reduce) {
+    .zettel,
+    .zettel:nth-child(even) {
+      --kippen: 0deg;
+      transition: none;
+    }
+
+    .plus .senkrecht,
+    .zettel::details-content {
+      transition: none;
+    }
+  }
+
+  /* ab 768 ---------------------------------------------------------------- */
+  /* Ab 768 px steht der Junge links ueber Einleitung und Zettel und auf
+     der Unterkante; die Ueberschrift laeuft darueber ueber die volle
+     Breite. Vorher stand er auch auf dem Tablet nur neben der
+     Einleitung und liess daneben viel leeren Raum. */
+  @media (min-width: 768px) {
+    .spalten {
+      --junge-breite: 160px;
+
+      grid-template-areas:
+        "titel titel"
+        "junge text"
+        "junge liste";
+      grid-template-rows: auto auto 1fr;
+    }
+
+    .junge {
+      margin-bottom: calc(-1 * var(--space-18));
+    }
+
+    .einleitung {
+      align-self: start;
+    }
+
+    .zettel {
+      --nummer-breite: var(--space-12);
+    }
+
+    summary {
+      column-gap: var(--space-4);
+      padding: var(--space-4) var(--space-6);
+    }
+
+    .antwort {
+      padding: 0 var(--space-6) var(--space-6)
+        calc(var(--space-6) + var(--nummer-breite) + var(--space-4));
+    }
+
+    .frage {
+      font-size: var(--font-size-xl);
+    }
+  }
+
+  /* ab 1120 — der Junge links ueber die ganze Hoehe ----------------------- */
+  @media (min-width: 1120px) {
+    /* 260 px: Das Bild hat 520 px, also 2-fach fuer Retina. */
+    .spalten {
+      --junge-breite: 260px;
+
+      grid-template-areas:
+        "junge titel"
+        "junge text"
+        "junge liste";
+      grid-template-rows: auto auto 1fr;
+      column-gap: var(--space-18);
+      row-gap: 0;
+    }
+
+    .einleitung {
+      align-self: start;
+      margin-top: var(--space-6);
+    }
+
+    .liste {
+      margin-top: var(--space-12);
+    }
+
+    /* Er steht auf der Sektionskante: Der negative Rand hebt den
+       unteren Innenabstand fuer ihn auf. */
+    .junge {
+      margin-bottom: calc(-1 * var(--space-18));
+    }
+
+  }
+</style>
