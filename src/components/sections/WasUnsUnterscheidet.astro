@@ -1,39 +1,68 @@
 ---
 // Sektion: Was machen wir anders (Startseite, 3)
 //
-// Aufbau und Text sind von der bestehenden Seite lernstabil.de
-// uebernommen, der Hintergrund ist weiss statt hellgrau.
+// Aufbau und Text stammen urspruenglich von der bestehenden Seite
+// lernstabil.de, der Hintergrund ist weiss statt hellgrau.
+//
+// Ueberarbeitet am 25. September 2026. Alexanders Kritik: zu leise,
+// zu klein, „nicht zu langweilig wie es jetzt ist". Die Sektion
+// bekommt dieselben Mittel wie die Preise:
+//
+// - Die Punkte werden abgehakt statt aufgezaehlt: dicke rote
+//   Marker-Haken, gezogen von der Doodly-Hand (scripts/doodle-hand.ts).
+// - Punkt-Ueberschriften in der Displayschrift und in xl — vorher
+//   md, kleiner als die H3 in Sektion 4.
+// - Der Junge steht auf der Unterkante der Sektion und wird von der
+//   dunklen Sektion darunter angeschnitten, wie die Schuelerin im
+//   Hero. Vorher schwebte er mitten auf der Flaeche und wirkte
+//   abgeschnitten.
+// - Knopf rot statt blau: Die Probestunde ist auf der ganzen Seite
+//   rot (Hero, Preise), Blau gehoert dem Telefon.
+//
+// Die Texte der Punkte sind neu geschrieben, ohne neue Behauptungen:
+// Einzelunterricht, Mut, Grundlagen, online und persoenlich standen
+// schon vorher da.
+
+import Unterstrichen from "../Unterstrichen.astro";
 
 const vorzeile = "Was machen wir anders";
-const ueberschrift = "Echte Förderung statt Franchise-Fließband";
 
 const punkte = [
   {
-    titel: "Einzelunterricht",
-    text: "Wir knüpfen dort an, wo der Schüler gerade steht, greifen spontane Fragen auf und vertiefen genau die Themen, die jetzt zählen.",
+    titel: "Einzelunterricht. Punkt.",
+    text: "Ein Dozent, ein Schüler, die ganze Stunde. Wir fangen dort an, wo Ihr Kind gerade steht, und nehmen jede spontane Frage mit.",
   },
   {
     titel: "Mehr Selbstvertrauen",
-    text: "Wir setzen auf einen offenen Lernprozess, der nicht nur Wissen vermittelt, sondern auch Mut macht.",
+    text: "Wer versteht, traut sich. Wir erklären, bis es sitzt – und dann traut sich Ihr Kind auch an die nächste Aufgabe.",
   },
   {
-    titel: "Starke Grundlagen",
-    text: "Ob Mathe, Deutsch, Englisch oder Latein etc. – wir sorgen dafür, dass das Fundament steht, bevor wir uns an die kniffligen Themen wagen.",
+    titel: "Erst das Fundament, dann die Kür",
+    text: "Ob Mathe, Deutsch, Englisch oder Latein: Alte Lücken schließen wir zuerst. Dann klappen auch die kniffligen Themen.",
   },
   {
     titel: "100 % online, 100 % persönlich",
     text: "Wir setzen auf echten Austausch, persönliche Betreuung und ein Lernklima, das auch digital Nähe schafft.",
   },
 ];
+
+// Gezeichnete Linien, viewBox-Koordinaten. Der Haken reicht ueber die
+// volle Breite (0 bis 30), damit das Aufdecken von links genau mit der
+// Stiftspitze mitlaeuft. Knick bei x = 9 — der kurze Schenkel zuerst,
+// wie man einen Haken von Hand zieht.
+const haken = "M0 12 C 3 14, 6 17, 9 21 C 14 12, 21 6, 30 1";
 ---
 
 <section class="anders" aria-labelledby="anders-titel">
   <div class="wrap">
     <div class="kopf">
       <p class="vorzeile">{vorzeile}</p>
-      <h2 id="anders-titel">{ueberschrift}</h2>
+      <h2 id="anders-titel">
+        <Unterstrichen>Echte Förderung</Unterstrichen>{" "}statt{" "}
+        <span class="zusammen">Franchise-Fließband</span>
+      </h2>
       <p class="einleitung">
-        Bei <strong>#Lernstabil</strong> gibt es keine versteckten Kosten, kein
+        Bei <strong class="marke">#Lernstabil</strong> gibt es keine versteckten Kosten, kein
         unpersönliches Franchise-Modell und keine standardisierten
         Unterrichtspakete. Jeder Schüler lernt anders – und genau darauf gehen
         wir ein.
@@ -41,33 +70,20 @@ const punkte = [
     </div>
 
     <div class="spalten">
-      <div class="bild">
-        {
-          /* Freigestelltes Motiv mit Alphakanal, erzeugt am
-             2. September 2026. Es sitzt direkt auf der weissen Flaeche,
-             deshalb keine gerundeten Ecken und kein Kasten — wie das
-             Hero-Motiv.
-
-             alt="" wie beim Hero: Das Bild traegt Stimmung, keine
-             Information. Der Satz daneben sagt bereits alles, was es
-             zeigt; eine Beschreibung waere fuer Screenreader nur
-             Rauschen. */
-        }
-        <img
-          src="/bilder/schueler-sektion-3.webp"
-          width="665"
-          height="1113"
-          alt=""
-          loading="lazy"
-          decoding="async"
-        />
-      </div>
-
       <div class="inhalt">
         <ul class="punkte">
           {
             punkte.map((p) => (
               <li>
+                <svg
+                  class="haken"
+                  viewBox="0 0 30 24"
+                  preserveAspectRatio="none"
+                  aria-hidden="true"
+                  focusable="false"
+                >
+                  <path d={haken} />
+                </svg>
                 <h3>{p.titel}</h3>
                 <p>{p.text}</p>
               </li>
@@ -76,10 +92,56 @@ const punkte = [
         </ul>
 
         <a class="knopf" href="#probestunde">Gratis Probestunde sichern</a>
+
+        {
+          /* Doodly-Hand, dieselbe wie in Sektion 7. Rein dekorativ; das
+             Skript unten bewegt sie, ohne Skript bleibt sie unsichtbar. */
+        }
+        <img
+          class="hand"
+          src="/bilder/hand-marker.webp"
+          width="520"
+          height="550"
+          alt=""
+          aria-hidden="true"
+          loading="lazy"
+          decoding="async"
+        />
+      </div>
+
+      <div class="bild">
+        {
+          /* Freigestelltes Motiv mit Alphakanal, erzeugt mit Firefly,
+             neu in hoeherer Aufloesung am 25. September 2026
+             (Vorlage 1176 x 2192, ausgeliefert 800 x 1491). Die
+             Unterkante ist eine gerade Schnittkante durch den Pullover —
+             sie sitzt auf der Sektionskante.
+
+             alt="" wie beim Hero: Das Bild traegt Stimmung, keine
+             Information. Erzeugte Person, kein echter Schueler. */
+        }
+        <img
+          src="/bilder/schueler-sektion-3.webp"
+          width="800"
+          height="1491"
+          alt=""
+          loading="lazy"
+          decoding="async"
+        />
       </div>
     </div>
   </div>
 </section>
+
+<script>
+  // Die Hand hakt die Punkte ab, einmal beim ersten Hineinscrollen.
+  // Ablauf, Zeiten und Regeln fuer reduzierte Bewegung:
+  // scripts/doodle-hand.ts.
+  import { hakenAbhaken } from "../../scripts/doodle-hand";
+
+  const bereich = document.querySelector<HTMLElement>(".anders .inhalt");
+  if (bereich) hakenAbhaken(bereich);
+</script>
 
 <style>
   /* ------------------------------------------------------------------
@@ -103,6 +165,12 @@ const punkte = [
     margin-top: calc(-1 * var(--keil-h));
     clip-path: polygon(0 0, 50% var(--keil-h), 100% 0, 100% 100%, 0 100%);
     padding: calc(var(--space-18) + var(--keil-h)) 0 var(--space-18);
+    /* Die Hand der Haken-Animation kommt von rechts ausserhalb herein.
+       clip-path schneidet sie zwar optisch ab, zaehlt aber nicht fuer
+       das Scrollen — ohne overflow-x entstuende waehrenddessen eine
+       waagerechte Scrollleiste. clip statt hidden: kein
+       Scrollcontainer, die sticky Kopfleiste bleibt unberuehrt. */
+    overflow-x: clip;
   }
 
   .wrap {
@@ -138,6 +206,14 @@ const punkte = [
     line-height: var(--line-height-snug);
   }
 
+  .haken path {
+    fill: none;
+    stroke: var(--color-brand);
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    vector-effect: non-scaling-stroke;
+  }
+
   .einleitung {
     margin: var(--space-6) auto 0;
     max-width: var(--measure-wide);
@@ -154,7 +230,10 @@ const punkte = [
     font-weight: var(--font-weight-bold);
   }
 
-  /* Spalten ------------------------------------------------------------ */
+  /* Spalten ------------------------------------------------------------
+     Unter 1120 px: erst Text und Knopf, dann der Junge, der auf der
+     Unterkante steht. Er kommt im Quelltext nach dem Text, damit die
+     Lesereihenfolge dieselbe ist wie die sichtbare. */
 
   .spalten {
     margin-top: var(--space-12);
@@ -163,56 +242,86 @@ const punkte = [
     gap: var(--space-12);
   }
 
+  /* Der Junge steht auf der Sektionskante: Der negative Rand hebt den
+     unteren Innenabstand der Sektion fuer diese Spalte auf. Die gerade
+     Schnittkante des Bildes faellt damit genau auf die Kante zur
+     dunklen Sektion darunter. */
+  .bild {
+    margin-bottom: calc(-1 * var(--space-18));
+  }
+
   /* Freigestelltes Motiv: kein Rahmen, keine Rundung, kein Schatten.
-     Es steht auf der Flaeche, es liegt nicht darauf. */
+     Es steht auf der Flaeche, es liegt nicht darauf.
+
+     --motiv-breite: Auf dem Handy schmaler als die Spalte und mittig,
+     sonst waere er allein hoeher als der Bildschirm. */
   .bild img {
+    --motiv-breite: 280px;
+
     display: block;
     width: 100%;
+    max-width: var(--motiv-breite);
     height: auto;
+    margin: 0 auto;
   }
 
   /* Punkte -------------------------------------------------------------
-     Haekchen wie im Hero gezeichnet, hier in Rot wie in der Vorlage.
-     Die fuenf Werte sind Geometrie dieser Zeichnung und stammen nicht
-     aus der Abstandsskala. */
+     Haken links, Ueberschrift und Text daneben. Der Haken ist eine
+     Zeichnung wie der Strich in Sektion 7: dicker roter Markerzug, von
+     Hand gezogen.
+
+     --haken-breite, --haken-hoehe, --haken-dicke, --haken-oben:
+     Geometrie der Zeichnung. --haken-oben setzt den Haken auf die erste
+     Zeile der Ueberschrift (26 px Schrift, Zeilenhoehe 1,15 = rund
+     30 px; der Haken ist 26 px hoch). */
   .punkte {
     margin: 0;
     padding: 0;
     list-style: none;
     display: flex;
     flex-direction: column;
-    gap: var(--space-6);
+    gap: var(--space-8);
   }
 
   .punkte li {
-    --haken-breite: 12px;
-    --haken-hoehe: 7px;
-    --haken-strich: 2px;
-    --haken-links: 0px;
-    --haken-oben: 9px;
-    --haken-einzug: 28px;
+    --haken-breite: 32px;
+    --haken-hoehe: 26px;
+    --haken-dicke: 5px;
+    --haken-oben: 2px;
 
-    position: relative;
-    padding-left: var(--haken-einzug);
+    display: grid;
+    grid-template-columns: var(--haken-breite) 1fr;
+    column-gap: var(--space-4);
   }
 
-  .punkte li::before {
-    content: "";
-    position: absolute;
-    left: var(--haken-links);
-    top: var(--haken-oben);
+  .haken {
+    grid-row: span 2;
     width: var(--haken-breite);
     height: var(--haken-hoehe);
-    border-left: var(--haken-strich) solid var(--color-brand);
-    border-bottom: var(--haken-strich) solid var(--color-brand);
-    transform: rotate(-45deg);
+    margin-top: var(--haken-oben);
+    overflow: visible;
   }
 
+  .haken path {
+    stroke-width: var(--haken-dicke);
+  }
+
+  /* Ohne Skript und bei abbestellter Bewegung stehen die Haken einfach
+     da. Das Skript setzt .animiert nur, wenn es laufen darf; erst dann
+     sind die Haken verdeckt, bis die Hand sie zieht. */
+  .punkte.animiert .haken {
+    clip-path: inset(-6px 100% -6px 0);
+  }
+
+  /* In der Displayschrift und in xl — groesser als die H3 in Sektion 4
+     (lg). Die Punkte sind hier die Aussage der Sektion, nicht
+     Beiwerk zum Bild. */
   .punkte h3 {
     margin: 0;
-    font-size: var(--font-size-md);
+    font-family: var(--font-family-display);
+    font-size: var(--font-size-xl);
     font-weight: var(--font-weight-bold);
-    line-height: var(--line-height-relaxed);
+    line-height: var(--line-height-snug);
   }
 
   .punkte p {
@@ -220,19 +329,50 @@ const punkte = [
     color: var(--color-text-inverse-subtle);
   }
 
+  /* Die Hand ------------------------------------------------------------
+     Wie in Sektion 7: links oben im Bereich verankert, das Skript
+     verschiebt sie. Der Aermel wird schraeg quer zum Arm abgeschnitten
+     statt an der rechtwinkligen Bildkante — Werte und Begruendung
+     stehen an der Hand in Sektion 7 (Preise.astro). */
+  .inhalt {
+    position: relative;
+  }
+
+  .hand {
+    --hand-breite: 200px;
+    --schnitt-winkel: 150deg;
+    --schnitt: 85%;
+    --schnitt-weich: 0%;
+
+    position: absolute;
+    left: 0;
+    top: 0;
+    z-index: 2;
+    width: var(--hand-breite);
+    height: auto;
+    max-width: none;
+    pointer-events: none;
+    visibility: hidden;
+    mask-image: linear-gradient(
+      var(--schnitt-winkel),
+      #000 calc(var(--schnitt) - var(--schnitt-weich)),
+      transparent var(--schnitt)
+    );
+  }
+
   /* Knopf --------------------------------------------------------------
-     In der Vorlage blau und ueber die volle Breite der rechten Spalte.
-     Blau ist im Projekt die Aktionsfarbe, das passt zusammen. */
+     Rot wie „Jetzt gratis testen" im Hero und die Probestunde in
+     Sektion 7. Weiss auf --color-brand 5,70:1. */
   .knopf {
-    margin-top: var(--space-8);
+    margin-top: var(--space-12);
     display: flex;
     align-items: center;
     justify-content: center;
     min-height: var(--tap-target-min);
     padding: var(--space-3) var(--space-8);
     border-radius: var(--radius-sm);
-    background: var(--color-action);
-    color: var(--color-text-on-action);
+    background: var(--color-brand);
+    color: var(--color-text-on-brand);
     font-size: var(--font-size-md);
     font-weight: var(--font-weight-bold);
     text-align: center;
@@ -240,11 +380,11 @@ const punkte = [
   }
 
   .knopf:hover {
-    background: var(--color-action-strong);
+    background: var(--color-brand-strong);
   }
 
   .knopf:active {
-    background: var(--color-action-stronger);
+    background: var(--color-brand-stronger);
     transform: translateY(1px);
   }
 
@@ -261,45 +401,70 @@ const punkte = [
     .anders {
       --keil-h: 48px;
     }
+
+    /* Ab 768 px passt „Franchise-Fließband" in eine Zeile und soll
+       nicht am Bindestrich brechen. Darunter ist das Wort bei 52 px
+       breiter als der Bildschirm und muss brechen duerfen. */
+    .zusammen {
+      white-space: nowrap;
+    }
+
+    .bild img {
+      --motiv-breite: 340px;
+    }
+
+    .hand {
+      --hand-breite: 260px;
+    }
   }
 
   /* ab 1120 — zweispaltig ------------------------------------------------ */
 
   @media (min-width: 1120px) {
-    /* Aussenabstand wie in der Vertrauensleiste darueber
-       (--space-18). Vorher stand hier --space-28; zusammen mit dem
-       hochformatigen Motiv wurde die Sektion damit hoeher als der
-       Bildschirm und liess sich nicht mehr am Stueck erfassen. */
     .anders {
       --keil-h: 72px;
       padding-top: calc(var(--space-18) + var(--keil-h));
       padding-bottom: var(--space-18);
     }
 
-    /* Mittig statt oben: Das Motiv ist hochformatig und deutlich
-       hoeher als eine einzelne Textzeile. Auf gleicher Oberkante
-       haenge es unten ins Leere. */
+    /* Der Junge links, wie bisher. order statt Quelltext-Reihenfolge:
+       Im Quelltext steht der Text vorn, damit er auf dem Handy zuerst
+       kommt. */
     .spalten {
       flex-direction: row;
-      align-items: center;
-      gap: var(--space-12);
+      gap: var(--space-18);
     }
 
-    /* Das Motiv ist 665 px breit. Mehr bekommt es nicht, sonst wird es
-       hochskaliert und unscharf.
-
-       Es ist hochformatig (665 x 1113) und damit der einzige Grund,
-       warum diese Sektion hoch wird: jedes Pixel Breite kostet 1,67
-       Pixel Hoehe. 340 px ist die Breite, bei der seine Hoehe der
-       Hoehe der Punkte daneben entspricht — vorher standen hier
-       400 px, da hing das Motiv unten ueber den Text hinaus. */
+    /* Der Kopf des Jungen reicht nach oben bis auf Hoehe der
+       Einleitung, wie von Alexander am 25. September 2026
+       eingezeichnet. Der negative Rand oben zieht das Bild ueber den
+       Abstand zwischen Einleitung und Spalten hinaus; die Einleitung
+       steht mittig und schmal, links daneben ist die Flaeche frei.
+       Ohne ihn wuerde das groessere Bild die Sektion nur nach unten
+       verlaengern. */
     .bild {
+      --motiv-hoch: calc(var(--space-12) + var(--space-18));
+
+      order: -1;
       flex: 0 0 auto;
-      max-width: 340px;
+      align-self: flex-end;
+      margin-top: calc(-1 * var(--motiv-hoch));
+    }
+
+    /* 430 px breit ergibt mit dem Hochformat (800 x 1491) rund 800 px
+       Hoehe: von der Einleitung bis zur Sektionskante. Am
+       25. September 2026 von 390 angehoben, Alexander wollte ihn
+       groesser. Die Vorlage hat 1176 px, also bleibt er auch auf
+       Retina-Bildschirmen scharf. */
+    .bild img {
+      --motiv-breite: 430px;
+
+      margin: 0;
     }
 
     .inhalt {
       flex: 1 1 auto;
+      align-self: center;
       display: flex;
       flex-direction: column;
     }

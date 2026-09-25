@@ -1,4 +1,5 @@
 ---
+import Unterstrichen from "../Unterstrichen.astro";
 // Sektion: Preise (Startseite, 7)
 //
 // Ersetzt die drei Paketkarten der bestehenden Seite (Flex, Fokus,
@@ -89,7 +90,10 @@ const strich = "M1 6 C 18 3, 34 7, 52 5 S 82 3, 99 5";
   <div class="wrap">
     <div class="kopf">
       <p class="vorzeile">Preise</p>
-      <h2 id="preise-titel">Sie zahlen nur, was stattfindet</h2>
+      <h2 id="preise-titel">
+        Sie zahlen nur,{" "}
+        <Unterstrichen>was stattfindet</Unterstrichen>
+      </h2>
       <p class="einleitung">
         Kein Vertrag, kein Abo, keine Kündigungsfrist. Sie entscheiden nach
         jeder Stunde neu, ob es weitergeht.
@@ -139,7 +143,7 @@ const strich = "M1 6 C 18 3, 34 7, 52 5 S 82 3, 99 5";
         }
         <img
           class="hand"
-          src="/bilder/hand-stift.webp"
+          src="/bilder/hand-marker.webp"
           width="520"
           height="550"
           alt=""
@@ -246,141 +250,49 @@ const strich = "M1 6 C 18 3, 34 7, 52 5 S 82 3, 99 5";
 
 <script>
   // Die Hand streicht die Posten — Doodly-Art, einmal beim ersten
-  // Hineinscrollen.
-  //
-  // Ablauf: Die Hand kommt von rechts unten (Rechtshaender), setzt die
-  // Stiftspitze am Anfang des ersten Postens an und zieht den Strich.
-  // Strich und Hand laufen mit derselben Dauer und derselben Kurve,
-  // deshalb sitzt die Spitze immer genau am Ende des sichtbaren
-  // Strichs. Dann hebt sie kurz ab, springt zum naechsten Posten und
-  // verschwindet am Ende wieder nach rechts unten.
-  //
-  // Wer Bewegung abbestellt hat oder keinen IntersectionObserver hat,
-  // bekommt .animiert gar nicht erst und sieht die Striche sofort. Laesst
-  // sich das Bild nicht laden, werden die Striche ebenfalls sofort
-  // gezeigt.
-  //
-  // Die Positionen werden beim Start einmal gemessen. Aendert jemand
-  // waehrend der gut fuenf Sekunden die Fenstergroesse, landet die
-  // Hand kurz neben den Strichen; die Striche selbst stimmen trotzdem.
+  // Hineinscrollen. Sie kommt von rechts unten, zieht einen Strich nach
+  // dem anderen, danach wird das Wort grau. Die Hand selbst und die
+  // Regeln fuer reduzierte Bewegung stehen in scripts/doodle-hand.ts.
+  import {
+    AUFDECKEN,
+    Hand,
+    KURVE_ZUG,
+    beimErstenBlick,
+  } from "../../scripts/doodle-hand";
 
-  // Stiftspitze im Bild, als Anteil von Breite und Hoehe. Gemessen am
-  // 25. September 2026 an der Vorlage (965 x 1022, Spitze bei 19 / 106).
-  const SPITZE_X = 19 / 965;
-  const SPITZE_Y = 106 / 1022;
-
-  // Zeiten in Millisekunden. Der Strich wie am 25. September 2026
-  // festgelegt (0,5 s, „mit Gewicht"). Der Sprung ist kurz, damit die
-  // Pausen zwischen den Strichen nicht laenger werden als vorher.
-  const ZEIT = { auftritt: 700, strich: 500, sprung: 350, abgang: 600 };
-
-  // Wie ein Stift, der mit Druck gefuehrt wird: langsam angesetzt,
-  // schnell durchgezogen, hart abgebremst.
-  const KURVE_STRICH = "cubic-bezier(0.7, 0, 0.25, 1)";
-  const KURVE_WEG = "cubic-bezier(0.3, 0, 0.2, 1)";
-
-  // Beim Sprung hebt die Hand ab: Der Mittelpunkt der Bahn liegt um
-  // diesen Anteil der Handhoehe hoeher.
-  const ABHEBEN = 0.04;
-
-  type Punkt = { x: number; y: number };
+  // Dauer eines Strichs in Millisekunden. Am 25. September 2026 von
+  // 350 auf 500 angehoben („da liegt gar kein Gewicht drin").
+  const STRICH = 500;
 
   const bereich = document.querySelector<HTMLElement>(".preise .ohne");
   const liste = bereich?.querySelector<HTMLElement>(".posten");
-  const hand = bereich?.querySelector<HTMLImageElement>(".hand");
-  const ruhig = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const bild = bereich?.querySelector<HTMLImageElement>(".hand");
 
-  if (bereich && liste && hand && !ruhig && "IntersectionObserver" in window) {
-    liste.classList.add("animiert");
+  if (bereich && liste && bild) {
+    beimErstenBlick(
+      liste,
+      bild,
+      () => liste.classList.add("animiert"),
+      async () => {
+        const hand = new Hand(bild, bereich);
+        for (const li of liste.querySelectorAll<HTMLElement>("li")) {
+          const strich = li.querySelector<SVGElement>(".strich")!;
+          const r = hand.rahmen(strich);
+          const y = r.y + r.h / 2;
 
-    const beobachter = new IntersectionObserver(
-      async (eintraege) => {
-        if (!eintraege.some((e) => e.isIntersecting)) return;
-        beobachter.disconnect();
-        try {
-          await hand.decode();
-          await streichen(bereich, liste, hand);
-        } catch {
-          hand.style.visibility = "hidden";
-          liste.classList.remove("animiert");
+          await hand.hin({ x: r.x, y });
+          strich.animate(AUFDECKEN, {
+            duration: STRICH,
+            easing: KURVE_ZUG,
+            fill: "forwards",
+          });
+          await hand.zieh([{ x: r.x + r.b, y }], STRICH);
+          li.classList.add("erledigt");
         }
+        await hand.weg();
       },
-      { threshold: 0.5 },
+      () => liste.classList.remove("animiert"),
     );
-
-    beobachter.observe(liste);
-  }
-
-  async function streichen(
-    bereich: HTMLElement,
-    liste: HTMLElement,
-    hand: HTMLImageElement,
-  ) {
-    const box = bereich.getBoundingClientRect();
-    const dx = hand.offsetWidth * SPITZE_X;
-    const dy = hand.offsetHeight * SPITZE_Y;
-    const lage = (p: Punkt) => `translate(${p.x - dx}px, ${p.y - dy}px)`;
-
-    // Anfang und Ende jedes Strichs, relativ zum Bereich. Die
-    // Strich-Grafik reicht genau von Anfang bis Ende des Zugs.
-    const posten = [...liste.querySelectorAll<HTMLElement>("li")].map((li) => {
-      const strich = li.querySelector<SVGElement>(".strich")!;
-      const r = strich.getBoundingClientRect();
-      const y = r.top - box.top + r.height / 2;
-      return {
-        li,
-        strich,
-        von: { x: r.left - box.left, y },
-        bis: { x: r.right - box.left, y },
-      };
-    });
-
-    // Ausserhalb rechts unten: Die Spitze liegt so weit draussen, dass
-    // die Hand ausserhalb des Bereichs beginnt.
-    const draussen: Punkt = {
-      x: box.width + hand.offsetWidth * 0.3,
-      y: box.height + hand.offsetHeight * 0.6,
-    };
-
-    let jetzt = draussen;
-    const fahre = async (
-      nach: Punkt,
-      dauer: number,
-      kurve: string,
-      abheben = false,
-    ) => {
-      const bahn = [{ transform: lage(jetzt) }, { transform: lage(nach) }];
-      if (abheben) {
-        const mitte = {
-          x: (jetzt.x + nach.x) / 2,
-          y: (jetzt.y + nach.y) / 2 - hand.offsetHeight * ABHEBEN,
-        };
-        bahn.splice(1, 0, { transform: lage(mitte) });
-      }
-      await hand.animate(bahn, {
-        duration: dauer,
-        easing: kurve,
-        fill: "forwards",
-      }).finished;
-      jetzt = nach;
-    };
-
-    hand.style.visibility = "visible";
-
-    for (const [i, p] of posten.entries()) {
-      if (i === 0) await fahre(p.von, ZEIT.auftritt, KURVE_WEG);
-      else await fahre(p.von, ZEIT.sprung, KURVE_WEG, true);
-
-      p.strich.animate(
-        [{ clipPath: "inset(0 100% 0 0)" }, { clipPath: "inset(0 0 0 0)" }],
-        { duration: ZEIT.strich, easing: KURVE_STRICH, fill: "forwards" },
-      );
-      await fahre(p.bis, ZEIT.strich, KURVE_STRICH);
-      p.li.classList.add("erledigt");
-    }
-
-    await fahre(draussen, ZEIT.abgang, KURVE_WEG);
-    hand.style.visibility = "hidden";
   }
 </script>
 
@@ -648,18 +560,28 @@ const strich = "M1 6 C 18 3, 34 7, 52 5 S 82 3, 99 5";
     pointer-events: none;
     visibility: hidden;
 
-    /* Das Bild endet rechts unten mit einer geraden Schnittkante durch
-       den Aermel. Im Video laege sie ausserhalb des Bildes, hier steht
-       die Hand mitten auf der Seite. Die Maske blendet den Aermel zur
-       Ecke hin aus; dunkler Strick auf dunkler Flaeche verlaeuft
-       unauffaellig. Der Uebergang beginnt hinter dem Handgelenk, das
-       bei rund 63 % der Diagonale liegt. */
-    --aermel-von: 72%;
-    --aermel-bis: 90%;
+    /* Das Bild endet rechts unten mit einer rechtwinkligen Schnittkante
+       durch den Aermel. Im Video laege sie ausserhalb des Bildes, hier
+       steht die Hand mitten auf der Seite. Die Maske schneidet den
+       Aermel stattdessen schraeg ab, quer zum Arm — Idee von Alexander
+       am 25. September 2026.
+
+       --schnitt-winkel  Richtung des Arms (150deg = nach rechts unten,
+                         steiler als die Diagonale). Die Schnittlinie
+                         steht senkrecht dazu.
+       --schnitt         Lage der Schnittlinie entlang des Arms. Bei
+                         150deg beruehrt der Aermel den Bildrand ab
+                         87 %; weiter hinten darf der Schnitt nicht
+                         liegen, sonst kommt die alte Ecke zurueck. Das
+                         Buendchen beginnt bei rund 70 %.
+       --schnitt-weich   Breite des Uebergangs. 0 % = harte Kante. */
+    --schnitt-winkel: 150deg;
+    --schnitt: 85%;
+    --schnitt-weich: 0%;
     mask-image: linear-gradient(
-      135deg,
-      #000 var(--aermel-von),
-      transparent var(--aermel-bis)
+      var(--schnitt-winkel),
+      #000 calc(var(--schnitt) - var(--schnitt-weich)),
+      transparent var(--schnitt)
     );
   }
 
