@@ -59,8 +59,12 @@ const haken = "M0 12 C 3 14, 6 17, 9 21 C 14 12, 21 6, 30 1";
       <h2 id="klassenzimmer-titel">
         {/* Kernwort mit rotem Marker-Unterstrich wie jede
             Sektionsueberschrift (components/Unterstrichen.astro). */}
+        {/* Weiches Trennzeichen in „Klassen&shy;zimmer": Das Wort ist
+            bei 52 px Schrift 352 px breit und passte auf schmalen Handys
+            nicht in die Zeile (gemessen bei 360 px). Bricht nur, wenn
+            noetig. */}
         <Unterstrichen>Echte Nachhilfe</Unterstrichen>{" "}–<br />direkt im
-        virtuellen Klassenzimmer
+        virtuellen Klassen&shy;zimmer
       </h2>
       <p class="einleitung">
         Der Schüler sieht seinen Dozenten, spricht mit ihm und arbeitet mit ihm
@@ -119,15 +123,21 @@ const haken = "M0 12 C 3 14, 6 17, 9 21 C 14 12, 21 6, 30 1";
     <div class="buehne">
       <div class="maedchen">
         {
-          /* Freigestellt, von Alexander mit Firefly erzeugt und in
-             Photoshop nachbearbeitet (Kamera auf die richtige Seite).
-             661 x 894. alt="" wie beim Hero: Stimmung, keine
+          /* Freigestellt, von Alexander mit Firefly erzeugt. Seit dem
+             25. September 2026 mit roter Huelle am Tablet: markenneutral,
+             fuer die KI leichter als ein echtes iPad, und das Rot hebt
+             sich vom dunklen Pullover ab und passt zum Doodle-Pfeil.
+             Kamera-Aussparung oben links wie bei einem echten Geraet.
+             Vorlage 982 x 1361, ausgeliefert 800 x 1108 — doppelt so
+             breit wie die Anzeige, also auch auf Retina scharf.
+             Neuer Dateiname, damit kein Browser das alte Bild aus dem
+             Cache zeigt. alt="" wie beim Hero: Stimmung, keine
              Information — die traegt das Jitsi-Bild daneben. */
         }
         <img
-          src="/bilder/maedchen-tablet.webp"
-          width="661"
-          height="894"
+          src="/bilder/maedchen-tablet-huelle.webp"
+          width="800"
+          height="1108"
           alt=""
           loading="lazy"
           decoding="async"
@@ -673,6 +683,22 @@ const haken = "M0 12 C 3 14, 6 17, 9 21 C 14 12, 21 6, 30 1";
     .hand {
       --hand-breite: 260px;
     }
+
+    /* Tablet (768 bis 1119): Neben dem Maedchen ist viel Platz, der
+       kleine Handy-Pfeil schwebte darin verloren. Groesser und naeher
+       am Maedchen, die Notiz in lg. Ab 1120 gilt die Fassung unten. */
+    .pfeil {
+      left: calc(100% + var(--space-4));
+      top: -16%;
+      width: 100px;
+      height: 137px;
+    }
+
+    .notiz {
+      left: calc(100% + var(--space-4));
+      top: 22%;
+      font-size: var(--font-size-lg);
+    }
   }
 
   /* ab 1120 — Punkte nebeneinander, Buehne zweispaltig ------------------- */
@@ -691,8 +717,7 @@ const haken = "M0 12 C 3 14, 6 17, 9 21 C 14 12, 21 6, 30 1";
 
     /* 400 px, am 25. September 2026 von 330 angehoben: Neben dem
        grossen Jitsi-Bild wirkte sie zu klein, darueber stand zu viel
-       Leerraum. Das Bild hat 661 px — auf Retina also etwas weicher als
-       ideal (1,65-fach statt 2-fach). */
+       Leerraum. Das Bild hat 800 px, also 2-fach fuer Retina. */
     .maedchen {
       --maedchen-breite: 400px;
 
