@@ -121,19 +121,22 @@ const haken = "M0 12 C 3 14, 6 17, 9 21 C 14 12, 21 6, 30 1";
 
       <div class="bild">
         {
-          /* Freigestelltes Motiv mit Alphakanal, erzeugt mit Firefly,
-             neu in hoeherer Aufloesung am 25. September 2026
-             (Vorlage 1176 x 2192, ausgeliefert 800 x 1491). Die
-             Unterkante ist eine gerade Schnittkante durch den Pullover —
-             sie sitzt auf der Sektionskante.
+          /* Freigestelltes Motiv mit Alphakanal, erzeugt mit Firefly.
+             Am 25. September 2026 gegen eine hellere Fassung getauscht,
+             die alte wirkte zu dunkel (Vorlage 1188 x 2194,
+             ausgeliefert 860 x 1588 — doppelt so breit wie die Anzeige
+             auf dem Desktop). Neuer Dateiname, damit kein Browser das
+             alte Bild aus dem Cache zeigt. Die Unterkante ist eine
+             gerade Schnittkante durch den Pullover — sie sitzt auf der
+             Sektionskante.
 
              alt="" wie beim Hero: Das Bild traegt Stimmung, keine
              Information. Erzeugte Person, kein echter Schueler. */
         }
         <img
-          src="/bilder/schueler-sektion-3.webp"
-          width="800"
-          height="1491"
+          src="/bilder/schueler-sektion-3-hell.webp"
+          width="860"
+          height="1588"
           alt=""
           loading="lazy"
           decoding="async"
@@ -470,11 +473,11 @@ const haken = "M0 12 C 3 14, 6 17, 9 21 C 14 12, 21 6, 30 1";
       margin-top: calc(-1 * var(--motiv-hoch));
     }
 
-    /* 430 px breit ergibt mit dem Hochformat (800 x 1491) rund 800 px
+    /* 430 px breit ergibt mit dem Hochformat (860 x 1588) rund 795 px
        Hoehe: von der Einleitung bis zur Sektionskante. Am
        25. September 2026 von 390 angehoben, Alexander wollte ihn
-       groesser. Die Vorlage hat 1176 px, also bleibt er auch auf
-       Retina-Bildschirmen scharf. */
+       groesser. Ausgeliefert werden 860 px, also 2-fach fuer
+       Retina. */
     .bild img {
       --motiv-breite: 430px;
 
