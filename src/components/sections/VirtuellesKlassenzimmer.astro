@@ -1,4 +1,5 @@
 ---
+import Unterstrichen from "../Unterstrichen.astro";
 // Sektion: Echte Nachhilfe im virtuellen Klassenzimmer (Startseite, 5)
 //
 // Aufbau und Bild von der bestehenden Seite lernstabil.de.
@@ -17,7 +18,38 @@
 // „Whiteboard" zweimal auf wenigen Zeilen. Inhalt unveraendert,
 // Wiederholungen raus.
 
+//
+// UEBERARBEITET am 25. September 2026 („bolder, kontrastreicher"):
+// - Die zwei grauen Absaetze sind drei kurze Punkte mit roten
+//   Marker-Haken wie in Sektion 3. Inhalt derselbe, nichts dazu.
+// - Das Maedchen aus dem Hero sitzt mit einem Tablet auf der Kante zur
+//   dunklen Sektion darunter — dieselbe Figur, damit die Seite eine
+//   Geschichte erzaehlt. Erzeugte Person: kein Name, kein Zitat.
+// - Ein roter Doodle-Pfeil mit Notiz verbindet ihr Tablet mit dem
+//   Jitsi-Bild: So sieht die Stunde aus.
+// - Das Jitsi-Bild ist leicht gekippt, wie hingelegt.
+
 const vorzeile = "Individuell. Interaktiv. Online.";
+
+// Geraete ohne Smartphone, passend zum Hinweis unter dem Jitsi-Bild —
+// Vorgabe von Alexander am 25. September 2026.
+const punkte = [
+  {
+    titel: "Per Video, von zu Hause",
+    text: "Die Stunde läuft per Videokonferenz. Kein Weg zur Nachhilfe – das spart Zeit und Nerven.",
+  },
+  {
+    titel: "Gemeinsam am Whiteboard",
+    text: "Aufgaben löst Ihr Kind zusammen mit dem Dozenten auf demselben Whiteboard – fast wie am Schultisch.",
+  },
+  {
+    titel: "Auf jedem Gerät",
+    text: "PC, Laptop oder Tablet: Es läuft auf dem, was zu Hause steht.",
+  },
+];
+
+// Haken wie in Sektion 3 (viewBox 0 0 30 24).
+const haken = "M0 12 C 3 14, 6 17, 9 21 C 14 12, 21 6, 30 1";
 ---
 
 <section class="klassenzimmer" aria-labelledby="klassenzimmer-titel">
@@ -25,7 +57,10 @@ const vorzeile = "Individuell. Interaktiv. Online.";
     <div class="kopf">
       <p class="vorzeile">{vorzeile}</p>
       <h2 id="klassenzimmer-titel">
-        Echte Nachhilfe –<br />direkt im virtuellen Klassenzimmer
+        {/* Kernwort mit rotem Marker-Unterstrich wie jede
+            Sektionsueberschrift (components/Unterstrichen.astro). */}
+        <Unterstrichen>Echte Nachhilfe</Unterstrichen>{" "}–<br />direkt im
+        virtuellen Klassenzimmer
       </h2>
       <p class="einleitung">
         Der Schüler sieht seinen Dozenten, spricht mit ihm und arbeitet mit ihm
@@ -34,41 +69,227 @@ const vorzeile = "Individuell. Interaktiv. Online.";
       </p>
     </div>
 
-    <div class="spalten">
-      <div class="bild">
+    <div class="punkte-block">
+      <ul class="punkte">
+        {
+          punkte.map((p) => (
+            <li>
+              <svg
+                class="haken"
+                viewBox="0 0 30 24"
+                preserveAspectRatio="none"
+                aria-hidden="true"
+                focusable="false"
+              >
+                <path d={haken} />
+              </svg>
+              <h3>{p.titel}</h3>
+              <p>{p.text}</p>
+            </li>
+          ))
+        }
+      </ul>
+
+      <a class="knopf" href="#probestunde">Gratis Probestunde sichern</a>
+
+      {/* Doodly-Hand wie in Sektion 3, sie hakt die Punkte ab. */}
+      <img
+        class="hand"
+        src="/bilder/hand-marker.webp"
+        width="520"
+        height="550"
+        alt=""
+        aria-hidden="true"
+        loading="lazy"
+        decoding="async"
+      />
+    </div>
+
+    {/* Buehne: Maedchen auf der Kante, Pfeil, Jitsi-Bild ----------- */}
+    <div class="buehne">
+      <div class="maedchen">
+        {
+          /* Freigestellt, von Alexander mit Firefly erzeugt und in
+             Photoshop nachbearbeitet (Kamera auf die richtige Seite).
+             661 x 894. alt="" wie beim Hero: Stimmung, keine
+             Information — die traegt das Jitsi-Bild daneben. */
+        }
+        <img
+          src="/bilder/maedchen-tablet.webp"
+          width="661"
+          height="894"
+          alt=""
+          loading="lazy"
+          decoding="async"
+        />
+
+        {
+          /* Doodle-Verbindung zum Jitsi-Bild. Dekorativ fuer
+             Screenreader: Der Alternativtext des Jitsi-Bildes sagt
+             bereits, was es zeigt. Zwei Bahnen — auf breiten Schirmen
+             nach rechts ins Bild, auf schmalen nach oben. */
+        }
+        <p class="notiz" aria-hidden="true">So sieht die Stunde aus</p>
+        <svg
+          class="pfeil"
+          viewBox="0 0 160 110"
+          aria-hidden="true"
+          focusable="false"
+        >
+          <path class="breit" d="M6 96 C 40 94, 92 76, 146 22 M 124 22 L 147 20 L 146 43"
+          ></path>
+          <path class="schmal" d="M30 104 C 26 70, 40 34, 78 8 M 58 8 L 79 7 L 76 28"
+          ></path>
+        </svg>
+      </div>
+
+      <figure class="bild">
         {
           /* Das Bild traegt Information — so sieht eine Stunde aus —,
-             deshalb hier ein Alternativtext, anders als beim Hero. */
+             deshalb hier ein Alternativtext, anders als beim Hero. Er
+             beschreibt das Tafelbild, das darueber liegt; die Zeichnung
+             selbst ist fuer Screenreader ausgeblendet, sonst wuerden
+             die Tafelzeilen einzeln vorgelesen. */
         }
         <img
           src="/bilder/whiteboard.webp"
           width="900"
           height="649"
-          alt="Nachhilfestunde auf dem Tablet: gemeinsames Whiteboard mit einer Übung zum Simple Present, daneben zwei Videobilder"
+          alt="Nachhilfestunde auf dem Tablet: gemeinsames Whiteboard mit einer Übersicht zur Steigerung der Adjektive im Englischen, daneben zwei Videobilder"
           loading="lazy"
           decoding="async"
         />
-      </div>
 
-      <div class="inhalt">
-        <p>
-          Die Stunde läuft per Videokonferenz, ganz bequem von zu Hause. Seine
-          Aufgaben löst der Schüler gemeinsam mit dem Dozenten auf dem digitalen
-          Whiteboard – fast wie am Schultisch, nur ohne den Weg zur Nachhilfe.
-        </p>
-        <p>
-          Das spart Zeit und Nerven und bringt echten Fortschritt – egal ob
-          am <strong>Desktop, Laptop, Tablet oder Smartphone</strong>.
-        </p>
+        {
+          /* TAFELBILD — ersetzt die Simple-Present-Uebung im Bild.
+             Angelegt am 25. September 2026 nach einem Tafelbild, das
+             Alexander vorgegeben hat; Datum und Verweis auf ein
+             Schulbuch sind weggelassen.
 
-        <a class="knopf" href="#probestunde">Gratis Probestunde sichern</a>
-      </div>
+             Die Zeichnung hat dasselbe Koordinatensystem wie das Bild
+             (900 x 649) und liegt deckungsgleich darueber. Alle Zahlen
+             darin sind deshalb Bildpixel, keine Abstaende der Seite.
+             Das weisse Rechteck deckt die alte Uebung ab; es laesst die
+             Werkzeugleiste oben, die Zoom-Knoepfe unten links und den
+             Pfeil rechts stehen — gemessen: frei ist x 58–750,
+             y 196–528, das Whiteboard ist reines Weiss.
+
+             Text statt Bild: Er bleibt auf jedem Bildschirm scharf,
+             obwohl das Tablet-Foto nur 900 px breit ist, und laesst
+             sich ohne Grafikprogramm aendern. */
+        }
+        <svg
+          class="tafel"
+          viewBox="0 0 900 649"
+          aria-hidden="true"
+          focusable="false"
+        >
+          <rect class="abdeckung" x="58" y="196" width="692" height="332"
+          ></rect>
+
+          {/* Ueberschrift mit Unterstrich */}
+          <text class="rot titel" x="84" y="232"
+            >Steigerung der Adjektive – Übersicht</text
+          >
+          <path class="zug rot-zug" d="M84 243 C 190 239, 300 246, 410 242 S 520 240, 552 243"
+          ></path>
+
+          {/* 1 Silbe */}
+          <circle class="kreis" cx="96" cy="267" r="12"></circle>
+          <text class="blau zahl" x="96" y="274">1</text>
+          <text x="118" y="274">Silbe = -er, -est</text>
+          <path class="zug pfeil" d="M466 268 L 492 268 M 484 262 L 493 268 L 484 274"
+          ></path>
+          <text x="504" y="274"
+            >cold, cold<tspan class="blau">er</tspan>, cold<tspan class="blau"
+              >est</tspan
+            ></text
+          >
+
+          {/* 1 Silbe, unregelmaessig */}
+          <circle class="kreis" cx="96" cy="303" r="12"></circle>
+          <text class="blau zahl" x="96" y="310">1</text>
+          <text x="118" y="310"
+            >Silbe: good, bad = <tspan class="rot">unregelmäßig</tspan></text
+          >
+          <path class="zug pfeil" d="M466 304 L 492 304 M 484 298 L 493 304 L 484 310"
+          ></path>
+          <text x="504" y="310">good, better, best</text>
+          <text x="504" y="333">bad, worse, worst</text>
+
+          {/* 2 Silben mit -y */}
+          <circle class="kreis" cx="96" cy="364" r="12"></circle>
+          <text class="blau zahl" x="96" y="371">2</text>
+          <text x="118" y="371">Silben mit -y am Ende = -er, -est</text>
+          <path class="zug pfeil" d="M466 365 L 492 365 M 484 359 L 493 365 L 484 371"
+          ></path>
+          <text x="504" y="371"
+            >happy, happ<tspan class="blau">ier</tspan>, happ<tspan class="blau"
+              >iest</tspan
+            ></text
+          >
+          <path class="zug warnung" d="M120 396 L 131 377 L 142 396 Z M 131 383 L 131 389"
+          ></path>
+          <text class="rot" x="150" y="394">„y becomes i"</text>
+
+          {/* 2 Silben ohne -y */}
+          <circle class="kreis" cx="96" cy="425" r="12"></circle>
+          <text class="blau zahl" x="96" y="432">2</text>
+          <text class="kein-zeile" x="118" y="432"
+            >Silben <tspan class="kein" dx="7">kein</tspan><tspan dx="7"> -y am Ende = more, most</tspan></text
+          >
+          <ellipse class="zug rot-zug" cx="207" cy="425" rx="25" ry="14"
+          ></ellipse>
+          <path class="zug pfeil" d="M466 426 L 492 426 M 484 420 L 493 426 L 484 432"
+          ></path>
+          <text x="504" y="432"
+            >boring, <tspan class="rot">more</tspan> boring,</text
+          >
+          <text x="504" y="455"><tspan class="rot">most</tspan> boring</text>
+
+          {/* 3 Silben */}
+          <circle class="kreis" cx="96" cy="486" r="12"></circle>
+          <text class="blau zahl" x="96" y="493">3</text>
+          <text x="118" y="493">Silben = more, most</text>
+          <path class="zug pfeil" d="M466 487 L 492 487 M 484 481 L 493 487 L 484 493"
+          ></path>
+          <text x="504" y="493"
+            >exciting, <tspan class="rot">more</tspan> exciting,</text
+          >
+          <text x="504" y="516"><tspan class="rot">most</tspan> exciting</text>
+        </svg>
+
+        {
+          /* Hinweis, dass das iPad nur ein Beispiel ist — Wunsch von
+             Alexander am 25. September 2026. Smartphone bewusst nicht
+             genannt. Als figcaption, damit Screenreader ihn zum Bild
+             lesen. */
+        }
+        <figcaption class="hinweis">
+          Hier am iPad – genauso am PC oder Laptop.
+        </figcaption>
+      </figure>
     </div>
   </div>
 </section>
 
+<script>
+  // Die Hand hakt die drei Punkte ab, wie in Sektion 3.
+  import { hakenAbhaken } from "../../scripts/doodle-hand";
+
+  const bereich = document.querySelector<HTMLElement>(
+    ".klassenzimmer .punkte-block",
+  );
+  if (bereich) hakenAbhaken(bereich);
+</script>
+
 <style>
   .klassenzimmer {
+    /* Notiz und Pfeil haengen ausserhalb des Maedchens. Falls sie auf
+       einem schmalen Geraet doch ueber den Rand ragen, entsteht keine
+       waagerechte Scrollleiste. clip statt hidden: kein
+       Scrollcontainer. */
+    overflow-x: clip;
     background: var(--color-surface-inverse);
     color: var(--color-text-inverse);
     padding: var(--space-18) 0;
@@ -112,16 +333,202 @@ const vorzeile = "Individuell. Interaktiv. Online.";
     color: var(--color-text-inverse-subtle);
   }
 
-  /* Spalten -------------------------------------------------------------
-     Im Quelltext steht das Bild vorn: Auf dem Telefon kommt es so vor
-     dem Text, und der Knopf bleibt das Letzte der Sektion. Auf breiten
-     Schirmen dreht row-reverse es nach rechts, wie in der Vorlage. */
+  /* Punkte ---------------------------------------------------------------
+     Wie in Sektion 3: roter Marker-Haken, Ueberschrift in der
+     Displayschrift. Hier ohne Hand — die hakt in Sektion 3 ab; ein
+     zweites Mal waere Wiederholung. Ab 1120 px drei nebeneinander.
 
-  .spalten {
+     --haken-*: Geometrie der Zeichnung, wie in Sektion 3. */
+  .punkte-block {
+    position: relative;
     margin-top: var(--space-12);
+    text-align: center;
+  }
+
+  /* Bis die Hand sie zieht, sind die Haken verdeckt — nur wenn das
+     Skript laufen darf, siehe scripts/doodle-hand.ts. */
+  .punkte.animiert .haken {
+    clip-path: inset(-6px 100% -6px 0);
+  }
+
+  /* Die Hand — Werte und Begruendung wie in Sektion 7 (Preise.astro). */
+  .hand {
+    --hand-breite: 200px;
+    --schnitt-winkel: 150deg;
+    --schnitt: 85%;
+    --schnitt-weich: 0%;
+
+    position: absolute;
+    left: 0;
+    top: 0;
+    z-index: 2;
+    width: var(--hand-breite);
+    height: auto;
+    max-width: none;
+    pointer-events: none;
+    visibility: hidden;
+    mask-image: linear-gradient(
+      var(--schnitt-winkel),
+      #000 calc(var(--schnitt) - var(--schnitt-weich)),
+      transparent var(--schnitt)
+    );
+  }
+
+  .punkte {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: grid;
+    gap: var(--space-8);
+    text-align: left;
+  }
+
+  .punkte li {
+    --haken-breite: 32px;
+    --haken-hoehe: 26px;
+    --haken-dicke: 5px;
+    --haken-oben: 2px;
+
+    display: grid;
+    grid-template-columns: var(--haken-breite) 1fr;
+    column-gap: var(--space-4);
+  }
+
+  .haken {
+    grid-row: span 2;
+    width: var(--haken-breite);
+    height: var(--haken-hoehe);
+    margin-top: var(--haken-oben);
+    overflow: visible;
+  }
+
+  .haken path {
+    fill: none;
+    stroke: var(--color-brand);
+    stroke-width: var(--haken-dicke);
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    vector-effect: non-scaling-stroke;
+  }
+
+  .punkte h3 {
+    margin: 0;
+    font-family: var(--font-family-display);
+    font-size: var(--font-size-xl);
+    font-weight: var(--font-weight-bold);
+    line-height: var(--line-height-snug);
+  }
+
+  .punkte p {
+    margin: var(--space-2) 0 0;
+    color: var(--color-text-inverse-subtle);
+  }
+
+  /* Buehne ---------------------------------------------------------------
+     Unter 1120 px: erst das Jitsi-Bild, darunter das Maedchen auf der
+     Kante, der Pfeil zeigt von ihr nach oben. Ab 1120 px: Maedchen
+     links, Bild rechts, der Pfeil zeigt nach rechts.
+
+     Das Maedchen sitzt auf der Sektionskante: Der negative Rand hebt
+     den unteren Innenabstand der Sektion fuer sie auf — wie der Junge
+     in Sektion 3. */
+  .buehne {
+    margin-top: var(--space-18);
     display: flex;
     flex-direction: column;
     gap: var(--space-12);
+  }
+
+  .maedchen {
+    --maedchen-breite: 220px;
+
+    order: 2;
+    position: relative;
+    /* Ueber dem Bild, damit Pfeilspitze und Notiz nicht unter dem
+       gekippten Tablet verschwinden. */
+    z-index: 1;
+    width: var(--maedchen-breite);
+    margin-bottom: calc(-1 * var(--space-18));
+  }
+
+  .maedchen img {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  /* Notiz und Pfeil in Rot, Displayschrift — dieselbe Hand wie
+     Haken und Unterstriche. Leicht gedreht, weil sie hingeschrieben
+     ist. Lage und Groesse sind Geometrie der Zeichnung, bezogen auf
+     das Maedchen: Die rechte Kante ihres Tablets liegt bei 67 % der
+     Bildbreite, zwischen 43 und 66 % der Hoehe. */
+  .notiz {
+    --notiz-drehung: -4deg;
+
+    position: absolute;
+    left: calc(100% + var(--space-3));
+    top: 22%;
+    width: 6em;
+    margin: 0;
+    font-family: var(--font-family-display);
+    font-size: var(--font-size-md);
+    line-height: var(--line-height-snug);
+    color: var(--color-brand);
+    transform: rotate(var(--notiz-drehung));
+  }
+
+  .pfeil {
+    --pfeil-dicke: 3px;
+
+    /* Unter 1120 px im Streifen rechts neben ihr, ueber der Notiz,
+       nach oben zum Bild. */
+    position: absolute;
+    left: calc(100% + var(--space-6));
+    top: -14%;
+    width: 60px;
+    height: 82px;
+    overflow: visible;
+  }
+
+  .pfeil path {
+    fill: none;
+    stroke: var(--color-brand);
+    stroke-width: var(--pfeil-dicke);
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .pfeil .breit {
+    display: none;
+  }
+
+  .bild {
+    --kippen: -2deg;
+
+    order: 1;
+    position: relative;
+    margin: 0;
+    transform: rotate(var(--kippen));
+  }
+
+  /* Handschriftlich unter dem Bild, in Schwarz — die rote Notiz beim
+     Pfeil sagt, was man sieht, dieser Hinweis ordnet es ein. */
+  .hinweis {
+    margin-top: var(--space-4);
+    font-family: var(--font-family-display);
+    font-size: var(--font-size-md);
+    line-height: var(--line-height-snug);
+    text-align: center;
+  }
+
+  /* Wer Bewegung abbestellt hat, bekommt alles gerade — die Drehungen
+     sind Dekoration, wie im Hero. */
+  @media (prefers-reduced-motion: reduce) {
+    .bild,
+    .notiz {
+      --kippen: 0deg;
+      --notiz-drehung: 0deg;
+    }
   }
 
   .bild img {
@@ -130,31 +537,89 @@ const vorzeile = "Individuell. Interaktiv. Online.";
     height: auto;
   }
 
-  .inhalt p {
-    margin: 0;
-    color: var(--color-text-inverse-subtle);
+  /* Tafelbild ------------------------------------------------------------
+     Liegt deckungsgleich auf dem Foto (gleiches Seitenverhaeltnis,
+     gleiches Koordinatensystem). Die Groessen unten sind Bildpixel des
+     Fotos, keine Stufen der Skala — sie muessen zur Schrift im Foto
+     passen, nicht zur Seite.
+
+     Drei Stiftfarben wie bei echten Whiteboard-Markern: Schwarz fuer den
+     Text, Rot fuer Ueberschrift und more/most, Blau fuer Endungen und
+     Silbenzahlen. Es sind die Rollen der Seite, damit das Tafelbild zum
+     Rest passt. */
+  .tafel {
+    --tafel-schrift: 19px;
+    --tafel-titel: 26px;
+    --tafel-strich: 2.5px;
+
+    /* Oben links auf dem Foto, Hoehe aus dessen Seitenverhaeltnis —
+       nicht inset: 0, denn unter dem Foto steht noch der Hinweis. */
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 900 / 649;
+    pointer-events: none;
   }
 
-  .inhalt p + p {
-    margin-top: var(--space-4);
+  .tafel .abdeckung {
+    fill: var(--color-surface-inverse);
   }
 
-  .inhalt strong {
-    color: var(--color-text-inverse);
-    font-weight: var(--font-weight-bold);
+  .tafel text {
+    font-family: var(--font-family-display);
+    font-size: var(--tafel-schrift);
+    fill: var(--color-text-inverse);
   }
 
-  /* Knopf — wie Sektion 3 ---------------------------------------------- */
+  .tafel .titel {
+    font-size: var(--tafel-titel);
+  }
+
+  .tafel .zahl {
+    text-anchor: middle;
+  }
+
+  .tafel .rot {
+    fill: var(--color-brand);
+  }
+
+  .tafel .blau {
+    fill: var(--color-action);
+  }
+
+  .tafel .zug,
+  .tafel .kreis {
+    fill: none;
+    stroke: var(--color-text-inverse);
+    stroke-width: var(--tafel-strich);
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .tafel .kreis {
+    stroke: var(--color-action);
+  }
+
+  .tafel .rot-zug,
+  .tafel .warnung {
+    stroke: var(--color-brand);
+  }
+
+  /* Knopf — wie Sektion 3: rot, weil die Probestunde auf der ganzen
+     Seite rot ist (Hero, Sektion 3, Preise). Blau gehoert dem Telefon.
+     Umgestellt am 25. September 2026. Weiss auf --color-brand 5,70:1. */
   .knopf {
-    margin-top: var(--space-8);
+    margin-top: var(--space-12);
     display: flex;
     align-items: center;
     justify-content: center;
     min-height: var(--tap-target-min);
     padding: var(--space-3) var(--space-8);
     border-radius: var(--radius-sm);
-    background: var(--color-action);
-    color: var(--color-text-on-action);
+    background: var(--color-brand);
+    color: var(--color-text-on-brand);
     font-size: var(--font-size-md);
     font-weight: var(--font-weight-bold);
     text-align: center;
@@ -162,11 +627,11 @@ const vorzeile = "Individuell. Interaktiv. Online.";
   }
 
   .knopf:hover {
-    background: var(--color-action-strong);
+    background: var(--color-brand-strong);
   }
 
   .knopf:active {
-    background: var(--color-action-stronger);
+    background: var(--color-brand-stronger);
     transform: translateY(1px);
   }
 
@@ -175,29 +640,80 @@ const vorzeile = "Individuell. Interaktiv. Online.";
     outline-offset: var(--focus-ring-offset);
   }
 
-  /* ab 768 — Knopf nicht mehr ueber die volle Breite ------------------- */
+  /* ab 768 ---------------------------------------------------------------- */
 
   @media (min-width: 768px) {
     .knopf {
       display: inline-flex;
     }
-  }
 
-  /* ab 1120 — zweispaltig ------------------------------------------------ */
-
-  @media (min-width: 1120px) {
-    .spalten {
-      margin-top: var(--space-18);
-      flex-direction: row-reverse;
-      align-items: center;
+    .maedchen {
+      --maedchen-breite: 280px;
     }
 
-    /* Beide Spalten gleich breit. Das Bild ist 900 px breit und wird in
-       der halben Inhaltsbreite nie hochskaliert. */
-    .bild,
-    .inhalt {
+    .hand {
+      --hand-breite: 260px;
+    }
+  }
+
+  /* ab 1120 — Punkte nebeneinander, Buehne zweispaltig ------------------- */
+
+  @media (min-width: 1120px) {
+    .punkte {
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--space-12);
+    }
+
+    .buehne {
+      flex-direction: row;
+      align-items: flex-end;
+      gap: var(--space-28);
+    }
+
+    /* 330 px: Das Bild hat 661 px, bleibt also auf Retina scharf. */
+    .maedchen {
+      --maedchen-breite: 330px;
+
+      order: 1;
+      flex: 0 0 auto;
+    }
+
+    /* Das Jitsi-Bild steht mittig neben ihr, nicht auf der Kante — es
+       ist ein Bildschirm, keine Figur. Nie breiter als seine 900 px. */
+    .bild {
+      order: 2;
       flex: 1 1 0;
       min-width: 0;
+      align-self: center;
+    }
+
+    /* Pfeil vom rechten Rand ihres Tablets quer durch die Luecke ins
+       Jitsi-Bild, Notiz darueber. */
+    /* 210 x 144 im Seitenverhaeltnis der Zeichnung (160 x 110). Der
+       Anfang liegt an der rechten Kante ihres Tablets, die Spitze
+       reicht ueber die Luecke (--space-28) in den Rahmen des Bildes. */
+    .pfeil {
+      left: 70%;
+      top: 30%;
+      width: 210px;
+      height: 144px;
+    }
+
+    .pfeil .breit {
+      display: inline;
+    }
+
+    .pfeil .schmal {
+      display: none;
+    }
+
+    /* Zweizeilig in der Luecke ueber dem Pfeil. Einzeilig lief sie
+       unter das gekippte Bild. */
+    .notiz {
+      left: 84%;
+      top: 12%;
+      width: 6.5em;
+      font-size: var(--font-size-lg);
     }
   }
 </style>
