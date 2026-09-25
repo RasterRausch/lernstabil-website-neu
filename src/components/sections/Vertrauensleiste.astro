@@ -361,6 +361,35 @@ const zahlen = [
      ohne Warnung im Build. Nach jeder Änderung am Widget nachsehen.
      ==================================================================== */
 
+  /* Rezensionstext 18 px statt 16 — Vorgabe von Alexander am
+     25. September 2026, ohne Umweg über das Trustindex-Konto.
+
+     Trustindex setzt Schriftgröße, Zeilenhöhe UND eine feste Höhe von
+     genau vier Zeilen (16 px, 23,2 px, 92,8 px). Nur die Schrift zu
+     ändern, schnitte die vierte Zeile mittendurch ab. Deshalb alle drei:
+     Zeilenhöhe 1,45-fach wie bei Trustindex, Höhe FÜNF Zeilen. Bei vier
+     wären zwei Rezensionen, die bei 16 px vollständig waren, durch die
+     groessere Schrift abgeschnitten worden (gemessen am 25. September
+     2026). Längere Rezensionen kürzt Trustindex wie vorher. Einen „Mehr
+     lesen"-Link hat dieses Layout nicht, die feste Höhe stört also kein
+     Aufklappen.
+
+     Gleiche Spezifität wie ihre Regel, aber ihr CSS kommt zur Laufzeit
+     nach unserem — deshalb !important. Ihre KI-Zusammenfassung
+     (.ti-ai-summary-item) hat eine eigene, spezifischere Höhe und bleibt
+     unberührt.
+
+     --ti-schrift, --ti-zeile: Werte des Fremdsystems, keine Stufen der
+     Skala. 18 px ist Alexanders Vorgabe, 26 px = 18 x 1,45. */
+  .widget-karussell .ti-widget[data-layout-id][data-set-id] .ti-review-content {
+    --ti-schrift: 18px;
+    --ti-zeile: 26px;
+
+    font-size: var(--ti-schrift) !important;
+    line-height: var(--ti-zeile) !important;
+    height: calc(5 * var(--ti-zeile)) !important;
+  }
+
   /* Kreis weg, und zwar in allen Zuständen. Die drei Eigenschaften sind
      genau die, die Trustindex beim Hover verändert — stehen sie in Ruhe
      und Hover auf demselben Wert, passiert beim Überfahren nichts
