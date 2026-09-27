@@ -1,0 +1,318 @@
+---
+import Unterstrichen from "../Unterstrichen.astro";
+import Getarnt from "../Getarnt.astro";
+import {
+  telefon,
+  email,
+  emailMitBetreff,
+  verschluesseln,
+} from "../../data/kontakt";
+// Sektion: Footer (seitenübergreifend, 9)
+//
+// Angelegt am 27. September 2026. Entwurf mit Alexander abgestimmt:
+//
+// - SCHWARZE FLAECHE (--color-surface-deepest). Die Fragen davor sind
+//   hellgrau — hell auf Schwarz ist der staerkste Wechsel, den die Seite
+//   hat. Schwarz ist auch der Sockel unter dem Hero: Die Seite beginnt
+//   und endet mit derselben Kante.
+// - LETZTER AUFRUF oben. Wer bis hierher liest, ist noch unentschlossen.
+//   Dieselben zwei Wege wie in Hero und Preisen: Anruf (blau) und
+//   Probestunde (rot).
+//
+// Die grosse Wortmarke am unteren Rand ist am 27. September 2026 auf
+// Alexanders Wunsch wieder entfallen.
+//
+// Telefon und E-Mail sind gegen Adresssammler geschuetzt, siehe
+// src/data/kontakt.ts.
+//
+// Keine Anschrift: Online-Nachhilfe, die Anschrift steht im Impressum.
+// Keine sozialen Netzwerke, es gibt derzeit keine Profile.
+//
+// Die Probestunde geht vorerst per E-Mail. Sobald das Kontaktformular
+// steht, zeigt der Knopf dorthin — wie „#probestunde" in Hero und
+// Preisen, das es auf der Seite noch nicht gibt.
+//
+// Links auf Sektionen der Startseite mit „/" davor: Der Footer steht
+// auch auf Impressum und Datenschutz. Nur Ziele, die es gibt.
+
+// kontakt: verschluesseltes Linkziel statt href, text wird getarnt.
+const spalten: {
+  titel: string;
+  links: { text: string; href?: string; kontakt?: string }[];
+}[] = [
+  {
+    titel: "Nachhilfe",
+    links: [
+      { text: "Preise", href: "/#preise" },
+      { text: "Häufige Fragen", href: "/#fragen" },
+      { text: "Dozent werden", href: "/fuer-dozenten" },
+    ],
+  },
+  {
+    titel: "Kontakt",
+    links: [
+      { text: telefon.anzeige, kontakt: verschluesseln(telefon.href) },
+      { text: email.anzeige, kontakt: verschluesseln(email.href) },
+    ],
+  },
+  {
+    titel: "Rechtliches",
+    links: [
+      { text: "Impressum", href: "/impressum" },
+      { text: "Datenschutz", href: "/datenschutz" },
+    ],
+  },
+];
+
+const jahr = new Date().getFullYear();
+---
+
+<footer class="footer">
+  <div class="wrap">
+    <div class="aufruf">
+      <p class="aufruf-titel">
+        Die erste Stunde ist <Unterstrichen>gratis.</Unterstrichen>
+        <span class="aufruf-zeile">Alles danach ohne Vertrag.</span>
+      </p>
+
+      <div class="knoepfe">
+        <a class="knopf-telefon" data-kontakt={verschluesseln(telefon.href)}>
+          {/* Die Nummer steht im Linktext, das Icon ist dekorativ.
+              Dieselbe Form wie in Kopfleiste, Hero und Preisen. */}
+          <svg
+            class="icon-telefon"
+            viewBox="0 0 24 24"
+            fill="currentColor"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linejoin="round"
+            aria-hidden="true"
+            focusable="false"
+          >
+            <path
+              d="M4 3h4l2 5-2.5 1.5a12.5 12.5 0 0 0 7 7L16 14l5 2v4h-1C11 20 4 13 4 4V3z"
+            ></path>
+          </svg>
+          <span><Getarnt text={telefon.anzeige} /></span>
+        </a>
+        <a
+          class="knopf-probe"
+          data-kontakt={verschluesseln(emailMitBetreff("Gratis-Probestunde"))}
+          >Probestunde anfragen</a
+        >
+      </div>
+      <p class="zeiten">Mo bis Fr, 9 bis 20 Uhr</p>
+    </div>
+
+    <nav class="spalten" aria-label="Fußbereich">
+      {
+        spalten.map((s) => (
+          <div class="spalte">
+            <h2 class="spalte-titel">{s.titel}</h2>
+            <ul>
+              {s.links.map((l) => (
+                <li>
+                  {l.kontakt ? (
+                    <a data-kontakt={l.kontakt}>
+                      <Getarnt text={l.text} />
+                    </a>
+                  ) : (
+                    <a href={l.href}>{l.text}</a>
+                  )}
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))
+      }
+    </nav>
+
+    <p class="copyright">
+      © {jahr} <span class="marke">#Lernstabil</span> – Online-Nachhilfe im
+      Einzelunterricht
+    </p>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    background: var(--color-surface-deepest);
+    color: var(--color-text-default);
+    padding: var(--space-18) 0 var(--space-12);
+  }
+
+  .wrap {
+    width: 100%;
+    max-width: var(--layout-content-max);
+    margin: 0 auto;
+    padding: 0 var(--layout-gutter);
+  }
+
+  /* Letzter Aufruf ------------------------------------------------------
+     Displayschrift wie „ONLINE NACHHILFE" im Hero: Der Footer ist die
+     zweite laute Stelle der Seite, nicht eine weitere Sektion. Kein h2 —
+     der Satz ist ein Aufruf, keine Ueberschrift fuer den Inhalt darunter. */
+  .aufruf {
+    text-align: center;
+  }
+
+  .aufruf-titel {
+    margin: 0 auto;
+    max-width: 20ch;
+    font-family: var(--font-family-display);
+    font-size: var(--font-size-4xl);
+    font-weight: var(--font-weight-regular);
+    line-height: var(--line-height-snug);
+  }
+
+  .aufruf-zeile {
+    display: block;
+    margin-top: var(--space-2);
+    font-size: var(--font-size-xl);
+    color: var(--color-text-subtle);
+  }
+
+  .knoepfe {
+    margin-top: var(--space-8);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+  }
+
+  .knopf-probe,
+  .knopf-telefon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-2);
+    min-height: var(--tap-target-min);
+    padding: var(--space-3) var(--space-8);
+    border-radius: var(--radius-sm);
+    font-size: var(--font-size-md);
+    font-weight: var(--font-weight-semibold);
+    text-decoration: none;
+  }
+
+  .knopf-probe {
+    background: var(--color-brand);
+    color: var(--color-text-on-brand);
+  }
+
+  .knopf-probe:hover {
+    background: var(--color-brand-strong);
+  }
+
+  .knopf-probe:active {
+    background: var(--color-brand-stronger);
+    transform: translateY(1px);
+  }
+
+  .knopf-telefon {
+    background: var(--color-action);
+    color: var(--color-text-on-action);
+  }
+
+  .knopf-telefon:hover {
+    background: var(--color-action-strong);
+  }
+
+  .knopf-telefon:active {
+    background: var(--color-action-stronger);
+    transform: translateY(1px);
+  }
+
+  .icon-telefon {
+    width: 1.1em;
+    height: 1.1em;
+    flex-shrink: 0;
+  }
+
+  .zeiten {
+    margin: var(--space-4) 0 0;
+    font-size: var(--font-size-sm);
+    color: var(--color-text-subtle);
+  }
+
+  /* Spalten --------------------------------------------------------------
+     Gedaempft, damit sie dem Aufruf nicht die Wirkung nehmen. Die
+     Trennlinie darueber setzt den Aufruf als eigenen Block ab. */
+  .spalten {
+    margin-top: var(--space-18);
+    padding-top: var(--space-12);
+    border-top: 1px solid var(--color-border-default);
+    display: grid;
+    /* Auf dem Handy zwei Spalten: untereinander wurde der Footer
+       laenger als der Bildschirm. Die E-Mail-Adresse ist der breiteste
+       Eintrag und passt in eine halbe Zeile. */
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-8) var(--space-6);
+  }
+
+  .spalte-titel {
+    margin: 0;
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-bold);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--color-text-default);
+  }
+
+  .spalte ul {
+    margin: var(--space-2) 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  /* 44 px Tippflaeche (WCAG 2.2, Target Size) — die Links stehen dicht
+     untereinander und werden auf dem Handy mit dem Daumen getroffen. */
+  .spalte a {
+    display: inline-flex;
+    align-items: center;
+    min-height: var(--tap-target-min);
+    color: var(--color-text-subtle);
+    text-decoration: none;
+  }
+
+  .spalte a:hover {
+    color: var(--color-text-default);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  .copyright {
+    margin: var(--space-12) 0 0;
+    font-size: var(--font-size-sm);
+    color: var(--color-text-subtle);
+  }
+
+  a:focus-visible {
+    outline: var(--focus-ring-width) solid var(--color-focus-ring);
+    outline-offset: var(--focus-ring-offset);
+    border-radius: var(--radius-sm);
+  }
+
+  /* ab 768 --------------------------------------------------------------- */
+
+  @media (min-width: 768px) {
+    .footer {
+      padding-top: var(--space-28);
+    }
+
+    .aufruf-titel {
+      font-size: var(--font-size-5xl);
+    }
+
+    .aufruf-zeile {
+      font-size: var(--font-size-2xl);
+    }
+
+    .knoepfe {
+      flex-direction: row;
+      justify-content: center;
+    }
+
+    .spalten {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+</style>

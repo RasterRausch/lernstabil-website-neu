@@ -229,9 +229,10 @@
   --line-height-loose: 1.6;
 
   /* --- Schriftschnitte -----------------------------------------------
-     Nur diese drei werden geladen (siehe BaseLayout). Andere Werte
-     lässt der Browser künstlich fetten — das sieht schlechter aus als
-     ein echter Schnitt.                                               */
+     Nur diese drei werden benutzt. Source Sans 3 ist eine variable
+     Schrift und im BaseLayout für 400 bis 700 freigegeben; Comic Neue
+     gibt es nur in 700. Werte ausserhalb lässt der Browser künstlich
+     fetten — das sieht schlechter aus als ein echter Schnitt.         */
   --font-weight-regular: 400;
   --font-weight-semibold: 600;
   --font-weight-bold: 700;

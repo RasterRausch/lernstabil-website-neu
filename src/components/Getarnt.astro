@@ -1,0 +1,35 @@
+---
+// Zeigt eine Telefonnummer oder E-Mail-Adresse so an, dass sie im
+// Quelltext nicht am Stueck steht. Hintergrund: src/data/kontakt.ts.
+//
+// Gebrauch: <Getarnt text={telefon.anzeige} />
+//
+// Der Text wird in Stuecke von drei Zeichen geteilt, dazwischen steht
+// jeweils ein Stoerzeichen mit display: none. display: none — nicht
+// visually-hidden — weil es das Stoerzeichen auch aus dem Namen fuer
+// Screenreader und aus der Zwischenablage nimmt.
+//
+// Die Stoerzeichen sind Ziffern und Buchstaben, damit ein Sammler sie
+// nicht einfach herausfiltern kann. Fest statt zufaellig: Der Build
+// bleibt reproduzierbar.
+
+interface Props {
+  text: string;
+}
+
+const { text } = Astro.props;
+
+const stoer = ["7", "x", "4", "q", "0", "k", "2", "m"];
+const teile: string[] = [];
+for (let i = 0; i < text.length; i += 3) teile.push(text.slice(i, i + 3));
+---
+
+{/* Eine Zeile mit Absicht: Zeilenumbrueche im Markup wuerden als
+    Leerzeichen zwischen den Stuecken landen. */}
+{teile.map((teil, i) => <>{teil}{i < teile.length - 1 && <span class="stoer">{stoer[i % stoer.length]}</span>}</>)}
+
+<style>
+  .stoer {
+    display: none;
+  }
+</style>

@@ -1,5 +1,7 @@
 ---
 import Unterstrichen from "../Unterstrichen.astro";
+import Getarnt from "../Getarnt.astro";
+import { telefon, verschluesseln } from "../../data/kontakt";
 // Sektion: Preise (Startseite, 7)
 //
 // Ersetzt die drei Paketkarten der bestehenden Seite (Flex, Fokus,
@@ -45,9 +47,6 @@ import Unterstrichen from "../Unterstrichen.astro";
 // 28,95 − 25,95 = 3,00; 28,95 − 22,50 = 6,45). Die Stufen sind ueber
 // Termine pro Woche erklaert, weil „16 Unterrichtsstunden" nach viel
 // klingt — Alexanders Einwand.
-
-const telefon = "0341 658 329 18";
-const telefonHref = "tel:+4934165832918";
 
 // Was bei uns nicht dazukommt. Jeder Posten wird durchgestrichen;
 // `zusatz` steht darunter und bleibt lesbar, weil er die Bedingung
@@ -270,7 +269,7 @@ const strich = "M1 6 C 18 3, 34 7, 52 5 S 82 3, 99 5";
             aria-describedby="probestunde-hinweis-preise"
             >Gratis Probestunde sichern<span aria-hidden="true">*</span></a
           >
-          <a class="knopf-telefon" href={telefonHref}>
+          <a class="knopf-telefon" data-kontakt={verschluesseln(telefon.href)}>
             {/* Die Nummer steht im Linktext, das Icon ist dekorativ. */}
             <svg
               class="icon-telefon"
@@ -286,7 +285,7 @@ const strich = "M1 6 C 18 3, 34 7, 52 5 S 82 3, 99 5";
                 d="M4 3h4l2 5-2.5 1.5a12.5 12.5 0 0 0 7 7L16 14l5 2v4h-1C11 20 4 13 4 4V3z"
               ></path>
             </svg>
-            <span>{telefon}</span>
+            <span><Getarnt text={telefon.anzeige} /></span>
           </a>
         </div>
         <p class="zeiten">Mo bis Fr, 9 bis 20 Uhr</p>

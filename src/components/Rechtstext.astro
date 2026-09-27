@@ -1,0 +1,105 @@
+---
+// Rahmen fuer Impressum und Datenschutz.
+//
+// Angelegt am 27. September 2026. Rechtstexte werden gelesen, nicht
+// ueberflogen: helle Flaeche, dunkle Schrift, eine Spalte in lesbarer
+// Zeilenlaenge. Die dunkle Grundflaeche der Startseite ist fuer lange
+// Fliesstexte anstrengend. Ueberschriften in der Textschrift, die
+// Displayschrift gehoert den lauten Stellen der Startseite.
+//
+// Der Inhalt kommt als Slot mit einfachem HTML (h2, h3, p, ul, a).
+
+interface Props {
+  titel: string;
+  stand?: string;
+}
+
+const { titel, stand } = Astro.props;
+---
+
+<article class="rechtstext">
+  <div class="wrap">
+    <h1>{titel}</h1>
+    {stand && <p class="stand">Stand: {stand}</p>}
+    <slot />
+  </div>
+</article>
+
+<style>
+  .rechtstext {
+    background: var(--color-surface-inverse);
+    color: var(--color-text-inverse);
+    padding: var(--space-18) 0 var(--space-28);
+  }
+
+  .wrap {
+    width: 100%;
+    max-width: calc(var(--measure-wide) + 2 * var(--layout-gutter));
+    margin: 0 auto;
+    padding: 0 var(--layout-gutter);
+  }
+
+  /* 2xl auf dem Handy: „Datenschutzerklärung" ist ein Wort und war bei
+     3xl (40 px) mit 374 px breiter als die 335 px Inhaltsbreite.
+     hyphens als Absicherung fuer noch schmalere Geraete. */
+  h1 {
+    margin: 0;
+    font-size: var(--font-size-2xl);
+    font-weight: var(--font-weight-bold);
+    line-height: var(--line-height-snug);
+    hyphens: auto;
+  }
+
+  .stand {
+    margin: var(--space-2) 0 0;
+    font-size: var(--font-size-sm);
+    color: var(--color-text-inverse-subtle);
+  }
+
+  /* Der Inhalt kommt aus der Seite, deshalb :global innerhalb des
+     Rahmens. */
+  .rechtstext :global(h2) {
+    margin: var(--space-12) 0 0;
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-bold);
+    line-height: var(--line-height-normal);
+  }
+
+  .rechtstext :global(h3) {
+    margin: var(--space-6) 0 0;
+    font-size: var(--font-size-md);
+    font-weight: var(--font-weight-bold);
+    line-height: var(--line-height-normal);
+  }
+
+  .rechtstext :global(p),
+  .rechtstext :global(ul) {
+    margin: var(--space-3) 0 0;
+  }
+
+  .rechtstext :global(ul) {
+    padding-left: var(--space-6);
+  }
+
+  /* Blau wie alle Verweise der Seite. #1f4e98 auf Weiss: 8,1:1. */
+  .rechtstext :global(a) {
+    color: var(--color-action);
+    overflow-wrap: anywhere;
+  }
+
+  .rechtstext :global(a:hover) {
+    color: var(--color-action-strong);
+  }
+
+  .rechtstext :global(a:focus-visible) {
+    outline: var(--focus-ring-width) solid var(--color-action);
+    outline-offset: var(--focus-ring-offset);
+    border-radius: var(--radius-sm);
+  }
+
+  @media (min-width: 768px) {
+    h1 {
+      font-size: var(--font-size-4xl);
+    }
+  }
+</style>

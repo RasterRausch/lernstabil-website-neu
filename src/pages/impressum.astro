@@ -1,0 +1,94 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Rechtstext from '../components/Rechtstext.astro';
+import Getarnt from '../components/Getarnt.astro';
+import { telefon, email, verschluesseln } from '../data/kontakt';
+
+// Wortlaut uebernommen von www.lernstabil.de/impressum (abgerufen am
+// 27. September 2026), auf Alexanders Anweisung.
+//
+// Aenderungen:
+// - TMG → DDG. Das Telemediengesetz ist am 14. Mai 2024 durch das
+//   Digitale-Dienste-Gesetz abgeloest worden; die Paragrafen (§ 5, § 7,
+//   §§ 8 bis 10) haben dieselben Nummern behalten.
+// - Telefon: die Festnetznummer wie auf der ganzen Seite, nicht mehr die
+//   Mobilnummer der alten Seite (Alexander, 27. September 2026).
+// - Telefon und E-Mail gegen Adresssammler geschuetzt, siehe
+//   src/data/kontakt.ts.
+---
+
+<BaseLayout
+  title="Impressum — #Lernstabil"
+  description="Impressum von #Lernstabil – Online-Nachhilfe im Einzelunterricht."
+>
+  <main id="inhalt">
+    <Rechtstext titel="Impressum">
+      <h2>Angaben gemäß § 5 DDG</h2>
+      <p>
+        #Lernstabil – Online Nachhilfe<br />
+        Alexander Ritter<br />
+        Kolonnadenstraße 24<br />
+        04109 Leipzig
+      </p>
+
+      <h2>Kontakt</h2>
+      <p>
+        Telefon:
+        <a data-kontakt={verschluesseln(telefon.href)}
+          ><Getarnt text={telefon.anzeige} /></a
+        ><br />
+        E-Mail:
+        <a data-kontakt={verschluesseln(email.href)}
+          ><Getarnt text={email.anzeige} /></a
+        >
+      </p>
+
+      <h2>Umsatzsteuer</h2>
+      <p>
+        Kleinunternehmer gemäß § 19 UStG. Es wird keine Umsatzsteuer
+        ausgewiesen.
+      </p>
+
+      <h2>Verantwortlich für den Inhalt nach § 18 Abs. 2 MStV</h2>
+      <p>
+        Alexander Ritter<br />
+        Kolonnadenstraße 24<br />
+        04109 Leipzig
+      </p>
+
+      <h2>Haftung für Inhalte</h2>
+      <p>
+        Als Diensteanbieter sind wir gemäß § 7 Abs. 1 DDG für eigene Inhalte
+        auf diesen Seiten nach den allgemeinen Gesetzen verantwortlich. Nach
+        §§ 8 bis 10 DDG sind wir als Diensteanbieter jedoch nicht
+        verpflichtet, übermittelte oder gespeicherte fremde Informationen zu
+        überwachen oder nach Umständen zu forschen, die auf eine rechtswidrige
+        Tätigkeit hinweisen.
+      </p>
+
+      <h2>Haftung für Links</h2>
+      <p>
+        Unser Angebot enthält Links zu externen Websites Dritter, auf deren
+        Inhalte wir keinen Einfluss haben. Deshalb können wir für diese fremden
+        Inhalte auch keine Gewähr übernehmen. Für die Inhalte der verlinkten
+        Seiten ist stets der jeweilige Anbieter oder Betreiber der Seiten
+        verantwortlich.
+      </p>
+
+      <h2>Urheberrecht</h2>
+      <p>
+        Die durch die Seitenbetreiber erstellten Inhalte und Werke auf diesen
+        Seiten unterliegen dem deutschen Urheberrecht. Die Vervielfältigung,
+        Bearbeitung, Verbreitung und jede Art der Verwertung außerhalb der
+        Grenzen des Urheberrechtes bedürfen der schriftlichen Zustimmung des
+        jeweiligen Autors bzw. Erstellers.
+      </p>
+
+      <h2>Streitschlichtung</h2>
+      <p>
+        Wir sind nicht bereit oder verpflichtet, an Streitbeilegungsverfahren
+        vor einer Verbraucherschlichtungsstelle teilzunehmen.
+      </p>
+    </Rechtstext>
+  </main>
+</BaseLayout>

@@ -5,16 +5,16 @@
 // src/styles/tokens.css. Ausnahme ist die Geometrie des Logoblocks:
 // Sie stammt aus public/bilder/logo.svg und ist unten begruendet.
 
-const telefon = "0341 658 329 18";
-const telefonHref = "tel:+4934165832918";
+import Getarnt from "../Getarnt.astro";
+import { telefon, verschluesseln } from "../../data/kontakt";
 
 // marke: Markenname hinter dem Text, in der Schrift des Logos (globale
 // Klasse .marke im BaseLayout).
 const links: { text: string; href: string; marke?: string }[] = [
-  { text: "Fächer", href: "#faecher" },
+  { text: "Fächer", href: "/#faecher" },
   { text: "Dozent werden", href: "/fuer-dozenten" },
-  { text: "Warum", marke: "#Lernstabil", href: "#warum" },
-  { text: "Preise", href: "#preise" },
+  { text: "Warum", marke: "#Lernstabil", href: "/#warum" },
+  { text: "Preise", href: "/#preise" },
 ];
 ---
 
@@ -45,7 +45,12 @@ const links: { text: string; href: string; marke?: string }[] = [
       </ul>
     </nav>
 
-    <a class="kontakt" href={telefonHref} aria-label={`Anrufen: ${telefon}`}>
+    {/* Kein aria-label mehr: Es stand im Klartext im HTML und damit
+        jedem Adresssammler offen (Schutz siehe src/data/kontakt.ts).
+        Der Name fuer Screenreader kommt jetzt aus dem Linktext —
+        „Anrufen:" unsichtbar davor, die Nummer auf dem Handy nur
+        optisch versteckt statt entfernt. */}
+    <a class="kontakt" data-kontakt={verschluesseln(telefon.href)}>
       {/* Selbst gezeichnet, kein Icon-Paket. Flaechig seit dem
           25. September 2026 (vorher Umriss), Wunsch von Alexander. Die
           Kontur in derselben Farbe rundet die Ecken ab. Dieselbe Form
@@ -63,7 +68,8 @@ const links: { text: string; href: string; marke?: string }[] = [
           d="M4 3h4l2 5-2.5 1.5a12.5 12.5 0 0 0 7 7L16 14l5 2v4h-1C11 20 4 13 4 4V3z"
         ></path>
       </svg>
-      <span class="kontakt-nummer">{telefon}</span>
+      <span class="nur-vorlesen">Anrufen: </span>
+      <span class="kontakt-nummer"><Getarnt text={telefon.anzeige} /></span>
     </a>
 
     <button
@@ -279,8 +285,20 @@ const links: { text: string; href: string; marke?: string }[] = [
     flex: none;
   }
 
+  /* Fuer Screenreader da, fuers Auge nicht. Die uebliche Technik: auf
+     einen Pixel zusammengezogen und weggeschnitten. display: none oder
+     visibility: hidden wuerden den Text auch aus dem Vorlesen nehmen. */
+  .nur-vorlesen,
   .kontakt-nummer {
-    display: none;
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  .kontakt-nummer {
     font-size: var(--font-size-md);
     font-weight: var(--font-weight-semibold);
     font-style: italic;
@@ -357,7 +375,11 @@ const links: { text: string; href: string; marke?: string }[] = [
     }
 
     .kontakt-nummer {
-      display: inline;
+      position: static;
+      width: auto;
+      height: auto;
+      overflow: visible;
+      clip-path: none;
     }
   }
 

@@ -81,7 +81,17 @@ sie im Kommentar. Das ist erwünscht, keine Grenzüberschreitung.
 - **Comic Neue** ist selbst gehostet unter `public/fonts/`, keine
   Laufzeitverbindung nach außen. Lizenz SIL Open Font License 1.1, der
   Lizenztext liegt daneben und **muss mitausgeliefert werden**.
-- **Source Sans 3** kommt von Google Fonts.
+- **Source Sans 3** ist selbst gehostet unter `public/fonts/` (seit
+  27. September 2026, vorher Google Fonts). Variable Schrift, Latin-
+  Teilsatz, unverändert von Google übernommen. Lizenz SIL OFL 1.1, der
+  Lizenztext liegt daneben und **muss mitausgeliefert werden**.
+
+## Kontaktdaten
+
+Telefon und E-Mail stehen nur in `src/data/kontakt.ts` und kommen nie
+im Klartext ins HTML (Schutz gegen Adresssammler). Links über
+`data-kontakt` + `verschluesseln()`, sichtbarer Text über `<Getarnt>`.
+Die Datei erklärt den Aufbau.
 
 ## Offene Punkte vor dem Livegang
 
@@ -95,6 +105,13 @@ sie im Kommentar. Das ist erwünscht, keine Grenzüberschreitung.
   englische Fehlermeldung. Nach dem Livegang prüfen.
 - Eine automatisierte Zugänglichkeitsprüfung ist nie gelaufen. Vor dem
   Livegang axe oder Lighthouse.
+- **Six Hands Marker (Adobe Fonts)** überträgt die IP jedes Besuchers an
+  Adobe, rechtlich wie Google Fonts. Entscheidung vertagt (27. September
+  2026): eigene Weblizenz zum Selbsthosten bei der Schriftschmiede,
+  Ersatz durch eine freie Marker-Schrift oder Adobe behalten.
+- Impressum und Datenschutz lässt Alexander vor dem Livegang prüfen.
+  Beim Einbau des Kontaktformulars Abschnitt 3 b der Datenschutz-
+  erklärung nachziehen.
 
 ## Deployment
 

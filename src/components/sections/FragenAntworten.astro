@@ -26,8 +26,8 @@ import Unterstrichen from "../Unterstrichen.astro";
 // Absagen werden berechnet; ein PC braucht eine Webcam. Die Texte sind
 // so formuliert, dass sie dadurch nichts Falsches versprechen.
 
-const telefon = "0341 658 329 18";
-const telefonHref = "tel:+4934165832918";
+import Getarnt from "../Getarnt.astro";
+import { telefon, verschluesseln } from "../../data/kontakt";
 
 const fragen = [
   {
@@ -105,7 +105,9 @@ const plusSenkrecht = "M12.3 3 C 11.6 8, 12.6 15, 11.8 21";
         </div>
         <p class="einleitung">
           Ihre Frage ist nicht dabei? Rufen Sie uns an:{" "}
-          <a href={telefonHref}>{telefon}</a>, Mo bis Fr von 9 bis 20 Uhr.
+          <a data-kontakt={verschluesseln(telefon.href)}
+            ><Getarnt text={telefon.anzeige} /></a
+          >, Mo bis Fr von 9 bis 20 Uhr.
         </p>
       </div>
 

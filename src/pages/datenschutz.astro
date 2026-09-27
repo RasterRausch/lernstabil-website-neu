@@ -1,0 +1,216 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Rechtstext from '../components/Rechtstext.astro';
+import Getarnt from '../components/Getarnt.astro';
+import { telefon, email, verschluesseln } from '../data/kontakt';
+
+// Grundlage: www.lernstabil.de/datenschutz (abgerufen am 27. September
+// 2026), angepasst an die neue Seite. Was die neue Seite nach aussen
+// laedt, wurde am 27. September 2026 im Browser gemessen (frischer
+// Kontext, bis ans Seitenende gescrollt):
+//
+//   use.typekit.net, p.typekit.net       Adobe Fonts (Six Hands Marker)
+//   cdn.trustindex.io                    Bewertungs-Widgets
+//
+// Google Fonts (Source Sans 3) wurde am selben Tag durch selbst
+// gehostete Dateien ersetzt und kommt hier deshalb nicht mehr vor.
+//
+// Cookies, localStorage, sessionStorage: keine.
+//
+// WER HIER EINEN DIENST EINBAUT (Formular, Karte, Video, Statistik,
+// Conversion-Tracking fuer Google Ads), MUSS DIESE SEITE NACHZIEHEN.
+//
+// Abschnitt 3 b (Kontaktformular) steht vorab, auf Alexanders Wunsch:
+// Das Formular kommt spaeter. Die Felder sind die des alten Formulars.
+// Beim Einbau pruefen: Felder, Versandweg, ggf. ein Formulardienst, der
+// dann als eigener Empfaenger genannt werden muss.
+//
+// Gegenueber der alten Fassung geaendert:
+// - Abschnitt Schriftarten: Die alte Fassung sagte „alles selbst
+//   gehostet". Six Hands Marker kommt aber von Adobe Fonts und darf
+//   nicht selbst gehostet werden (siehe CLAUDE.md).
+// - Telefon: Festnetz statt der Mobilnummer der alten Seite.
+// - Trustindex: Firmenangaben aus deren Datenschutzerklaerung
+//   (Stand 31. August 2026). Die alte Fassung nannte „Trustindex
+//   Technologies Ltd." — so heisst die Firma dort nicht.
+// - Hosting (mittwald) und Kontakt per Telefon/E-Mail ergaenzt.
+// - Beschwerderecht bei der Aufsichtsbehoerde ergaenzt (Art. 13 Abs. 2
+//   lit. d DSGVO verlangt den Hinweis).
+---
+
+<BaseLayout
+  title="Datenschutz — #Lernstabil"
+  description="Datenschutzerklärung von #Lernstabil – Online-Nachhilfe im Einzelunterricht."
+>
+  <main id="inhalt">
+    <Rechtstext titel="Datenschutzerklärung" stand="September 2026">
+      <h2>1. Verantwortlicher</h2>
+      <p>
+        Alexander Ritter<br />
+        #Lernstabil – Online Nachhilfe<br />
+        Kolonnadenstraße 24<br />
+        04109 Leipzig<br />
+        E-Mail:
+        <a data-kontakt={verschluesseln(email.href)}
+          ><Getarnt text={email.anzeige} /></a
+        ><br />
+        Telefon:
+        <a data-kontakt={verschluesseln(telefon.href)}
+          ><Getarnt text={telefon.anzeige} /></a
+        >
+      </p>
+
+      <h2>2. Hosting und Server-Logfiles</h2>
+      <p>
+        Diese Website wird bei der Mittwald CM Service GmbH &amp; Co. KG,
+        Königsberger Straße 4–6, 32339 Espelkamp, gehostet.
+      </p>
+      <p>
+        Beim Aufrufen unserer Website werden durch den Browser automatisch
+        Informationen an den Server unserer Website gesendet. Diese
+        Informationen werden temporär in einem sogenannten Logfile
+        gespeichert. Folgende Informationen werden dabei ohne Ihr Zutun
+        erfasst und bis zur automatisierten Löschung gespeichert: IP-Adresse
+        des anfragenden Rechners, Datum und Uhrzeit des Zugriffs, Name und URL
+        der abgerufenen Datei, Website, von der aus der Zugriff erfolgt
+        (Referrer-URL), verwendeter Browser und ggf. das Betriebssystem Ihres
+        Rechners sowie der Name Ihres Access-Providers.
+      </p>
+      <p>
+        Rechtsgrundlage ist Art. 6 Abs. 1 lit. f DSGVO. Unser berechtigtes
+        Interesse liegt in der sicheren und technisch einwandfreien
+        Bereitstellung der Website.
+      </p>
+
+      <h2>3. Kontaktaufnahme</h2>
+
+      <h3>a) Per Telefon oder E-Mail</h3>
+      <p>
+        Wenn Sie uns anrufen oder eine E-Mail schreiben, verarbeiten wir die
+        Angaben, die Sie uns dabei mitteilen – etwa Ihren Namen, Ihre
+        Telefonnummer oder E-Mail-Adresse und Ihr Anliegen –, um Ihre Anfrage
+        zu bearbeiten. Eine Weitergabe an Dritte erfolgt nicht.
+      </p>
+
+      <h3>b) Bei Nutzung unseres Kontaktformulars</h3>
+      <p>
+        Ihre Angaben aus dem Kontaktformular (Vorname, E-Mail-Adresse,
+        Nachricht) werden zur Bearbeitung Ihrer Anfrage verarbeitet und
+        gespeichert. Eine Weitergabe an Dritte erfolgt nicht.
+      </p>
+      <p>
+        Rechtsgrundlage für die Kontaktaufnahme ist Art. 6 Abs. 1 lit. b
+        DSGVO, soweit Ihre Anfrage auf Nachhilfeunterricht oder eine
+        Probestunde zielt, im Übrigen Art. 6 Abs. 1 lit. f DSGVO. Unser
+        berechtigtes Interesse liegt darin, Anfragen beantworten zu können.
+      </p>
+
+      <h3>c) Bei Bewerbungen als Dozent</h3>
+      <p>
+        Wenn Sie sich bei uns als Dozent bewerben, verarbeiten wir die von
+        Ihnen übermittelten Daten (Name, E-Mail, Qualifikation) zur Prüfung
+        Ihrer Bewerbung. Die Daten werden nach Abschluss des
+        Bewerbungsverfahrens gelöscht, sofern keine gesetzlichen
+        Aufbewahrungspflichten bestehen. Rechtsgrundlage ist Art. 6 Abs. 1
+        lit. b DSGVO.
+      </p>
+
+      <h2>4. Cookies und Analyse</h2>
+      <p>
+        Diese Website setzt keine Cookies und verwendet keine Analyse-,
+        Statistik- oder Werbedienste.
+      </p>
+
+      <h2>5. Schriftarten</h2>
+
+      <h3>a) Selbst gehostete Schriften</h3>
+      <p>
+        Die Schriften „Source Sans 3“ und „Comic Neue“ werden direkt von
+        unserem Server ausgeliefert. Dabei werden keine Daten an Dritte
+        übertragen.
+      </p>
+
+      <h3>b) Adobe Fonts</h3>
+      <p>
+        Für die Darstellung einer Schrift nutzen wir Adobe Fonts. Anbieter ist
+        die Adobe Systems Software Ireland Limited, 4–6 Riverwalk, Citywest
+        Business Campus, Dublin 24, Irland. Beim Aufruf einer Seite lädt Ihr
+        Browser die Schrift von Servern von Adobe. Dabei werden Ihre
+        IP-Adresse sowie technische Informationen über Ihren Browser an Adobe
+        übertragen. Für die Auslieferung der Schriften setzt Adobe keine
+        Cookies.
+      </p>
+      <p>
+        Eine Übermittlung in die USA an die Adobe Inc. ist nicht
+        ausgeschlossen. Adobe Inc. ist nach dem EU-US Data Privacy Framework
+        zertifiziert, auf dessen Grundlage die EU-Kommission ein angemessenes
+        Datenschutzniveau festgestellt hat (Art. 45 DSGVO). Weitere
+        Informationen:
+        <a href="https://www.adobe.com/de/privacy/policies/adobe-fonts.html"
+          >www.adobe.com/de/privacy/policies/adobe-fonts.html</a
+        >.
+      </p>
+
+      <p>
+        Rechtsgrundlage für die Nutzung von Adobe Fonts ist Art. 6 Abs. 1
+        lit. f DSGVO. Unser berechtigtes Interesse liegt in einer
+        einheitlichen und gut lesbaren Darstellung der Website.
+      </p>
+
+      <h2>6. Bewertungs-Widgets (Trustindex)</h2>
+      <p>
+        Auf unserer Startseite binden wir Bewertungs-Widgets des Dienstes
+        Trustindex ein. Anbieter ist die Trustindex Ltd., Nyári Pál utca 15.,
+        2724 Újlengyel, Ungarn. Beim Laden der Widgets wird eine Verbindung zu
+        den Servern von Trustindex hergestellt, wobei Ihre IP-Adresse und
+        technische Browserinformationen übertragen werden. Weitere
+        Informationen:
+        <a href="https://www.trustindex.io/privacy-policy/"
+          >www.trustindex.io/privacy-policy</a
+        >.
+      </p>
+      <p>
+        Rechtsgrundlage ist Art. 6 Abs. 1 lit. f DSGVO. Unser berechtigtes
+        Interesse liegt in der Darstellung authentischer Kundenbewertungen.
+      </p>
+
+      <h2>7. Speicherdauer</h2>
+      <p>
+        Ihre personenbezogenen Daten werden nur so lange gespeichert, wie es
+        für die Erfüllung des jeweiligen Zwecks erforderlich ist oder soweit
+        dies gesetzlich vorgeschrieben ist.
+      </p>
+
+      <h2>8. Ihre Rechte</h2>
+      <p>
+        Sie haben das Recht auf Auskunft über die bei uns gespeicherten
+        personenbezogenen Daten (Art. 15 DSGVO), Berichtigung unrichtiger
+        Daten (Art. 16 DSGVO), Löschung (Art. 17 DSGVO), Einschränkung der
+        Verarbeitung (Art. 18 DSGVO), Datenübertragbarkeit (Art. 20 DSGVO)
+        sowie Widerspruch gegen die Verarbeitung (Art. 21 DSGVO). Zur
+        Wahrnehmung Ihrer Rechte wenden Sie sich an die oben genannte
+        Kontaktadresse.
+      </p>
+      <p>
+        Außerdem haben Sie das Recht, sich bei einer
+        Datenschutz-Aufsichtsbehörde über die Verarbeitung Ihrer Daten zu
+        beschweren (Art. 77 DSGVO).
+      </p>
+
+      <h2>9. SSL-/TLS-Verschlüsselung</h2>
+      <p>
+        Diese Seite nutzt aus Sicherheitsgründen eine SSL- bzw.
+        TLS-Verschlüsselung. Eine verschlüsselte Verbindung erkennen Sie
+        daran, dass die Adresszeile des Browsers von „http://“ auf „https://“
+        wechselt, und an dem Schloss-Symbol in Ihrer Browserzeile.
+      </p>
+
+      <h2>10. Änderung der Datenschutzerklärung</h2>
+      <p>
+        Wir behalten uns vor, diese Datenschutzerklärung anzupassen, um sie an
+        geänderte Rechtslagen oder Änderungen des Dienstes anzupassen. Die
+        jeweils aktuelle Version finden Sie auf dieser Seite.
+      </p>
+    </Rechtstext>
+  </main>
+</BaseLayout>

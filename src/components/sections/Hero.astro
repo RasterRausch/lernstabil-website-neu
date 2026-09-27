@@ -1,4 +1,6 @@
 ---
+import Getarnt from "../Getarnt.astro";
+import { telefon, verschluesseln } from "../../data/kontakt";
 // Sektion: Hero (Startseite, 1)
 
 // Siegel von Trustindex, aus Alexanders Konto.
@@ -107,7 +109,7 @@ const siegel = [
         </ul>
 
         <div class="aktionen">
-          <a class="knopf-primaer" href="tel:+4934165832918">
+          <a class="knopf-primaer" data-kontakt={verschluesseln(telefon.href)}>
             {
               /* Der Linktext nennt die Nummer bereits, das Icon ist rein
                 dekorativ und bleibt fuer Screenreader unsichtbar. */
@@ -126,7 +128,7 @@ const siegel = [
                 d="M4 3h4l2 5-2.5 1.5a12.5 12.5 0 0 0 7 7L16 14l5 2v4h-1C11 20 4 13 4 4V3z"
               ></path>
             </svg>
-            <span>0341 658 329 18</span>
+            <span><Getarnt text={telefon.anzeige} /></span>
           </a>
           {
             /* Sternchen verweist auf die Fussnote bei den Siegeln.
