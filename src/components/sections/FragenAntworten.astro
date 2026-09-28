@@ -67,7 +67,22 @@ const fragen = [
 // Waagerechte — aus Plus wird Minus.
 const plusWaagerecht = "M3 12.5 C 8 11.5, 15 12.8, 21 11.8";
 const plusSenkrecht = "M12.3 3 C 11.6 8, 12.6 15, 11.8 21";
+
+// Dieselben Fragen als strukturierte Daten (schema.org FAQPage), fuer
+// Suchmaschinen und KI-Assistenten. Angelegt am 28. September 2026.
+// Aus derselben Liste wie die Zettel — sie kann nicht auseinanderlaufen.
+const faqDaten = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: fragen.map((f) => ({
+    "@type": "Question",
+    name: f.frage,
+    acceptedAnswer: { "@type": "Answer", text: f.antwort },
+  })),
+};
 ---
+
+<script is:inline type="application/ld+json" set:html={JSON.stringify(faqDaten)} />
 
 <section class="fragen-sektion" id="fragen" aria-labelledby="fragen-titel">
   <div class="wrap">
@@ -301,6 +316,7 @@ const plusSenkrecht = "M12.3 3 C 11.6 8, 12.6 15, 11.8 21";
   /* Ziffer wie am Zettel in den Preisen: Displayschrift, Rot. */
   .nummer {
     font-family: var(--font-family-display);
+    font-weight: var(--font-weight-display);
     font-size: var(--font-size-3xl);
     line-height: var(--line-height-tight);
     color: var(--color-brand);
@@ -309,6 +325,7 @@ const plusSenkrecht = "M12.3 3 C 11.6 8, 12.6 15, 11.8 21";
 
   .frage {
     font-family: var(--font-family-display);
+    font-weight: var(--font-weight-display);
     font-size: var(--font-size-lg);
     line-height: var(--line-height-snug);
   }

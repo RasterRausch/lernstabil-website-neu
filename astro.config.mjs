@@ -10,6 +10,9 @@ import node from '@astrojs/node';
 // (prerender = false); der Standalone-Server liefert daneben die
 // statischen Seiten aus. Start: node dist/server/entry.mjs
 export default defineConfig({
+  // Oeffentliche Adresse: Grundlage fuer kanonische Links, Open Graph,
+  // Sitemap und strukturierte Daten (BaseLayout, pages/sitemap.xml.ts).
+  site: 'https://lernstabil.de',
   output: 'static',
   adapter: node({
     mode: 'standalone',

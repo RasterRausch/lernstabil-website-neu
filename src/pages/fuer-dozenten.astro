@@ -16,13 +16,42 @@ import DozentHero from "../components/sections/DozentHero.astro";
 import DozentVorteile from "../components/sections/DozentVorteile.astro";
 import DozentAblauf from "../components/sections/DozentAblauf.astro";
 import DozentProfile from "../components/sections/DozentProfile.astro";
+
+// Stellenanzeige als strukturierte Daten (schema.org JobPosting), damit
+// die Seite in der Jobsuche von Google und bei KI-Assistenten auftaucht.
+// Angelegt am 28. September 2026. Nur Angaben von der Seite; die Art
+// der Beschaeftigung (employmentType) und das Honorar fehlen, weil sie
+// nicht feststehen. Bewerbungsadresse bewusst nicht als Klartext.
+const seite = Astro.site!.href.replace(/\/$/, "");
+const stelle = {
+  "@context": "https://schema.org",
+  "@type": "JobPosting",
+  title: "Nachhilfelehrer für Online-Einzelunterricht",
+  datePosted: "2026-09-28",
+  description:
+    "<p>Bei #Lernstabil unterrichten Sie online im Einzelunterricht: ein Schüler, ein Dozent. Sie lernen Ihre Schüler wirklich kennen und begleiten sie über längere Zeit.</p>" +
+    "<ul><li>Online und ortsunabhängig, wann und wo es für Sie passt</li><li>Faires Honorar pro Stunde, ohne versteckte Abzüge</li><li>Persönliche Begleitung im kleinen Team, Materialien werden gestellt</li></ul>" +
+    "<p>Wir suchen Studenten aller Fachrichtungen, Akademiker und ehemalige Lehrer mit Fachwissen und Freude am Unterrichten. Bewerbung per E-Mail mit Lebenslauf und Ihren Fächern; wir melden uns innerhalb weniger Tage.</p>",
+  hiringOrganization: {
+    "@type": "Organization",
+    name: "#Lernstabil",
+    sameAs: `${seite}/`,
+    logo: `${seite}/favicon.png`,
+  },
+  jobLocationType: "TELECOMMUTE",
+  applicantLocationRequirements: { "@type": "Country", name: "Deutschland" },
+  directApply: false,
+  url: `${seite}/fuer-dozenten`,
+};
 ---
 
 <BaseLayout
-  title="Dozent werden — #Lernstabil"
-  description="Online-Nachhilfe im Einzelunterricht geben: Werden Sie Dozent bei #Lernstabil. Flexibel, ortsunabhängig, mit fairem Honorar pro Stunde und persönlicher Begleitung."
+  title="Dozent werden: Online-Nachhilfe geben | #Lernstabil"
+  description="Werden Sie Dozent bei #Lernstabil: Online-Nachhilfe im Einzelunterricht geben, ortsunabhängig, mit fairem Honorar pro Stunde und persönlicher Begleitung im kleinen Team."
   footerAufruf="bewerbung"
+  bild="/bilder/vorschau-dozent.jpg"
 >
+  <script is:inline slot="kopf" type="application/ld+json" set:html={JSON.stringify(stelle)} />
   <main id="inhalt">
     <DozentHero />
     <DozentVorteile />

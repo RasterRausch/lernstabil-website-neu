@@ -8,12 +8,114 @@ import VirtuellesKlassenzimmer from '../components/sections/VirtuellesKlassenzim
 import Schulfaecher from '../components/sections/Schulfaecher.astro';
 import Preise from '../components/sections/Preise.astro';
 import FragenAntworten from '../components/sections/FragenAntworten.astro';
+import { alleFaecher } from '../data/probestunde';
+
+// Titel und Beschreibung fuer die Suche (28. September 2026): das
+// Suchwort „Online-Nachhilfe" vorn, dazu, was in der Trefferliste
+// ueberzeugt — Einzelunterricht, ohne Vertrag, Preis ab, gratis.
+// „ab 22,50 €" ist die guenstigste Stufe aus Sektion 7.
+const titel = 'Online-Nachhilfe im Einzelunterricht ohne Vertrag | #Lernstabil';
+const beschreibung =
+  'Online-Nachhilfe im Einzelunterricht für alle Fächer, von der Grundschule bis zum Abitur. Ohne Vertragslaufzeit, ab 22,50 € je Stunde. Erste Stunde gratis testen.';
+
+// Strukturierte Daten (schema.org) fuer Suchmaschinen und KI-Assistenten.
+// Nur Angaben, die auch auf der Seite stehen. Telefon und E-Mail stehen
+// bewusst NICHT darin: JSON-LD ist Klartext im Quelltext und wuerde den
+// Schutz gegen Adresssammler aushebeln (data/kontakt.ts).
+const seite = Astro.site!.href.replace(/\/$/, '');
+const daten = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'EducationalOrganization',
+      '@id': `${seite}/#organisation`,
+      name: '#Lernstabil',
+      alternateName: 'Lernstabil',
+      url: `${seite}/`,
+      logo: `${seite}/favicon.png`,
+      image: `${seite}/bilder/vorschau-lernstabil.jpg`,
+      slogan: 'Nachhilfe bequem von zu Hause!',
+      description:
+        'Online-Nachhilfe im Einzelunterricht für alle Schulfächer, von der Grundschule bis zum Abitur. Ohne Vertragslaufzeit, abgerechnet wird monatlich nur, was stattgefunden hat.',
+      areaServed: { '@type': 'Country', name: 'Deutschland' },
+      knowsAbout: alleFaecher,
+    },
+    {
+      '@type': 'Service',
+      '@id': `${seite}/#nachhilfe`,
+      name: 'Online-Nachhilfe im Einzelunterricht',
+      serviceType: 'Nachhilfe',
+      provider: { '@id': `${seite}/#organisation` },
+      areaServed: { '@type': 'Country', name: 'Deutschland' },
+      availableChannel: {
+        '@type': 'ServiceChannel',
+        name: 'Online per Videokonferenz und gemeinsamem Whiteboard',
+      },
+      audience: {
+        '@type': 'EducationalAudience',
+        educationalRole: 'student',
+        audienceType: 'Schüler von der Grundschule bis zum Abitur',
+      },
+      offers: [
+        {
+          '@type': 'Offer',
+          name: 'Gratis-Probestunde (45 Minuten, mit Leistungsanalyse)',
+          price: '0',
+          priceCurrency: 'EUR',
+          url: `${seite}/probestunde`,
+        },
+        {
+          '@type': 'Offer',
+          name: 'Einzelunterricht bis 8 Unterrichtsstunden im Monat',
+          price: '28.95',
+          priceCurrency: 'EUR',
+          priceSpecification: {
+            '@type': 'UnitPriceSpecification',
+            price: '28.95',
+            priceCurrency: 'EUR',
+            unitText: 'Unterrichtsstunde (45 Minuten)',
+          },
+        },
+        {
+          '@type': 'Offer',
+          name: 'Einzelunterricht ab 9 Unterrichtsstunden im Monat',
+          price: '25.95',
+          priceCurrency: 'EUR',
+          priceSpecification: {
+            '@type': 'UnitPriceSpecification',
+            price: '25.95',
+            priceCurrency: 'EUR',
+            unitText: 'Unterrichtsstunde (45 Minuten)',
+          },
+        },
+        {
+          '@type': 'Offer',
+          name: 'Einzelunterricht ab 17 Unterrichtsstunden im Monat',
+          price: '22.50',
+          priceCurrency: 'EUR',
+          priceSpecification: {
+            '@type': 'UnitPriceSpecification',
+            price: '22.50',
+            priceCurrency: 'EUR',
+            unitText: 'Unterrichtsstunde (45 Minuten)',
+          },
+        },
+      ],
+    },
+    {
+      '@type': 'WebSite',
+      '@id': `${seite}/#website`,
+      url: `${seite}/`,
+      name: '#Lernstabil',
+      inLanguage: 'de-DE',
+      publisher: { '@id': `${seite}/#organisation` },
+    },
+  ],
+};
 ---
 
-<BaseLayout
-  title="#Lernstabil — Online-Einzelunterricht ohne Vertragslaufzeit"
-  description="Nachhilfe, die ankommt. Erste Stunde gratis testen. Online-Einzelunterricht ohne Vertragslaufzeit, Mo bis Fr 9 bis 20 Uhr."
->
+<BaseLayout title={titel} description={beschreibung}>
+  <script is:inline slot="kopf" type="application/ld+json" set:html={JSON.stringify(daten)} />
   <main id="inhalt">
     <Hero />
     <Vertrauensleiste />

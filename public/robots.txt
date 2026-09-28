@@ -1,0 +1,11 @@
+# #Lernstabil — Online-Nachhilfe im Einzelunterricht
+# Suchmaschinen und KI-Assistenten sind ausdruecklich willkommen.
+# Eine Zusammenfassung fuer KI-Agenten steht unter /llms.txt.
+
+User-agent: *
+Allow: /
+Disallow: /api/
+Disallow: /danke
+Disallow: /anfrage-fehler
+
+Sitemap: https://lernstabil.de/sitemap.xml
