@@ -34,7 +34,15 @@ Git-Historie (Commit `4fd1997`), falls doch einmal etwas gebraucht wird.
 - Astro ist der Standard. Svelte nur, wo echte Interaktivität nötig ist.
   Erst prüfen, ob es ohne Framework geht; ein Akkordeon oder ein
   Burger-Menü braucht keins.
-- Rendering: statisch (`output: 'static'`).
+- Rendering: statisch (`output: 'static'`) mit Node-Adapter
+  (`@astrojs/node`, standalone). Alle Seiten werden beim Bauen erzeugt;
+  nur `src/pages/api/anfrage.ts` (Probestunden-Formular) läuft auf dem
+  Server. Seit 27. September 2026.
+- Versand der Anfragen per `nodemailer` über das mittwald-Postfach
+  `info@lernstabil.de`. Zugangsdaten über `astro:env` (SMTP_HOST,
+  SMTP_PORT, SMTP_USER, SMTP_PASS) — in `.env` bzw. als
+  Umgebungsvariablen der App. Ohne SMTP_HOST schreibt `npm run dev`
+  Anfragen nur ins Terminal.
 - In Astro landet alles mit `PUBLIC_`-Präfix im Client-Bundle. Ohne
   Präfix bleibt es serverseitig.
 
@@ -110,16 +118,23 @@ Die Datei erklärt den Aufbau.
   2026): eigene Weblizenz zum Selbsthosten bei der Schriftschmiede,
   Ersatz durch eine freie Marker-Schrift oder Adobe behalten.
 - Impressum und Datenschutz lässt Alexander vor dem Livegang prüfen.
-  Beim Einbau des Kontaktformulars Abschnitt 3 b der Datenschutz-
-  erklärung nachziehen.
+- Probestunden-Formular einmal mit echtem Versand testen: SMTP-Werte
+  des Postfachs info@ in `.env` eintragen, Anfrage abschicken, Eingang
+  prüfen. Bis dahin ist nur der Weg ohne Versand (Terminal) getestet.
 
 ## Deployment
 
 - Hosting: mittwald mStudio
-- Projekt-ID: p-
-- App-Installation: a-
-- Domain: lernstabil.de (aktuell noch die alte Seite)
-- Build: `npm run build` → `dist/`
+- Projekt-ID: p-i7b2q9 (#Lernstabil)
+- App-Installation: a-upf6k9, Node.js (Stand 27. September 2026: alte
+  Seite, Startbefehl `node build/index.js`)
+- Domain: `lernstabil.de` und `www.lernstabil.de` zeigen auf a-upf6k9
+  (aktuell noch die alte Seite)
+- Build: `npm run build` → `dist/client` (statisch) und `dist/server`
+- Start: `node dist/server/entry.mjs` (Port über `PORT`)
+- Beim Neuaufsetzen nur die App-Installation ersetzen, **nicht das
+  Projekt löschen**: Die Postfächer info@ und bewerbung@ hängen am
+  Projekt.
 
 ## Repository
 

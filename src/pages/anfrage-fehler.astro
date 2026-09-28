@@ -1,0 +1,58 @@
+---
+// Wenn das Absenden ohne JavaScript schiefgeht (Pflichtfeld fehlt,
+// Versand gescheitert). Mit JavaScript zeigt das Formular Fehler selbst
+// an und kommt nie hierher. Angelegt am 27. September 2026.
+
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Getarnt from "../components/Getarnt.astro";
+import { telefon, verschluesseln } from "../data/kontakt";
+---
+
+<BaseLayout title="Anfrage nicht gesendet — #Lernstabil" noindex>
+  <main id="inhalt" class="seite">
+    <div class="wrap">
+      <h1>Das hat leider nicht geklappt</h1>
+      <p>
+        Ihre Anfrage ist nicht bei uns angekommen. Vielleicht fehlte eine
+        Angabe – Fach, Klasse, Vorname und Telefonnummer brauchen wir.
+      </p>
+      <p><a href="/probestunde">Noch einmal versuchen</a></p>
+      <p>
+        Oder rufen Sie uns direkt an:{" "}
+        <a data-kontakt={verschluesseln(telefon.href)}
+          ><Getarnt text={telefon.anzeige} /></a
+        >, Mo bis Fr von 9 bis 20 Uhr.
+      </p>
+    </div>
+  </main>
+</BaseLayout>
+
+<style>
+  .seite {
+    background: var(--color-surface-inverse);
+    color: var(--color-text-inverse);
+    padding: var(--space-18) 0 var(--space-28);
+  }
+
+  .wrap {
+    width: 100%;
+    max-width: calc(var(--measure-wide) + 2 * var(--layout-gutter));
+    margin: 0 auto;
+    padding: 0 var(--layout-gutter);
+  }
+
+  h1 {
+    margin: 0 0 var(--space-6);
+    font-size: var(--font-size-3xl);
+    font-weight: var(--font-weight-bold);
+    line-height: var(--line-height-snug);
+  }
+
+  p {
+    margin: var(--space-3) 0 0;
+  }
+
+  a {
+    color: var(--color-action);
+  }
+</style>

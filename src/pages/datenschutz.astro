@@ -20,10 +20,12 @@ import { telefon, email, verschluesseln } from '../data/kontakt';
 // WER HIER EINEN DIENST EINBAUT (Formular, Karte, Video, Statistik,
 // Conversion-Tracking fuer Google Ads), MUSS DIESE SEITE NACHZIEHEN.
 //
-// Abschnitt 3 b (Kontaktformular) steht vorab, auf Alexanders Wunsch:
-// Das Formular kommt spaeter. Die Felder sind die des alten Formulars.
-// Beim Einbau pruefen: Felder, Versandweg, ggf. ein Formulardienst, der
-// dann als eigener Empfaenger genannt werden muss.
+// Abschnitt 3 b beschreibt das Probestunden-Formular so, wie es am
+// 27. September 2026 gebaut wurde: Felder aus
+// components/ProbestundeFormular.astro, Versand ueber
+// pages/api/anfrage.ts per E-Mail an das eigene Postfach bei mittwald,
+// IP nur zur Mengenbegrenzung im Arbeitsspeicher. Aendert sich eins
+// davon, diesen Abschnitt nachziehen.
 //
 // Gegenueber der alten Fassung geaendert:
 // - Abschnitt Schriftarten: Die alte Fassung sagte „alles selbst
@@ -50,11 +52,11 @@ import { telefon, email, verschluesseln } from '../data/kontakt';
         #Lernstabil – Online Nachhilfe<br />
         Kolonnadenstraße 24<br />
         04109 Leipzig<br />
-        E-Mail:
+        E-Mail:{" "}
         <a data-kontakt={verschluesseln(email.href)}
           ><Getarnt text={email.anzeige} /></a
         ><br />
-        Telefon:
+        Telefon:{" "}
         <a data-kontakt={verschluesseln(telefon.href)}
           ><Getarnt text={telefon.anzeige} /></a
         >
@@ -92,11 +94,25 @@ import { telefon, email, verschluesseln } from '../data/kontakt';
         zu bearbeiten. Eine Weitergabe an Dritte erfolgt nicht.
       </p>
 
-      <h3>b) Bei Nutzung unseres Kontaktformulars</h3>
+      <h3>b) Bei Nutzung unseres Anfrageformulars</h3>
       <p>
-        Ihre Angaben aus dem Kontaktformular (Vorname, E-Mail-Adresse,
-        Nachricht) werden zur Bearbeitung Ihrer Anfrage verarbeitet und
-        gespeichert. Eine Weitergabe an Dritte erfolgt nicht.
+        Wenn Sie über unser Formular eine Probestunde anfragen, verarbeiten
+        wir Ihre Angaben: Fach, Klassenstufe, Vorname und Telefonnummer sowie,
+        falls Sie sie angeben, Ihre E-Mail-Adresse und die Zeiten, zu denen
+        Sie erreichbar sind. Das Formular wird von unserem Server (siehe
+        Abschnitt 2) entgegengenommen und per E-Mail an unser eigenes Postfach
+        übermittelt. Eine Weitergabe an Dritte erfolgt nicht.
+      </p>
+      <p>
+        Zum Schutz vor Missbrauch begrenzt der Server die Zahl der Anfragen je
+        Anschluss. Dafür hält er Ihre IP-Adresse höchstens 10 Minuten im
+        Arbeitsspeicher und verwirft sie danach. Sie wird nicht mit Ihren
+        Angaben aus dem Formular verknüpft und nicht mitgeschickt.
+      </p>
+      <p>
+        Ihre Angaben löschen wir, sobald Ihre Anfrage erledigt ist – es sei
+        denn, es kommt ein Unterrichtsvertrag zustande oder gesetzliche
+        Aufbewahrungspflichten stehen dem entgegen.
       </p>
       <p>
         Rechtsgrundlage für die Kontaktaufnahme ist Art. 6 Abs. 1 lit. b

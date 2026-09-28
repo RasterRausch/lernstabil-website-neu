@@ -1,0 +1,172 @@
+---
+// Das Probestunden-Formular als Fenster ueber der Seite. Angelegt am
+// 27. September 2026.
+//
+// Jeder Link auf /probestunde oeffnet mit JavaScript dieses Fenster,
+// statt die Seite zu wechseln — wer vom Knopf in den Preisen kommt,
+// verliert die Stelle nicht, an der er gelesen hat. Ohne JavaScript
+// fuehrt derselbe Link auf die eigene Seite /probestunde mit demselben
+// Formular. Die Knoepfe brauchen deshalb nichts Besonderes, nur
+// href="/probestunde".
+//
+// Natives <dialog> mit showModal(): Escape schliesst, der Rest der Seite
+// ist fuer Tastatur und Screenreader gesperrt, und beim Schliessen kehrt
+// der Fokus auf den Knopf zurueck, der es geoeffnet hat.
+//
+// Auf dem Handy bildschirmfuellend, ab 768 px ein Fenster in der Mitte.
+
+import ProbestundeFormular from "./ProbestundeFormular.astro";
+---
+
+<dialog class="dialog" data-probestunde-dialog aria-labelledby="psd-titel">
+  <div class="innen">
+    <button class="schliessen" type="button" data-schliessen aria-label="Schließen">
+      <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+        <path d="M5 5l14 14M19 5L5 19"></path>
+      </svg>
+    </button>
+    <ProbestundeFormular id="psd" titel="Gratis-Probestunde anfragen" />
+  </div>
+</dialog>
+
+<script>
+  const dialog = document.querySelector<HTMLDialogElement>("[data-probestunde-dialog]");
+
+  if (dialog) {
+    const wurzel = dialog.querySelector("[data-probestunde]");
+    // Der Knopf, der das Fenster geoeffnet hat. Der Browser gibt den
+    // Fokus beim Schliessen nur an das zuletzt fokussierte Element
+    // zurueck — Safari fokussiert Links beim Anklicken aber nicht, dann
+    // landete der Fokus am Seitenanfang.
+    let ausloeser = null as HTMLElement | null;
+    dialog.addEventListener("close", () => ausloeser?.focus());
+
+    document.addEventListener("click", (e) => {
+      const link = (e.target as HTMLElement).closest<HTMLAnchorElement>(
+        'a[href="/probestunde"]',
+      );
+      // Mit gedrueckter Taste oder mittlerer Maustaste will jemand einen
+      // neuen Tab — dann die Seite, nicht das Fenster.
+      if (!link || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+      e.preventDefault();
+      ausloeser = link;
+      wurzel?.dispatchEvent(new Event("probestunde:start"));
+      dialog.showModal();
+      dialog
+        .querySelector<HTMLElement>("[data-schritt][data-aktiv] .frage, [data-erfolg]:not([hidden]) h2")
+        ?.focus();
+    });
+
+    dialog.querySelector("[data-schliessen]")?.addEventListener("click", () => dialog.close());
+
+    // Klick auf die Abdunklung schliesst. Der Innenbereich fuellt das
+    // Fenster ganz aus — trifft ein Klick das <dialog> selbst, war es
+    // die Flaeche dahinter.
+    dialog.addEventListener("click", (e) => {
+      if (e.target === dialog) dialog.close();
+    });
+  }
+</script>
+
+<style>
+  .dialog {
+    width: 100%;
+    max-width: 100%;
+    height: 100%;
+    max-height: 100%;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: var(--color-surface-inverse);
+    color: var(--color-text-inverse);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+
+  .dialog::backdrop {
+    background: var(--color-overlay);
+  }
+
+  /* Die Seite dahinter scrollt nicht mit, solange das Fenster offen ist. */
+  :global(html:has(dialog[open])) {
+    overflow: hidden;
+  }
+
+  .innen {
+    position: relative;
+    min-height: 100%;
+    padding: var(--space-12) var(--layout-gutter) var(--space-8);
+  }
+
+  .schliessen {
+    position: absolute;
+    top: var(--space-2);
+    right: var(--space-2);
+    display: grid;
+    place-items: center;
+    width: var(--tap-target-min);
+    height: var(--tap-target-min);
+    padding: 0;
+    border: 0;
+    border-radius: var(--radius-full);
+    background: none;
+    color: var(--color-text-inverse);
+    cursor: pointer;
+  }
+
+  .schliessen:hover {
+    background: var(--color-surface-inverse-muted);
+  }
+
+  .schliessen:focus-visible {
+    outline: var(--focus-ring-width) solid var(--color-action);
+    outline-offset: var(--focus-ring-offset);
+  }
+
+  .schliessen svg {
+    width: var(--icon-size-md);
+    height: var(--icon-size-md);
+  }
+
+  .schliessen path {
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .dialog[open] {
+      animation: auftauchen 200ms ease-out;
+    }
+
+    @keyframes auftauchen {
+      from {
+        opacity: 0;
+        transform: translateY(var(--space-4));
+      }
+    }
+  }
+
+  /* ab 768: Fenster in der Mitte. Breite aus der Zeilenlaenge plus
+     Innenabstand — so breit, dass drei Kacheln nebeneinander passen. */
+  @media (min-width: 768px) {
+    .dialog {
+      width: calc(100% - 2 * var(--layout-gutter));
+      max-width: calc(var(--measure-wide) + 2 * var(--space-12));
+      /* fit-content, nicht auto: Das offene <dialog> ist fest
+         positioniert und oben wie unten verankert — bei auto zoege es
+         sich ueber die volle Hoehe. fit-content ist auch die Vorgabe des
+         Browsers, die die Handy-Fassung oben mit 100% ueberschreibt. */
+      height: fit-content;
+      max-height: calc(100dvh - 2 * var(--space-12));
+      margin: auto;
+      border-radius: var(--radius-md);
+      box-shadow: var(--shadow-md);
+    }
+
+    .innen {
+      padding: var(--space-12);
+    }
+  }
+</style>

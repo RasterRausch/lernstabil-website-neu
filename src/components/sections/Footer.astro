@@ -1,12 +1,7 @@
 ---
 import Unterstrichen from "../Unterstrichen.astro";
 import Getarnt from "../Getarnt.astro";
-import {
-  telefon,
-  email,
-  emailMitBetreff,
-  verschluesseln,
-} from "../../data/kontakt";
+import { telefon, email, verschluesseln } from "../../data/kontakt";
 // Sektion: Footer (seitenübergreifend, 9)
 //
 // Angelegt am 27. September 2026. Entwurf mit Alexander abgestimmt:
@@ -28,9 +23,9 @@ import {
 // Keine Anschrift: Online-Nachhilfe, die Anschrift steht im Impressum.
 // Keine sozialen Netzwerke, es gibt derzeit keine Profile.
 //
-// Die Probestunde geht vorerst per E-Mail. Sobald das Kontaktformular
-// steht, zeigt der Knopf dorthin — wie „#probestunde" in Hero und
-// Preisen, das es auf der Seite noch nicht gibt.
+// „Probestunde anfragen" oeffnet das Formular wie alle anderen
+// Probestunden-Knoepfe (href="/probestunde", siehe
+// components/ProbestundeDialog.astro).
 //
 // Links auf Sektionen der Startseite mit „/" davor: Der Footer steht
 // auch auf Impressum und Datenschutz. Nur Ziele, die es gibt.
@@ -95,11 +90,7 @@ const jahr = new Date().getFullYear();
           </svg>
           <span><Getarnt text={telefon.anzeige} /></span>
         </a>
-        <a
-          class="knopf-probe"
-          data-kontakt={verschluesseln(emailMitBetreff("Gratis-Probestunde"))}
-          >Probestunde anfragen</a
-        >
+        <a class="knopf-probe" href="/probestunde">Probestunde anfragen</a>
       </div>
       <p class="zeiten">Mo bis Fr, 9 bis 20 Uhr</p>
     </div>

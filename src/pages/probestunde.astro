@@ -1,0 +1,80 @@
+---
+// Das Probestunden-Formular als eigene Seite. Angelegt am
+// 27. September 2026.
+//
+// Mit JavaScript oeffnen die Knoepfe der Seite das Formular als Fenster
+// (components/ProbestundeDialog.astro) und kommen nie hierher. Diese
+// Seite ist fuer alle anderen Wege: ohne JavaScript, Link in neuem Tab,
+// und spaeter als direktes Ziel einer Anzeige.
+
+import BaseLayout from "../layouts/BaseLayout.astro";
+import ProbestundeFormular from "../components/ProbestundeFormular.astro";
+---
+
+<BaseLayout
+  title="Gratis-Probestunde anfragen — #Lernstabil"
+  description="Kostenlose Probestunde anfragen: 45 Minuten Online-Einzelunterricht mit Leistungsanalyse. Wir melden uns innerhalb von 24 Stunden."
+  probestundeDialog={false}
+>
+  <main id="inhalt" class="seite">
+    <div class="wrap">
+      <h1>Gratis-Probestunde anfragen</h1>
+      <p class="einleitung">
+        45 Minuten, kostenlos und mit Leistungsanalyse. Drei kurze Fragen –
+        wir melden uns innerhalb von 24 Stunden.
+      </p>
+      <div class="karte">
+        <ProbestundeFormular id="ps" />
+      </div>
+    </div>
+  </main>
+</BaseLayout>
+
+<style>
+  .seite {
+    background: var(--color-surface-inverse-muted);
+    color: var(--color-text-inverse);
+    padding: var(--space-12) 0 var(--space-18);
+  }
+
+  .wrap {
+    width: 100%;
+    max-width: calc(var(--measure-wide) + 2 * var(--layout-gutter));
+    margin: 0 auto;
+    padding: 0 var(--layout-gutter);
+  }
+
+  h1 {
+    margin: 0;
+    font-size: var(--font-size-3xl);
+    font-weight: var(--font-weight-bold);
+    line-height: var(--line-height-snug);
+  }
+
+  .einleitung {
+    margin: var(--space-3) 0 0;
+    color: var(--color-text-inverse-subtle);
+  }
+
+  .karte {
+    margin-top: var(--space-8);
+    padding: var(--space-8) var(--space-6);
+    border-radius: var(--radius-md);
+    background: var(--color-surface-inverse);
+    box-shadow: var(--shadow-md);
+  }
+
+  @media (min-width: 768px) {
+    .seite {
+      padding-top: var(--space-18);
+    }
+
+    h1 {
+      font-size: var(--font-size-4xl);
+    }
+
+    .karte {
+      padding: var(--space-12);
+    }
+  }
+</style>

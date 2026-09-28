@@ -27,11 +27,6 @@ export const email = {
   href: "mailto:info@lernstabil.de",
 };
 
-/** mailto-Link mit vorausgefuelltem Betreff. */
-export function emailMitBetreff(betreff: string): string {
-  return `${email.href}?subject=${encodeURIComponent(betreff)}`;
-}
-
 /**
  * Verschluesselt ein Linkziel fuer data-kontakt: umgedreht, dann Base64.
  * Kein Geheimnis — es soll nur nicht nach „tel:" oder „@" aussehen.

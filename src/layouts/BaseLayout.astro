@@ -2,14 +2,28 @@
 import '../styles/tokens.css';
 import Header from '../components/sections/Header.astro';
 import Footer from '../components/sections/Footer.astro';
+import ProbestundeDialog from '../components/ProbestundeDialog.astro';
 
 interface Props {
   title: string;
   description?: string;
   lang?: string;
+  // Das Probestunden-Fenster steht auf jeder Seite, damit jeder Knopf
+  // auf /probestunde es oeffnen kann. Nur auf /probestunde selbst nicht:
+  // Dort steht dasselbe Formular schon in der Seite.
+  probestundeDialog?: boolean;
+  // Fuer Seiten, die niemand ueber Google finden soll (Danke-Seite,
+  // Fehlerseite des Formulars).
+  noindex?: boolean;
 }
 
-const { title, description, lang = 'de' } = Astro.props;
+const {
+  title,
+  description,
+  lang = 'de',
+  probestundeDialog = true,
+  noindex = false,
+} = Astro.props;
 ---
 
 <!doctype html>
@@ -19,6 +33,7 @@ const { title, description, lang = 'de' } = Astro.props;
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{title}</title>
     {description && <meta name="description" content={description} />}
+    {noindex && <meta name="robots" content="noindex" />}
 
     {/* Die Textschrift steht in jedem Absatz ueber dem Falz, deshalb
         vorgeladen. Die Kursive nicht: Sie kommt nur in der Hero-Unterzeile
@@ -50,6 +65,7 @@ const { title, description, lang = 'de' } = Astro.props;
     <Header />
     <slot />
     <Footer />
+    {probestundeDialog && <ProbestundeDialog />}
   </body>
 </html>
 

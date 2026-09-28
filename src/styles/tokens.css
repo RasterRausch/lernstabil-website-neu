@@ -121,6 +121,18 @@
   /* --- Linien -------------------------------------------------------- */
   --color-border-default: var(--color-neutral-700);
 
+  /* Linien auf hellen Flaechen. Angelegt am 27. September 2026 fuer die
+     Felder und Kacheln des Probestunden-Formulars. Rahmen von
+     Eingabefeldern muessen sich mit 3:1 abheben (WCAG 1.4.11) —
+     #6b6b6b auf Weiss: 5,3:1. neutral-400 haette nur 2,1:1. */
+  --color-border-inverse: var(--color-neutral-500);
+
+  /* Abdunklung hinter einem Dialog, der ueber der Seite liegt. Angelegt
+     am 27. September 2026 fuer das Probestunden-Formular. Stark genug,
+     dass die Seite dahinter zuruecktritt, aber noch erkennbar bleibt —
+     man soll sehen, dass man die Seite nicht verlassen hat. */
+  --color-overlay: color-mix(in srgb, var(--color-neutral-950) 70%, transparent);
+
   /* --- Marke (Rot) ---------------------------------------------------
      Logo, Knopf „Probestunde anfragen", Sockel, Keil.
      `strong` ist die dunkle Stufe: große Flächen und Hover. Große
