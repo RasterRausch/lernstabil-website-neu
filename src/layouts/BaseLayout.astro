@@ -17,6 +17,9 @@ interface Props {
   noindex?: boolean;
   // Aufruf oben im Footer, siehe components/sections/Footer.astro.
   footerAufruf?: 'probestunde' | 'bewerbung';
+  // Vorschaubild fuer Messenger und soziale Netzwerke (Open Graph),
+  // 1200 x 630. Ohne Angabe das allgemeine Bild der Marke.
+  bild?: string;
 }
 
 const {
@@ -26,7 +29,17 @@ const {
   probestundeDialog = true,
   noindex = false,
   footerAufruf = 'probestunde',
+  bild = '/bilder/vorschau-lernstabil.jpg',
 } = Astro.props;
+
+// Kanonische Adresse ohne Anfrageteil, auf Basis von `site` in
+// astro.config.mjs. Verhindert doppelte Treffer, wenn eine Anzeige
+// Parameter anhaengt (?gclid=…). Ohne Schraegstrich am Ende wie alle
+// Links der Seite und die Sitemap — der Server liefert /seite und
+// /seite/ beide aus, gezaehlt werden soll nur eine.
+const pfad = Astro.url.pathname.replace(/\/+$/, '') || '/';
+const kanonisch = new URL(pfad, Astro.site).href;
+const bildUrl = new URL(bild, Astro.site).href;
 ---
 
 <!doctype html>
@@ -37,6 +50,26 @@ const {
     <title>{title}</title>
     {description && <meta name="description" content={description} />}
     {noindex && <meta name="robots" content="noindex" />}
+    {!noindex && <link rel="canonical" href={kanonisch} />}
+
+    {/* Vorschau beim Teilen (WhatsApp, Facebook, LinkedIn, Messenger)
+        und fuer Suchmaschinen und KI-Agenten, die sie auswerten. */}
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="de_DE" />
+    <meta property="og:site_name" content="#Lernstabil" />
+    <meta property="og:title" content={title} />
+    {description && <meta property="og:description" content={description} />}
+    <meta property="og:url" content={kanonisch} />
+    <meta property="og:image" content={bildUrl} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="twitter:card" content="summary_large_image" />
+    {/* Farbe der Browserleiste auf dem Handy = Blau der Kopfleiste
+        (--color-action). Ein meta-Tag kann keine CSS-Variable lesen. */}
+    <meta name="theme-color" content="#1f4e98" />
+
+    {/* Seitenspezifische strukturierte Daten (JSON-LD). */}
+    <slot name="kopf" />
 
     {/* Favicon von der alten Seite uebernommen (28. September 2026):
         weisses # auf rotem Quadrat, 512 px. Das Apple-Touch-Icon ist
@@ -71,6 +104,10 @@ const {
     {/* Six Hands Marker kommt von Adobe Fonts und darf nicht selbst
         gehostet werden. Jeder Aufruf überträgt die IP des Besuchers an
         Adobe — gehört in die Datenschutzerklärung. Siehe CLAUDE.md. */}
+    {/* Verbindung zu Adobe frueh aufbauen: Das Stylesheet blockiert das
+        Zeichnen, und die Schriftdatei liegt auf einem zweiten Server. */}
+    <link rel="preconnect" href="https://use.typekit.net" crossorigin />
+    <link rel="preconnect" href="https://p.typekit.net" crossorigin />
     <link rel="stylesheet" href="https://use.typekit.net/chw4hpk.css" />
   </head>
   <body>
@@ -138,6 +175,56 @@ const {
     font-weight: 400 700;
     font-display: swap;
     src: url('/fonts/source-sans-3-italic-latin.woff2') format('woff2');
+  }
+
+  /* Ersatzschrift mit den Massen von Source Sans 3, angelegt am
+     28. September 2026. Bis die echte Schrift geladen ist, steht Arial
+     da — ungezaehmt ist sie breiter, die Hero-Zeile brach anders um, und
+     beim Austausch sprang alles darunter nach unten (CLS 0,23 auf
+     langsamem 4G). size-adjust gleicht die Breite an (gemessen an einem
+     Mustertext mit den echten Dateien), ascent-/descent-override die
+     Zeilenhoehe (Source Sans 3: 1024 / 400 bei 1000 Einheiten). Roboto
+     fuer Android, dort gibt es kein Arial; die Werte passen dort
+     naeherungsweise. */
+  @font-face {
+    font-family: 'Source Sans 3 Ersatz';
+    font-style: normal;
+    font-weight: 400;
+    src: local("Arial"), local("ArialMT"), local("Roboto");
+    size-adjust: 94.7%;
+    ascent-override: 108.1%;
+    descent-override: 42.2%;
+    line-gap-override: 0%;
+  }
+  @font-face {
+    font-family: 'Source Sans 3 Ersatz';
+    font-style: normal;
+    font-weight: 600 700;
+    src: local("Arial Bold"), local("Arial-BoldMT"), local("Roboto Bold");
+    size-adjust: 90.6%;
+    ascent-override: 113.0%;
+    descent-override: 44.2%;
+    line-gap-override: 0%;
+  }
+  @font-face {
+    font-family: 'Source Sans 3 Ersatz';
+    font-style: italic;
+    font-weight: 400;
+    src: local("Arial Italic"), local("Arial-ItalicMT"), local("Roboto Italic");
+    size-adjust: 91.9%;
+    ascent-override: 111.4%;
+    descent-override: 43.5%;
+    line-gap-override: 0%;
+  }
+  @font-face {
+    font-family: 'Source Sans 3 Ersatz';
+    font-style: italic;
+    font-weight: 600 700;
+    src: local("Arial Bold Italic"), local("Arial-BoldItalicMT"), local("Roboto Bold Italic");
+    size-adjust: 90.5%;
+    ascent-override: 113.1%;
+    descent-override: 44.2%;
+    line-gap-override: 0%;
   }
 
   * {

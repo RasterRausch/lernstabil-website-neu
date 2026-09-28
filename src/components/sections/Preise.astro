@@ -295,13 +295,24 @@ const kante = "M5 2 C 3 20, 7 36, 5 52 S 3 80, 6 98";
           kann er dadurch schon die nächste Stufe erreichen.
         </p>
 
+        {/* Zwei Spalten: links der Probestunden-Knopf mit der Fussnote
+            zu seinem Sternchen, rechts der Telefon-Knopf mit der
+            Beratungszeile. Bis zum 28. September 2026 stand die Fussnote
+            unter beiden Knoepfen und kollidierte mit der Beratungszeile
+            (Alexander). */}
         <div class="knoepfe">
-          <a
-            class="knopf-probe"
-            href="/probestunde"
-            aria-describedby="probestunde-hinweis-preise"
-            >Gratis Probestunde sichern<span aria-hidden="true">*</span></a
-          >
+          <div class="probe-gruppe">
+            <a
+              class="knopf-probe"
+              href="/probestunde"
+              aria-describedby="probestunde-hinweis-preise"
+              >Gratis Probestunde sichern<span aria-hidden="true">*</span></a
+            >
+            <p class="fussnote" id="probestunde-hinweis-preise">
+              <span aria-hidden="true">*</span> Die Gratis-Probestunde dauert
+              45 Minuten und dient zugleich als Leistungsanalyse.
+            </p>
+          </div>
           {/* Unter dem Telefon-Knopf der Grund zum Anrufen, wie im Hero
               (Alexander, 28. September 2026). Ersetzt die graue Zeile
               „Mo bis Fr, 9 bis 20 Uhr" unter beiden Knoepfen. */}
@@ -327,11 +338,6 @@ const kante = "M5 2 C 3 20, 7 36, 5 52 S 3 80, 6 98";
             <Beratung nummer={false} />
           </div>
         </div>
-        {/* Fussnote zum Sternchen, Wortlaut wie im Hero. */}
-        <p class="fussnote" id="probestunde-hinweis-preise">
-          <span aria-hidden="true">*</span> Die Gratis-Probestunde dauert 45
-          Minuten und dient zugleich als Leistungsanalyse.
-        </p>
       </div>
     </div>
 
@@ -533,7 +539,7 @@ const kante = "M5 2 C 3 20, 7 36, 5 52 S 3 80, 6 98";
     margin: 0;
     font-family: var(--font-family-display);
     font-size: var(--font-size-6xl);
-    font-weight: var(--font-weight-bold);
+    font-weight: var(--font-weight-display);
     line-height: var(--line-height-tight);
     white-space: nowrap;
     transform: rotate(var(--neigung));
@@ -704,6 +710,7 @@ const kante = "M5 2 C 3 20, 7 36, 5 52 S 3 80, 6 98";
 
     position: relative;
     font-family: var(--font-family-display);
+    font-weight: var(--font-weight-display);
     font-size: var(--font-size-xl);
     line-height: var(--line-height-normal);
     /* Endzustand: gestrichen und zurueckgetreten. Die Animation setzt
@@ -717,6 +724,7 @@ const kante = "M5 2 C 3 20, 7 36, 5 52 S 3 80, 6 98";
   .sternchen {
     margin-left: var(--space-3);
     font-family: var(--font-family-display);
+    font-weight: var(--font-weight-display);
     font-size: var(--font-size-xl);
     line-height: var(--line-height-normal);
     color: var(--color-text-default);
@@ -913,7 +921,7 @@ const kante = "M5 2 C 3 20, 7 36, 5 52 S 3 80, 6 98";
   .stufe-preis {
     font-family: var(--font-family-display);
     font-size: var(--font-size-3xl);
-    font-weight: var(--font-weight-bold);
+    font-weight: var(--font-weight-display);
     line-height: var(--line-height-normal);
   }
 
@@ -1139,7 +1147,8 @@ const kante = "M5 2 C 3 20, 7 36, 5 52 S 3 80, 6 98";
     padding: var(--space-3) var(--space-8);
     border-radius: var(--radius-sm);
     font-size: var(--font-size-md);
-    font-weight: var(--font-weight-semibold);
+    font-style: italic;
+    font-weight: var(--font-weight-bold);
     text-decoration: none;
   }
 
@@ -1186,14 +1195,29 @@ const kante = "M5 2 C 3 20, 7 36, 5 52 S 3 80, 6 98";
     flex-shrink: 0;
   }
 
-  /* Fussnote zum Sternchen am Knopf — wie im Hero: klein, gedaempft,
-     nicht kursiv. */
+  /* Fussnote zum Sternchen direkt unter dem Knopf — wie im Hero: klein,
+     gedaempft, nicht kursiv. Sie ist nie breiter als der Knopf. */
+  .probe-gruppe {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+  }
+
   .fussnote {
-    margin: var(--space-2) auto 0;
-    max-width: var(--measure-wide);
+    margin: var(--space-2) 0 0;
     font-size: var(--font-size-sm);
     line-height: var(--line-height-normal);
     color: var(--color-text-subtle);
+  }
+
+  /* Auf dem Handy stehen die Gruppen untereinander; die Fussnote wird
+     dort so breit wie der Knopf. Ab 768 px nebeneinander darf sie den
+     Knopf nicht verbreitern. */
+  @media (min-width: 768px) {
+    .probe-gruppe .fussnote {
+      width: 0;
+      min-width: 100%;
+    }
   }
 
   /* Ab 1120 px: Kreis links, Abrechnung und Knoepfe rechts, beide
@@ -1214,8 +1238,7 @@ const kante = "M5 2 C 3 20, 7 36, 5 52 S 3 80, 6 98";
       text-align: left;
     }
 
-    .abrechnung,
-    .fussnote {
+    .abrechnung {
       margin-left: 0;
     }
 
@@ -1255,6 +1278,7 @@ const kante = "M5 2 C 3 20, 7 36, 5 52 S 3 80, 6 98";
 
   .zettel h3 {
     font-family: var(--font-family-display);
+    font-weight: var(--font-weight-display);
     font-size: var(--font-size-2xl);
     line-height: var(--line-height-normal);
   }
@@ -1290,6 +1314,7 @@ const kante = "M5 2 C 3 20, 7 36, 5 52 S 3 80, 6 98";
     content: counter(frage);
     grid-row: span 2;
     font-family: var(--font-family-display);
+    font-weight: var(--font-weight-display);
     font-size: var(--font-size-5xl);
     line-height: var(--line-height-tight);
     color: var(--color-brand);

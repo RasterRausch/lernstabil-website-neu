@@ -96,6 +96,8 @@ const punkte = [
         }
         <img
           src="/bilder/dozent-laptop.webp"
+          srcset="/bilder/dozent-laptop-640.webp 640w, /bilder/dozent-laptop-960.webp 960w, /bilder/dozent-laptop.webp 1235w"
+          sizes="(min-width: 1120px) 700px, (min-width: 768px) 80vw, 100vw"
           width="1235"
           height="1166"
           alt=""
@@ -178,7 +180,7 @@ const punkte = [
 
     font-family: var(--font-family-display);
     font-size: var(--font-size-hero);
-    font-weight: var(--font-weight-bold);
+    font-weight: var(--font-weight-display);
     line-height: var(--line-height-tight);
     transform: rotate(var(--neigung));
     transform-origin: left center;
@@ -256,7 +258,8 @@ const punkte = [
     text-align: center;
     text-decoration: none;
     font-size: var(--font-size-md);
-    font-weight: var(--font-weight-semibold);
+    font-style: italic;
+    font-weight: var(--font-weight-bold);
     padding: var(--space-3) var(--space-12);
     min-height: var(--tap-target-min);
     border-radius: var(--radius-sm);
@@ -352,16 +355,33 @@ const punkte = [
       align-items: stretch;
     }
 
+    /* Abstaende wachsen mit der Fensterhoehe wie im Hero der
+       Startseite, damit der Hero samt Sockel auf niedrige Bildschirme
+       passt (28. September 2026). */
+    /* position + z-index: Das groessere Motiv reicht nach links in die
+       Textspalte hinein. Der Text liegt darueber. */
     .text {
+      position: relative;
+      z-index: 1;
       flex: 0 0 52%;
-      padding-top: var(--space-28);
-      padding-bottom: var(--space-18);
+      padding-top: clamp(var(--space-12), calc(12svh - var(--space-12)), var(--space-28));
+      padding-bottom: clamp(var(--space-8), 5svh, var(--space-18));
+    }
+
+    .aktionen {
+      margin-top: clamp(var(--space-6), 5svh, var(--space-12));
+    }
+
+    .punkte {
+      margin-top: clamp(var(--space-4), 3svh, var(--space-8));
     }
 
     /* Das Bild haengt unten rechts und waechst nach links oben.
-       --motiv-hoehe: Hoehe in Prozent der Spalte. */
+       --motiv-hoehe: Hoehe in Prozent der Spalte. Am 28. September
+       2026 erst um 20 % vergroessert (82 x 1,2 = 98,4), dann um 5 %
+       verkleinert: 98,4 x 0,95 = 93,48. Vorgaben von Alexander. */
     .motiv {
-      --motiv-hoehe: 82%;
+      --motiv-hoehe: 93.48%;
 
       flex: 1 1 48%;
       position: relative;

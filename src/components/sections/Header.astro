@@ -29,7 +29,11 @@ const links: { text: string; href: string; marke?: string }[] = [
 
 <header class="leiste" data-leiste>
   <div class="raster">
-    <a class="logo" href="/" aria-label="#Lernstabil — Startseite">
+    {/* Kein aria-label: Der Name des Links ist sein sichtbarer Text.
+        „#Lernstabil — Startseite" wich davon ab — wer per Sprache
+        „#Lernstabil" sagt, traf den Link nicht (Lighthouse,
+        28. September 2026). */}
+    <a class="logo" href="/">
       <span class="logo-wort">#Lernstabil</span>
       <span class="logo-claim">Nachhilfe bequem von zu Hause!</span>
     </a>
@@ -147,7 +151,7 @@ const links: { text: string; href: string; marke?: string }[] = [
   }
 
   const leiste = document.querySelector("[data-leiste]");
-  const burger = document.querySelector("[data-burger]");
+  const burger = document.querySelector<HTMLButtonElement>("[data-burger]");
   const nav = document.getElementById("hauptnav");
 
   if (leiste && burger && nav) {

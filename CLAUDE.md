@@ -109,9 +109,14 @@ Die Datei erklärt den Aufbau.
   in `astro.config.mjs`). Kommt 403 zurück, liegt es daran.
 - Die IP-Begrenzung nimmt den letzten Eintrag aus `X-Forwarded-For`.
   Nach dem Deploy einmal prüfen, wie mittwald die Kopfzeile befüllt.
-- Sicherheits-Header (HSTS, nosniff, Referrer-Policy, frame-ancestors)
-  setzt der Node-Adapter nicht. Bei mittwald prüfen, was der Proxy
-  setzt, sonst ergänzen.
+- Sicherheits-Header: HSTS und nosniff setzt offenbar der Proxy von
+  mittwald (die alte Seite hat sie, ihr Framework setzt sie nicht).
+  Referrer-Policy und frame-ancestors fehlen; nach dem Deploy prüfen.
+- Komprimierung: Der Node-Adapter komprimiert nicht. Nach dem Deploy
+  `curl -sI -H 'Accept-Encoding: gzip, br' https://lernstabil.de/`
+  — fehlt `content-encoding`, einen kleinen eigenen Server mit
+  node:zlib vorschalten (kein Zusatzpaket nötig). Gewinn: Startseite
+  125 → 37 KB, CSS 47 → 7 KB.
 - Die alte Seite zeigt Telefon und E-Mail im Klartext (Startseite,
   Impressum). Sie stehen damit wahrscheinlich schon in Sammlerlisten;
   der Schutz der neuen Seite verhindert nur neues Sammeln.

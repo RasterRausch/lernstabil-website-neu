@@ -417,13 +417,23 @@ const i = (name: string) => `${id}-${name}`;
     /* Drei Zustaende, klar unterscheidbar (28. September 2026 — vorher
        weiss mit grauem Rand, und beim Ueberfahren wurde nur der Rand
        etwas dunkler; Alexander: „sieht man kaum"):
-         Ruhe      graue Flaeche, der Rand faellt nicht auf
+         Ruhe      graue Flaeche, duenner grauer Rand
          Hover     weiss, roter Rand, hebt sich leicht an
          gewaehlt  rot gefuellt, weisse Schrift — wie der Knopf „Weiter"
        Rot, weil das Formular der Weg zur Probestunde ist und dort alles
-       rot ist: Fortschritt, Weiter, Senden. Der Rand bleibt 2 px stark
-       und aendert nur die Farbe, damit nichts springt. */
-    border: 2px solid var(--color-surface-inverse-muted);
+       rot ist: Fortschritt, Weiter, Senden.
+
+       Der duenne Rand in Ruhe seit 28. September 2026 (Alexander): Ohne
+       ihn hob sich die Kachel kaum vom Weiss ab (1,1:1); WCAG 1.4.11
+       verlangt 3:1 fuer die Grenze eines Bedienelements —
+       --color-border-inverse erreicht 5,3:1. Beim Hover und in der Wahl
+       verstaerkt ein innerer Schatten den Rand auf 2 px, ohne dass die
+       Kachel ihre Groesse aendert.
+
+       --kachel-rand: Strichstaerke, Geometrie der Zeichnung. */
+    --kachel-rand: 1px;
+
+    border: var(--kachel-rand) solid var(--color-border-inverse);
     border-radius: var(--radius-sm);
     background: var(--color-surface-inverse-muted);
     text-align: center;
@@ -460,7 +470,9 @@ const i = (name: string) => `${id}-${name}`;
   .kachel:hover {
     border-color: var(--color-brand);
     background: var(--color-surface-inverse);
-    box-shadow: var(--shadow-md);
+    box-shadow:
+      inset 0 0 0 var(--kachel-rand) var(--color-brand),
+      var(--shadow-md);
     transform: translateY(calc(-1 * var(--space-1) / 2));
   }
 
@@ -592,7 +604,8 @@ const i = (name: string) => `${id}-${name}`;
     background: var(--color-brand);
     color: var(--color-text-on-brand);
     font: inherit;
-    font-weight: var(--font-weight-semibold);
+    font-style: italic;
+    font-weight: var(--font-weight-bold);
     cursor: pointer;
   }
 
@@ -688,7 +701,7 @@ const i = (name: string) => `${id}-${name}`;
     margin: 0;
     font-family: var(--font-family-display);
     font-size: var(--font-size-4xl);
-    font-weight: var(--font-weight-regular);
+    font-weight: var(--font-weight-display);
     line-height: var(--line-height-snug);
   }
 

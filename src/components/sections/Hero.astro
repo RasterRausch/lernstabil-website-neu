@@ -121,54 +121,59 @@ const siegel = [
              blau und Probestunde rot, darunter „Mo bis Fr, 9 bis 20 Uhr".
              Die Zeiten stehen jetzt in der Kopfleiste.
 
-             Sternchen verweist auf die Fussnote bei den Siegeln.
+             Sternchen verweist auf die Fussnote direkt darunter.
              aria-describedby liest sie Screenreadern zum Knopf vor;
-             das Sternchen selbst bleibt fuer sie stumm. */
+             das Sternchen selbst bleibt fuer sie stumm.
+
+             Ab 1120 px stehen die Siegel RECHTS neben Knopf, Beratung und
+             Fussnote (Alexander, 28. September 2026). Vorher standen sie
+             darunter und ragten in den Sockel — der Hero war damit immer
+             rund 1030 px hoch und passte auf keinen MacBook-Bildschirm. */
         }
-        <div class="aktionen">
-          <a
-            class="knopf-probe"
-            href="/probestunde"
-            aria-describedby="probestunde-hinweis"
-            >Jetzt gratis testen<span aria-hidden="true">*</span></a
-          >
-        </div>
+        <div class="handlung">
+          <div class="aufruf">
+            <div class="aktionen">
+              <a
+                class="knopf-probe"
+                href="/probestunde"
+                aria-describedby="probestunde-hinweis"
+                >Jetzt gratis testen<span aria-hidden="true">*</span></a
+              >
+            </div>
 
-        <Beratung />
+            <Beratung />
 
-        {
-          /* Siegel. Wie die Widgets in der Vertrauensleiste laden sie
-             asynchron von cdn.trustindex.io und bringen ihr eigenes CSS
-             mit; wir ruehren es nicht an und steuern nur die Flaeche.
-
-             is:inline ist Pflicht: ohne das Attribut zieht Astro das
-             Script ins eigene Bundle und der Loader verliert die
-             Stelle, an der er das Siegel einsetzt. */
-        }
-        <div class="siegel">
-          {
-            siegel.map((s) => (
-              <div class="siegel-widget">
-                <script
-                  defer
-                  async
-                  is:inline
-                  src={`https://cdn.trustindex.io/loader.js?${s.id}`}
-                />
-              </div>
-            ))
-          }
+            {/* Fussnote zum Sternchen am Knopf. Inhalt von Alexander,
+                25. September 2026. */}
+            <p class="fussnote" id="probestunde-hinweis">
+              <span aria-hidden="true">*</span> Die Gratis-Probestunde dauert 45
+              Minuten und dient zugleich als Leistungsanalyse.
+            </p>
+          </div>
 
           {
-            /* Fussnote zum Sternchen am Knopf. Inhalt von Alexander,
-               25. September 2026. Steht neben den Siegeln, mittig zu
-               ihnen — so bleibt sie ueber dem roten Sockel, auf den
-               die Siegel hinunterreichen. */
+            /* Siegel. Wie die Widgets in der Vertrauensleiste laden sie
+               asynchron von cdn.trustindex.io und bringen ihr eigenes CSS
+               mit; wir ruehren es nicht an und steuern nur die Flaeche.
+
+               is:inline ist Pflicht: ohne das Attribut zieht Astro das
+               Script ins eigene Bundle und der Loader verliert die
+               Stelle, an der er das Siegel einsetzt. */
           }
-          <p class="fussnote" id="probestunde-hinweis">
-            <span aria-hidden="true">*</span> Die Gratis-Probestunde dauert 45
-            Minuten und dient zugleich als Leistungsanalyse.
-          </p>
+          <div class="siegel">
+            {
+              siegel.map((s) => (
+                <div class="siegel-widget">
+                  <script
+                    defer
+                    async
+                    is:inline
+                    src={`https://cdn.trustindex.io/loader.js?${s.id}`}
+                  />
+                </div>
+              ))
+            }
+          </div>
         </div>
       </div>
 
@@ -178,14 +183,16 @@ const siegel = [
              Erzeugte Person, auf dunklem Grund freigestellt.
 
              Bis zum 28. September 2026 ein PNG mit 4,9 MB. Jetzt WebP in
-             drei Breiten (94 / 204 / 600 KB), erzeugt mit
-             cwebp -q 88 -alpha_q 100 -resize. sizes: Unter 1120 px geht
+             vier Breiten (77 / 158 / 239 / 466 KB), erzeugt mit
+             cwebp -q 82 -alpha_q 100 -resize. Die 1200er-Stufe fuer
+             Handys mit hoher Pixeldichte (rund 1070 Bildpunkte), die
+             sonst die grosse Datei geladen haetten. sizes: Unter 1120 px geht
              das Motiv ueber die volle Breite, darueber ist es rund 780 px
              breit (Hoehe der Spalte mal Seitenverhaeltnis). */
         }
         <img
           src="/bilder/hero-schuelerin-1494.webp"
-          srcset="/bilder/hero-schuelerin-640.webp 640w, /bilder/hero-schuelerin-960.webp 960w, /bilder/hero-schuelerin-1494.webp 1494w"
+          srcset="/bilder/hero-schuelerin-640.webp 640w, /bilder/hero-schuelerin-960.webp 960w, /bilder/hero-schuelerin-1200.webp 1200w, /bilder/hero-schuelerin-1494.webp 1494w"
           sizes="(min-width: 1120px) 780px, 100vw"
           width="1494"
           height="1628"
@@ -436,7 +443,7 @@ const siegel = [
 
     font-family: var(--font-family-display);
     font-size: var(--font-size-hero);
-    font-weight: var(--font-weight-bold);
+    font-weight: var(--font-weight-display);
     line-height: var(--line-height-tight);
 
     transform: rotate(var(--neigung));
@@ -538,8 +545,16 @@ const siegel = [
     vector-effect: non-scaling-stroke;
   }
 
-  .aktionen {
+  /* Handlung: links Knopf, Beratungszeile und Fussnote, rechts bzw.
+     auf dem Handy darunter die Siegel. */
+  .handlung {
     margin-top: var(--space-12);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-8);
+  }
+
+  .aktionen {
     display: flex;
   }
 
@@ -581,14 +596,14 @@ const siegel = [
   }
 
   /* Siegel -----------------------------------------------------------
-     Zwei Fremd-Widgets nebeneinander, linksbuendig unter Knopf und
-     Beratungszeile. Sie bringen ihre eigenen Groessen mit; wir geben
-     ihnen nur die Zeile und den Abstand.
+     Zwei Fremd-Widgets nebeneinander. Auf dem Handy unter der
+     Fussnote, ab 1120 px rechts neben Knopf und Beratungszeile. Sie
+     bringen ihre eigenen Groessen mit; wir geben ihnen nur die Zeile
+     und den Abstand.
 
      flex-wrap bleibt: Auf schmalen Geraeten sollen sie umbrechen
      duerfen, statt sich zu quetschen. */
   .siegel {
-    margin-top: var(--space-8);
     display: flex;
     flex-wrap: wrap;
     /* Unten buendig: Beide Siegel stehen auf derselben Linie,
@@ -600,14 +615,12 @@ const siegel = [
   /* Alle Groessen unten sind am 1. September 2026 im Browser gemessen,
      nicht entworfen. Sie gehoeren den Widgets, nicht uns. */
 
-  /* Fussnote: klein, gedaempft, nicht kursiv. --color-text-subtle auf
-     der Heroflaeche rund 8:1. Die Breite haelt sie auf drei kurze
-     Zeilen neben den Siegeln. */
+  /* Fussnote: klein, gedaempft, nicht kursiv, direkt unter der
+     Beratungszeile. --color-text-subtle auf der Heroflaeche rund 8:1.
+     Die Breite haelt sie auf zwei kurze Zeilen. */
   .fussnote {
-    flex: 1 1 18ch;
-    max-width: 26ch;
-    align-self: center;
-    margin: 0;
+    max-width: var(--measure-narrow);
+    margin: var(--space-3) 0 0;
     font-size: var(--font-size-sm);
     line-height: var(--line-height-normal);
     color: var(--color-text-subtle);
@@ -631,8 +644,20 @@ const siegel = [
        Am 28. September 2026 noch einmal um 15 %, Vorgabe von
        Alexander: 0,7475 x 1,15 = 0,8596. */
     --siegel-massstab: 0.8596;
+    /* Hoehe, die ein Siegel vor dem Laden belegt. Sonst springt beim
+       Nachladen alles darunter nach unten (Lighthouse, 28. September
+       2026: CLS 0,04 aus genau dieser Stelle). Gemessen: 183 px bei
+       Massstab 0,8596, also 213 px ungezoomt — zoom rechnet auch die
+       Mindesthoehe mit. Wert des Fremdsystems. */
+    --siegel-hoehe: 213px;
+    /* Ebenso die Breite, sonst rutscht die Fussnote daneben beim Laden
+       zur Seite. Gemessen: 120 und 127 px bei 0,8596, das breitere
+       ungezoomt 148 px. */
+    --siegel-breite: 148px;
 
     flex: 0 0 auto;
+    min-height: var(--siegel-hoehe);
+    min-width: var(--siegel-breite);
     zoom: var(--siegel-massstab);
   }
 
@@ -641,6 +666,15 @@ const siegel = [
   @media (min-width: 768px) {
     .aktionen {
       display: block;
+    }
+
+    /* Tablet: Das Motiv steht unter dem Text. Ueber die volle Breite
+       waere es auf dem iPad quer ueber 1100 px hoch; so bleibt es bei
+       rund 700. Der Stempel haengt an .motiv und wandert mit. */
+    .motiv {
+      width: 100%;
+      max-width: 640px;
+      margin: 0 auto;
     }
 
     .knopf-probe {
@@ -658,42 +692,19 @@ const siegel = [
       --stempel-rechts: -16px;
     }
 
-    /* Die Textspalte wird zur Flex-Spalte, damit die Siegel per
-       margin-top: auto an ihren unteren Rand rutschen. Ohne das haengen
-       sie direkt unter der Beratungszeile und der Abstand zum Sockel
-       waechst mit jedem hoeheren Fenster. */
-    .text {
-      display: flex;
-      flex-direction: column;
+
+    /* Siegel rechts neben Knopf, Beratung und Fussnote, mittig zu
+       ihnen. Passt die Zeile nicht (knapp ueber 1120 px), rutschen sie
+       darunter. */
+    .handlung {
+      flex-direction: row;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: var(--space-6);
     }
 
-    /* --------------------------------------------------------------
-       SIEGEL IN DEN SOCKEL ZIEHEN — nur diesen Wert anfassen.
-
-       --siegel-tiefe  Wie weit die Siegel unter die Unterkante der
-                       Textspalte reichen, also in den Sockel hinein.
-                       0 = sie sitzen buendig auf der Kante.
-       --------------------------------------------------------------
-
-       Der Versatz rechnet mit dem unteren Innenabstand der Spalte:
-       Die Siegel stehen nach margin-top: auto genau um diesen Abstand
-       ueber der Unterkante. Wird der Abstand geaendert, wandert der
-       Versatz automatisch mit.
-
-       transform statt margin, damit der Versatz rein optisch ist und
-       die Hoehe der Sektion nicht veraendert. z-index, weil der Sockel
-       im Quelltext nach der Textspalte kommt und sonst darueber liegt.
-
-       padding-top ersetzt den margin-top von oben: margin-top: auto
-       und ein Mindestabstand gehen nicht gleichzeitig. */
     .siegel {
-      --siegel-tiefe: var(--space-8);
-
-      margin-top: auto;
-      padding-top: var(--space-8);
-      position: relative;
-      z-index: 1;
-      transform: translateY(calc(var(--text-unten) + var(--siegel-tiefe)));
+      gap: var(--space-4);
     }
 
     .hero {
@@ -709,37 +720,36 @@ const siegel = [
       gap: 0;
     }
 
-    /* --text-unten ist der Abstand zwischen der letzten Textzeile und
-       der Sockelkante. Ab 1120 px steht in diesem Raum nichts mehr —
-       die Siegel liegen im Fluss direkt unter der Beratungszeile und
-       werden nur optisch hineingeschoben. Der Wert bestimmt damit
-       allein, wie weit der Knopf ueber dem Sockel steht.
+    /* Abstaende oben und unten wachsen mit der Fensterhoehe, damit der
+       Hero samt Sockel auf niedrige Bildschirme passt (MacBook Air:
+       rund 850 px nutzbare Hoehe) und auf hohen nicht gedrungen wirkt.
+       Grenzen aus der Skala: oben 48 bis 112 px, unten 32 bis 72 px.
+       svh = kleinste Fensterhoehe, also ohne ein- und ausfahrende
+       Browserleisten. Festgelegt am 28. September 2026.
 
-       Alexander war der Abstand am 2. September 2026 zu gross; vorher
-       stand hier --space-28 wie oben. Oben bleibt es dabei, unten sind
-       es jetzt --space-18.
-
-       Die Verschiebung der Siegel rechnet mit derselben Variable. Bis
-       zum 2. September 2026 stand --space-28 an beiden Stellen
-       getrennt — der Kommentar am Siegel-Block behauptete eine
-       Kopplung, die es nicht gab. Jetzt gibt es sie. */
-    /* position + z-index: Seit das Motiv 15 % groesser ist
-       (28. September 2026), reichen die Haarstraehnen bis in die
-       zweite Zeile der Ueberschrift. Der Text liegt darueber und bleibt
-       lesbar. */
+       position + z-index: Die Haarstraehnen des Motivs reichen bis in
+       die zweite Zeile der Ueberschrift. Der Text liegt darueber und
+       bleibt lesbar. */
     .text {
-      --text-unten: var(--space-8);
-
       position: relative;
       z-index: 1;
       flex: 0 0 55%;
-      padding-top: var(--space-28);
-      padding-bottom: var(--text-unten);
+      padding-top: clamp(var(--space-12), calc(12svh - var(--space-12)), var(--space-28));
+      padding-bottom: clamp(var(--space-8), 5svh, var(--space-18));
+    }
+
+    .handlung {
+      margin-top: clamp(var(--space-6), 5svh, var(--space-12));
+    }
+
+    .punkte {
+      margin-top: clamp(var(--space-4), 3svh, var(--space-8));
     }
 
     .motiv {
       flex: 1 1 45%;
       position: relative;
+      max-width: none;
       margin: 0;
       padding: var(--space-28) 0 0;
 

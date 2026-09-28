@@ -189,7 +189,7 @@
 
   /* --- Schriftfamilien ----------------------------------------------- */
   --font-family-display: "six-hands-marker", system-ui, sans-serif;
-  --font-family-body: "Source Sans 3", system-ui, sans-serif;
+  --font-family-body: "Source Sans 3", "Source Sans 3 Ersatz", system-ui, sans-serif;
   --font-family-logo: "Comic Neue", "Comic Sans MS", cursive;
 
   /* --- Schriftgrößen -------------------------------------------------
@@ -269,6 +269,11 @@
   --font-weight-regular: 400;
   --font-weight-semibold: 600;
   --font-weight-bold: 700;
+
+  /* Schnitt der Displayschrift (Six Hands Marker). Das Adobe-Kit hat
+     nur 400; wo „fett" stand, fettete der Browser kuenstlich. Seit
+     28. September 2026 ueberall normal, Entscheidung von Alexander. */
+  --font-weight-display: var(--font-weight-regular);
 
   /* --- Zeilenlänge ---------------------------------------------------
      In ch, wächst also mit der Schriftgröße mit. Für Fließtext sind
