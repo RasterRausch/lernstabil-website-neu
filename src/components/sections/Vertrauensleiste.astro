@@ -2,13 +2,20 @@
 import Unterstrichen from "../Unterstrichen.astro";
 // Sektion: Vertrauensleiste (Startseite, 2)
 
-// PLATZHALTER — noch nicht durch endgueltigen Text ersetzt.
-// Das Kernwort traegt den roten Marker-Unterstrich wie jede
-// Sektionsueberschrift (components/Unterstrichen.astro).
-const platzhalterUeberschrift = {
-  vor: "Mission:",
-  kern: "Verlässliche",
-  nach: "Nachhilfe.",
+// Ueberschrift neben den Bewertungen, neu am 28. September 2026. Vorher
+// „Mission: Verlässliche Nachhilfe." — ein Platzhalter, der zu nah am
+// Studienkreis lag (Alexander).
+//
+// „Lernen, das hält." spielt mit dem Namen: stabil = es hält. Das
+// Versprechen ist Nachhaltigkeit statt Pauken fuer die naechste
+// Arbeit, und die Bewertungen daneben (bessere Noten, weiter
+// empfohlen) sind der Beleg dafuer. Das Kernwort traegt den roten
+// Marker-Unterstrich wie jede Sektionsueberschrift
+// (components/Unterstrichen.astro).
+const ueberschrift = {
+  vor: "Lernen, das",
+  kern: "hält",
+  nach: ".",
 };
 
 // Trustindex-Karussell aus Alexanders Konto.
@@ -40,7 +47,15 @@ const trustindexKarussell = "808d4748020846902d868e6fc63";
 // Geschützte Leerzeichen in „1 : 1", damit die Angabe nicht umbricht.
 const zahlen = [
   { zahl: "Seit 2021", label: "unterrichten wir online" },
-  { zahl: "Über ein Jahr", label: "bleiben unsere Schüler in der Regel" },
+  // Neu am 28. September 2026. Vorher stand hier die Verweildauer
+  // („Über ein Jahr / bleiben unsere Schüler in der Regel") — Alexander
+  // fand sie schwach, auch mit dem Zusatz „ohne Vertrag". Jetzt die
+  // Breite des Angebots: Das ist die erste Frage der Eltern („Helft ihr
+  // bei MEINEM Kind?"), und die Leiste liest sich damit als Erfahrung,
+  // Umfang, Form. Tatsache aus Sektion 7 („Alle Fächer, alle
+  // Klassenstufen") und den Klassen im Formular (Grundschule bis
+  // Oberstufe, „bis zum Abitur").
+  { zahl: "Alle Fächer", label: "von der Grundschule bis zum Abitur" },
   { zahl: "1 : 1", label: "immer Einzelunterricht, nie Gruppe" },
 ];
 ---
@@ -51,13 +66,17 @@ const zahlen = [
     <div class="wrap">
       <div class="spalten">
         <div class="einstieg">
+          {/* Der Punkt haengt ohne Leerzeichen am unterstrichenen Wort. */}
           <h2 id="vertrauen-titel">
-            {platzhalterUeberschrift.vor}{" "}
-            <Unterstrichen>{platzhalterUeberschrift.kern}</Unterstrichen>{" "}
-            {platzhalterUeberschrift.nach}
+            {ueberschrift.vor}{" "}
+            <Unterstrichen>{ueberschrift.kern}</Unterstrichen>{ueberschrift.nach}
           </h2>
+          {/* Bis zum 28. September 2026 stand hier „Wir unterrichten
+              ausschließlich im Einzelunterricht." — das sagt jetzt „1 : 1"
+              in der Zahlenleiste darunter. */}
           <p class="unterzeile">
-            Wir unterrichten <strong>ausschließlich</strong> im Einzelunterricht.
+            <strong>Verstehen statt Pauken.</strong> Damit es nicht nur bis zur
+            nächsten Klassenarbeit reicht.
           </p>
         </div>
 
@@ -160,10 +179,10 @@ const zahlen = [
      376 px breit, der Text bricht aber schon bei 260 px um — 116 px
      stehen leer und fehlen dem Karussell.
 
-     ACHTUNG, das ist auf den PLATZHALTERTEXT eingestellt. 30ch ist der
-     engste Wert, bei dem „Wir unterrichten ausschließlich im /
-     Einzelunterricht." noch genauso umbricht. Mit dem endgültigen Text
-     ist der Wert neu zu bestimmen — siehe spec.md. */
+     Eingestellt war das auf den frueheren Platzhalter. Mit dem Text vom
+     28. September 2026 („Verstehen statt Pauken. …") laeuft die Zeile
+     dreizeilig und bleibt schmal genug neben dem Karussell — im
+     Browser geprueft, Wert unveraendert. */
   .unterzeile {
     margin: var(--space-6) 0 0;
     color: var(--color-text-subtle);
@@ -208,7 +227,7 @@ const zahlen = [
      ../03-ohne-kleingedrucktes/. */
   .band-b {
     background: var(--color-surface-raised);
-    padding: var(--space-12) 0;
+    padding: var(--space-18) 0;
   }
 
   .zahlen {
@@ -227,20 +246,38 @@ const zahlen = [
     flex-direction: column;
   }
 
-  /* Eine Stufe unter der Ueberschrift. Bis zum 1. September 2026 waren
-     beide gleich gross — die Sektion hatte damit zwei gleichrangige
-     Blickpunkte statt einer Rangfolge. */
+  /* Displayschrift wie die Preise und „ONLINE NACHHILFE", mit derselben
+     leichten Neigung. Am 28. September 2026 von 32 px Source Sans
+     umgestellt: Neben dem Hero und den Preisen wirkte die Leiste zu
+     klein und zu brav (Alexander).
+
+     Gleiche Stufe wie die Ueberschrift darueber (4xl), trotzdem keine
+     zwei gleichrangigen Blickpunkte mehr: Die Ueberschrift steht in
+     Source Sans, die Zahlen in der Marker-Schrift — Schrift und Band
+     trennen sie. */
   .zahl {
-    font-size: var(--font-size-2xl);
+    --neigung: -1.5deg;
+
+    font-family: var(--font-family-display);
+    font-size: var(--font-size-4xl);
     font-weight: var(--font-weight-bold);
-    line-height: var(--line-height-snug);
+    line-height: var(--line-height-tight);
+    white-space: nowrap;
+    transform: rotate(var(--neigung));
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .zahl {
+      --neigung: 0deg;
+    }
   }
 
   .label {
-    margin-top: var(--space-1);
-    font-size: var(--font-size-sm);
-    line-height: var(--line-height-relaxed);
+    margin-top: var(--space-3);
+    font-size: var(--font-size-md);
+    line-height: var(--line-height-normal);
     color: var(--color-text-subtle);
+    text-wrap: balance;
   }
 
   /* ab 768 ---------------------------------------------------------- */
