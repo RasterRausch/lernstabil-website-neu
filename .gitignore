@@ -23,3 +23,6 @@ Thumbs.db
 *.log
 npm-debug.log*
 
+
+# Rohbilder (Firefly, Freistellungen) — zu gross fuers Repo
+vorlagen/
