@@ -1,0 +1,376 @@
+---
+import Getarnt from "../Getarnt.astro";
+import { bewerbung, telefon, verschluesseln } from "../../data/kontakt";
+// Sektion: Hero der Seite „Dozent werden" (/fuer-dozenten).
+// Angelegt am 28. September 2026.
+//
+// Derselbe Aufbau wie der Hero der Startseite (Hero.astro): dunkle
+// Flaeche mit Lichtkegel, Displayzeile, Haken, rechts das freigestellte
+// Motiv auf dem roten Sockel. Wer von der Startseite kommt, soll sofort
+// sehen, dass er noch bei #Lernstabil ist. Ohne Siegel und Stempel —
+// die sprechen Eltern an, nicht Bewerber.
+//
+// TEXT: Nur Tatsachen, die auf der Seite schon stehen — Einzelunterricht,
+// online, fester Dozent je Schueler, die meisten Schueler bleiben ueber
+// ein Jahr. Honorar, Anstellungsart und Anforderungen fehlen noch; die
+// kommen von Alexander und gehoeren in die folgenden Sektionen.
+//
+// Anrede „Sie" wie auf der ganzen Seite.
+
+const punkte = [
+  "Einzelunterricht, nie Gruppe",
+  "Online unterrichten, ohne Anfahrt",
+  "Feste Schüler statt ständig neuer Gesichter",
+];
+// Derselbe Marker-Haken wie im Hero der Startseite.
+const haken = "M0 12 C 3 14, 6 17, 9 21 C 14 12, 21 6, 30 1";
+---
+
+<section class="hero" aria-labelledby="dozent-titel">
+  <div class="wrap">
+    <div class="inhalt">
+      <div class="text">
+        <h1 id="dozent-titel">
+          <span class="zeile1">DOZENT WERDEN</span>
+          <span class="zeile2"
+            ><em>Unterrichten, wie es sein sollte: einzeln und online.</em></span
+          >
+        </h1>
+
+        <p class="unterzeile">
+          <strong>Ein Schüler, ein Dozent.</strong> Sie lernen Ihre Schüler
+          wirklich kennen und begleiten sie über längere Zeit.
+        </p>
+
+        <ul class="punkte">
+          {
+            punkte.map((p) => (
+              <li>
+                <svg
+                  class="haken"
+                  viewBox="0 0 30 24"
+                  preserveAspectRatio="none"
+                  aria-hidden="true"
+                  focusable="false"
+                >
+                  <path d={haken} />
+                </svg>
+                {p}
+              </li>
+            ))
+          }
+        </ul>
+
+        {
+          /* Ein Knopf, eine Handlung. Rot, weil die Bewerbung hier die
+             Hauptsache ist — wie „Probestunde" auf der Startseite. Das
+             Telefon steht als Nebenweg darunter, fuer Fragen vorab. */
+        }
+        <div class="aktionen">
+          <a class="knopf-bewerben" data-kontakt={verschluesseln(bewerbung.href)}
+            >Jetzt bewerben</a
+          >
+        </div>
+
+        <p class="nebenweg">
+          Fragen vorab?{" "}
+          <a data-kontakt={verschluesseln(telefon.href)}
+            ><Getarnt text={telefon.anzeige} /></a
+          >, Mo bis Fr, 9 bis 20 Uhr
+        </p>
+      </div>
+
+      <div class="motiv">
+        {
+          /* Erzeugte Person (Firefly), von Alexander freigestellt. Auf
+             dunklem Grund erzeugt (vorlagen/Dozent-2.png), damit die
+             Haarkanten dunkel sind — die erste Fassung auf Hellgrau hatte
+             auf der Heroflaeche einen hellen Saum. Eingesetzt ist
+             Alexanders nachbearbeitete Fassung vorlagen/Dozent-3.png.
+             Nach den Regeln des
+             Projekts ohne Namen, Zitat oder Bildunterschrift: Sie ist ein
+             Stimmungsbild, kein Dozent von #Lernstabil.
+
+             Die Unterkante ist knapp unter der Linie geschnitten, auf der
+             die Unterarme aufliegen. Der rote Sockel deckt diesen Streifen
+             ab (siehe --motiv-versatz) und wird so zum Tisch. */
+        }
+        <img
+          src="/bilder/dozent-laptop.webp"
+          width="1235"
+          height="1166"
+          alt=""
+          fetchpriority="high"
+        />
+      </div>
+    </div>
+  </div>
+  {/* Roter Sockel, zugleich der Tisch unter Laptop und Armen. */}
+  <div class="sockel"></div>
+</section>
+
+<style>
+  .hero {
+    --sockel-h: var(--space-12);
+
+    /* Lichtkegel hinter dem Motiv wie auf der Startseite. Unter 1120 px
+       steht das Motiv unten, deshalb liegt das Licht dort. */
+    --licht-x: 50%;
+    --licht-y: 75%;
+    --licht-b: 90%;
+    --licht-h: 50%;
+    --licht-staerke: 0.075;
+
+    min-height: calc(75svh - var(--layout-header-height) + var(--sockel-h));
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    background:
+      radial-gradient(
+        ellipse var(--licht-b) var(--licht-h) at var(--licht-x) var(--licht-y),
+        rgb(255 255 255 / var(--licht-staerke)) 0%,
+        rgb(255 255 255 / calc(var(--licht-staerke) * 0.45)) 45%,
+        rgb(255 255 255 / 0) 75%
+      ),
+      var(--color-surface-default);
+  }
+
+  /* position + z-index: Der Sockel liegt ueber der Unterkante des Motivs
+     und verdeckt dort den Schnitt. */
+  .sockel {
+    position: relative;
+    z-index: 1;
+    flex: 0 0 var(--sockel-h);
+    background: var(--color-brand-strong);
+  }
+
+  .wrap {
+    width: 100%;
+    max-width: var(--layout-content-max);
+    margin: 0 auto;
+    padding: 0 var(--layout-gutter);
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .inhalt {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .text {
+    padding-top: var(--space-18);
+    padding-bottom: var(--space-12);
+  }
+
+  h1 {
+    margin: 0;
+    font-family: var(--font-family-body);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+
+  /* Displayzeile mit derselben Neigung wie „ONLINE NACHHILFE". */
+  .zeile1 {
+    --neigung: -1.5deg;
+
+    font-family: var(--font-family-display);
+    font-size: var(--font-size-hero);
+    font-weight: var(--font-weight-bold);
+    line-height: var(--line-height-tight);
+    transform: rotate(var(--neigung));
+    transform-origin: left center;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .zeile1 {
+      --neigung: 0deg;
+    }
+  }
+
+  .zeile2 {
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-regular);
+    line-height: var(--line-height-normal);
+  }
+
+  .unterzeile {
+    margin: var(--space-6) 0 0;
+    color: var(--color-text-subtle);
+    max-width: var(--measure-default);
+  }
+
+  .unterzeile strong {
+    color: var(--color-text-default);
+    font-weight: inherit;
+  }
+
+  .punkte {
+    margin: var(--space-8) 0 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+
+  /* Geometrie des Hakens wie in Hero.astro. */
+  .punkte li {
+    --haken-breite: 22px;
+    --haken-hoehe: 18px;
+    --haken-dicke: 4px;
+    --haken-oben: 3px;
+
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-3);
+  }
+
+  .haken {
+    flex: 0 0 auto;
+    width: var(--haken-breite);
+    height: var(--haken-hoehe);
+    margin-top: var(--haken-oben);
+    overflow: visible;
+  }
+
+  .haken path {
+    fill: none;
+    stroke: var(--color-text-default);
+    stroke-width: var(--haken-dicke);
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    vector-effect: non-scaling-stroke;
+  }
+
+  .aktionen {
+    margin-top: var(--space-12);
+    display: flex;
+  }
+
+  .knopf-bewerben {
+    display: block;
+    flex: 1;
+    text-align: center;
+    text-decoration: none;
+    font-size: var(--font-size-md);
+    font-weight: var(--font-weight-semibold);
+    padding: var(--space-3) var(--space-12);
+    min-height: var(--tap-target-min);
+    border-radius: var(--radius-sm);
+    background: var(--color-brand);
+    color: var(--color-text-on-brand);
+    cursor: pointer;
+  }
+
+  .knopf-bewerben:hover {
+    background: var(--color-brand-strong);
+  }
+
+  .knopf-bewerben:active {
+    background: var(--color-brand-stronger);
+    transform: translateY(1px);
+  }
+
+  .knopf-bewerben:focus-visible {
+    outline: var(--focus-ring-width) solid var(--color-focus-ring);
+    outline-offset: var(--focus-ring-offset);
+  }
+
+  .nebenweg {
+    margin: var(--space-4) 0 0;
+    font-size: var(--font-size-sm);
+    line-height: var(--line-height-relaxed);
+    color: var(--color-text-subtle);
+  }
+
+  .nebenweg a {
+    color: var(--color-text-default);
+    white-space: nowrap;
+  }
+
+  /* Unter 1120 px steht das Motiv unter dem Text, ueber die volle
+     Breite bis an den Rand. */
+  .motiv {
+    /* Wie weit die Unterkante unter den Sockel rutscht, in Prozent der
+       Bildhoehe — so bleibt es bei jeder Groesse derselbe Streifen.
+
+       Der Sockel ist die Tischkante, und eine Tischkante verdeckt die
+       Unterseite der Arme. Die Aermel sind unten rund; stuende die
+       Rundung ueber der Kante, bliebe ein dunkler Keil und die Arme
+       schwebten (Alexander, 28. September 2026). Bis Zeile 1075 von
+       1166 reichen die Aermel noch in voller Breite — darunter beginnt
+       die Rundung. 91 / 1166 = 7,8 %. Geometrie des Bildes
+       vorlagen/Dozent-3.png. */
+    --motiv-versatz: 7.8%;
+
+    margin: 0 calc(-1 * var(--layout-gutter));
+  }
+
+  .motiv img {
+    display: block;
+    width: 100%;
+    height: auto;
+    transform: translateY(var(--motiv-versatz));
+  }
+
+  @media (min-width: 768px) {
+    .aktionen {
+      display: block;
+    }
+
+    .knopf-bewerben {
+      display: inline-block;
+    }
+
+    /* Auf dem Tablet waere das Bild ueber die volle Breite riesig. */
+    .motiv {
+      margin: 0 auto;
+      width: 80%;
+    }
+  }
+
+  /* ab 1120 — zweispaltig wie die Startseite -------------------------- */
+  @media (min-width: 1120px) {
+    .hero {
+      --licht-x: 72%;
+      --licht-y: 45%;
+      --licht-b: 62%;
+      --licht-h: 80%;
+    }
+
+    .inhalt {
+      flex-direction: row;
+      align-items: stretch;
+    }
+
+    .text {
+      flex: 0 0 52%;
+      padding-top: var(--space-28);
+      padding-bottom: var(--space-18);
+    }
+
+    /* Das Bild haengt unten rechts und waechst nach links oben.
+       --motiv-hoehe: Hoehe in Prozent der Spalte. */
+    .motiv {
+      --motiv-hoehe: 82%;
+
+      flex: 1 1 48%;
+      position: relative;
+      width: auto;
+      margin: 0;
+    }
+
+    .motiv img {
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      height: var(--motiv-hoehe);
+      width: auto;
+      max-width: none;
+    }
+  }
+</style>

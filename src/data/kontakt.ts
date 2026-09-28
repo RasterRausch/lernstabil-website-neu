@@ -27,6 +27,14 @@ export const email = {
   href: "mailto:info@lernstabil.de",
 };
 
+// Postfach fuer Bewerbungen als Dozent (haengt wie info@ am Projekt bei
+// mittwald). Der Betreff ist vorbelegt, damit Bewerbungen im Postfach
+// gleich erkennbar sind.
+export const bewerbung = {
+  anzeige: "bewerbung@lernstabil.de",
+  href: "mailto:bewerbung@lernstabil.de?subject=Bewerbung%20als%20Dozent",
+};
+
 /**
  * Verschluesselt ein Linkziel fuer data-kontakt: umgedreht, dann Base64.
  * Kein Geheimnis — es soll nur nicht nach „tel:" oder „@" aussehen.
