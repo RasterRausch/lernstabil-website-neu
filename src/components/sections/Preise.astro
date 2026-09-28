@@ -48,9 +48,13 @@ import { telefon, verschluesseln } from "../../data/kontakt";
 // Termine pro Woche erklaert, weil „16 Unterrichtsstunden" nach viel
 // klingt — Alexanders Einwand.
 
-// Was bei uns nicht dazukommt. Jeder Posten wird durchgestrichen;
-// `zusatz` steht darunter und bleibt lesbar, weil er die Bedingung
-// nennt.
+// Was bei uns nicht dazukommt. Jeder Posten wird durchgestrichen.
+//
+// `bedingung`: Der Posten bekommt ein Sternchen, die Bedingung steht
+// als Fussnote unter der Liste. Bis zum 28. September 2026 stand sie
+// klein direkt unter dem Wort; Alexander wollte sie als Sternchen, wie
+// beim Knopf zur Probestunde. Das Sternchen steht neben dem Strich,
+// nicht darunter — es gilt ja weiter.
 //
 // `klartext` erscheint als Infobox beim Ueberfahren, Antippen oder
 // Fokussieren — durchgestrichen ist der Posten schwer zu lesen
@@ -63,7 +67,7 @@ const posten = [
   { name: "Kündigungsfrist", klartext: "Keine Kündigungsfrist" },
   {
     name: "Ausfallgebühr",
-    zusatz: "bei Absage bis 24 Stunden vorher",
+    bedingung: "Gilt bei Absage bis 24 Stunden vor dem Termin.",
     klartext: "Keine Ausfallgebühr, wenn Sie bis 24 Stunden vorher absagen",
   },
   {
@@ -99,6 +103,13 @@ const stufen = [
 // unregelmaessig, damit der Strich nicht nach Textauszeichnung
 // aussieht. viewBox 100 x 10, gestreckt ueber preserveAspectRatio.
 const strich = "M1 6 C 18 3, 34 7, 52 5 S 82 3, 99 5";
+
+// Senkrechter Markerzug links neben „Einzelunterricht mit festem
+// Dozenten", derselbe Zug wie oben, nur hochkant (viewBox 10 x 100).
+// Ersetzt am 28. September 2026 die gerade rote Kante — die wirkte
+// neben dem handgeschriebenen Preis zu akkurat (Alexander). Der Zug
+// wackelt leicht und endet unten nicht genau senkrecht.
+const kante = "M5 2 C 3 20, 7 36, 5 52 S 3 80, 6 98";
 ---
 
 <section class="preise" id="preise" aria-labelledby="preise-titel">
@@ -133,6 +144,15 @@ const strich = "M1 6 C 18 3, 34 7, 52 5 S 82 3, 99 5";
           Unterrichtsstunden.
         </p>
         <p class="inklusive">
+          <svg
+            class="kante"
+            viewBox="0 0 10 100"
+            preserveAspectRatio="none"
+            aria-hidden="true"
+            focusable="false"
+          >
+            <path d={kante} />
+          </svg>
           Einzelunterricht mit festem Dozenten.
           <br />Alle Fächer, alle Klassenstufen.
         </p>
@@ -144,19 +164,23 @@ const strich = "M1 6 C 18 3, 34 7, 52 5 S 82 3, 99 5";
           {
             posten.map((p, i) => (
               <li tabindex="0" aria-describedby={`posten-klartext-${i}`}>
-                <span class="posten-name">
-                  {p.name}
-                  <svg
-                    class="strich"
-                    viewBox="0 0 100 10"
-                    preserveAspectRatio="none"
-                    aria-hidden="true"
-                    focusable="false"
-                  >
-                    <path d={strich} />
-                  </svg>
+                <span class="posten-zeile">
+                  <span class="posten-name">
+                    {p.name}
+                    <svg
+                      class="strich"
+                      viewBox="0 0 100 10"
+                      preserveAspectRatio="none"
+                      aria-hidden="true"
+                      focusable="false"
+                    >
+                      <path d={strich} />
+                    </svg>
+                  </span>
+                  {p.bedingung && (
+                    <span class="sternchen" aria-hidden="true">*</span>
+                  )}
                 </span>
-                {p.zusatz && <span class="posten-zusatz">{p.zusatz}</span>}
                 <span
                   class="klartext"
                   role="tooltip"
@@ -168,6 +192,15 @@ const strich = "M1 6 C 18 3, 34 7, 52 5 S 82 3, 99 5";
             ))
           }
         </ul>
+        {
+          posten
+            .filter((p) => p.bedingung)
+            .map((p) => (
+              <p class="posten-fussnote">
+                <span aria-hidden="true">*</span> {p.bedingung}
+              </p>
+            ))
+        }
 
         {
           /* Hand, die die Posten streicht. Erzeugtes Bild (Firefly),
@@ -514,11 +547,36 @@ const strich = "M1 6 C 18 3, 34 7, 52 5 S 82 3, 99 5";
     color: var(--color-text-subtle);
   }
 
+  /* --kante-dicke, --kante-breite: Geometrie der Zeichnung. Die Breite
+     ist der Raum, in dem der Zug seitlich wackeln darf; der Text
+     beginnt dahinter mit demselben Abstand wie vorher an der geraden
+     Kante. Der Zug steht oben und unten etwas ueber, wie von Hand
+     gezogen. */
   .inklusive {
+    --kante-dicke: 5px;
+    --kante-breite: 8px;
+
+    position: relative;
     margin: var(--space-6) 0 0;
-    padding-left: var(--space-4);
-    border-left: var(--space-1) solid var(--color-brand);
+    padding-left: calc(var(--kante-breite) + var(--space-3));
     font-weight: var(--font-weight-semibold);
+  }
+
+  .kante {
+    position: absolute;
+    left: 0;
+    top: calc(-1 * var(--space-1));
+    width: var(--kante-breite);
+    height: calc(100% + 2 * var(--space-1));
+    overflow: visible;
+  }
+
+  .kante path {
+    fill: none;
+    stroke: var(--color-brand);
+    stroke-width: var(--kante-dicke);
+    stroke-linecap: round;
+    vector-effect: non-scaling-stroke;
   }
 
   /* Gestrichene Posten ----------------------------------------------------
@@ -649,8 +707,22 @@ const strich = "M1 6 C 18 3, 34 7, 52 5 S 82 3, 99 5";
     color: var(--color-text-subtle);
   }
 
-  .posten-zusatz {
+  /* Sternchen in der Displayschrift wie das Wort, aber hell und nicht
+     gestrichen: Die Bedingung gilt. Der Abstand ist groesser als der
+     Ueberstand des Strichs (6 px), sonst beruehrt ihn der Strich. */
+  .sternchen {
+    margin-left: var(--space-3);
+    font-family: var(--font-family-display);
+    font-size: var(--font-size-xl);
+    line-height: var(--line-height-normal);
+    color: var(--color-text-default);
+  }
+
+  /* Wie die Fussnote am Knopf weiter unten: klein, gedaempft. */
+  .posten-fussnote {
+    margin: var(--space-6) 0 0;
     font-size: var(--font-size-sm);
+    line-height: var(--line-height-normal);
     color: var(--color-text-subtle);
   }
 

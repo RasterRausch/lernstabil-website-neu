@@ -329,8 +329,9 @@ const siegel = [
      ------------------------------------------------------------------ */
   .stempel {
     /* 147 = 128 x 1,15, am 25. September 2026 um 15 % vergroessert,
-       Vorgabe von Alexander. */
-    --stempel-gr: 147px;
+       Vorgabe von Alexander. Am 28. September 2026 noch einmal um 10 %:
+       147 x 1,1 = 161,7, gerundet 162. */
+    --stempel-gr: 162px;
     /* Am 25. September 2026 nach unten und rechts versetzt, Wunsch von
        Alexander: Der Stempel ragt jetzt so tief in den roten Sockel wie
        die Siegel links (--space-8) und verdeckt weniger von Blatt und
@@ -672,8 +673,11 @@ const siegel = [
        wieder hinauf.
 
        Am 25. September 2026 von 0,65 um 15 % vergroessert, Vorgabe von
-       Alexander: 0,65 x 1,15 = 0,7475. */
-    --siegel-massstab: 0.7475;
+       Alexander: 0,65 x 1,15 = 0,7475.
+
+       Am 28. September 2026 noch einmal um 15 %, Vorgabe von
+       Alexander: 0,7475 x 1,15 = 0,8596. */
+    --siegel-massstab: 0.8596;
 
     flex: 0 0 auto;
     zoom: var(--siegel-massstab);
