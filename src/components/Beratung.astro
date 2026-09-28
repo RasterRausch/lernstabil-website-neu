@@ -1,0 +1,94 @@
+---
+// „Gratis Beratung: 0341 …" mit Schild — der Anruf als Zeile unter dem
+// roten Probestunden-Knopf. Angelegt am 28. September 2026 nach dem
+// Vorbild grosser Anbieter (Alexander); steht im Hero und bei den
+// Preisen. „Gratis Beratung" ist Alexanders Formulierung.
+//
+// Fuer dunkle Flaechen gebaut: weisser, kursiver Text, Nummer fett.
+// Nummer geschuetzt wie ueberall (src/data/kontakt.ts).
+
+import Getarnt from "./Getarnt.astro";
+import { telefon, verschluesseln } from "../data/kontakt";
+
+interface Props {
+  // true: „Gratis Beratung: 0341 …" (Hero, Footer — dort gibt es keinen
+  // eigenen Telefon-Knopf). false: „Gratis Beratung (heute 9–20 Uhr)"
+  // unter einem Telefon-Knopf, der die Nummer schon traegt (Preise).
+  // „heute" setzt das Skript in der Kopfleiste (data-erreichbar).
+  nummer?: boolean;
+}
+
+const { nummer = true } = Astro.props;
+---
+
+<p class="beratung">
+  {/* Schild mit Haken: Sicherheit, nichts zu verlieren. Selbst
+      gezeichnet, dekorativ. */}
+  <svg class="schild" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+    <path d="M12 2.5 4 5.5v6c0 5 3.4 8.6 8 10 4.6-1.4 8-5 8-10v-6z"></path>
+    <path d="m8.5 12.2 2.4 2.4 4.8-5"></path>
+  </svg>
+  {
+    nummer ? (
+      <span>
+        Gratis Beratung:{" "}
+        <a data-kontakt={verschluesseln(telefon.href)}>
+          <Getarnt text={telefon.anzeige} />
+        </a>
+      </span>
+    ) : (
+      <span>
+        Gratis Beratung (<span data-erreichbar>Mo bis Fr 9–20 Uhr</span>)
+      </span>
+    )
+  }
+</p>
+
+<style>
+  .beratung {
+    margin: var(--space-4) 0 0;
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    font-size: var(--font-size-md);
+    font-style: italic;
+    line-height: var(--line-height-normal);
+    color: var(--color-text-default);
+  }
+
+  .beratung a {
+    color: inherit;
+    font-weight: var(--font-weight-bold);
+    text-decoration: none;
+    white-space: nowrap;
+  }
+
+  .beratung a:hover {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  .beratung a:focus-visible {
+    outline: var(--focus-ring-width) solid var(--color-focus-ring);
+    outline-offset: var(--focus-ring-offset);
+    border-radius: var(--radius-sm);
+  }
+
+  /* Schild in der Groesse der Schrift, als Umriss wie ein Stempel.
+     --schild-dicke: Geometrie der Zeichnung. */
+  .schild {
+    --schild-dicke: 1.8px;
+
+    flex: none;
+    width: 1.3em;
+    height: 1.3em;
+  }
+
+  .schild path {
+    fill: none;
+    stroke: currentColor;
+    stroke-width: var(--schild-dicke);
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+</style>

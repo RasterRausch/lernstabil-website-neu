@@ -55,4 +55,11 @@ import { telefon, verschluesseln } from "../data/kontakt";
   a {
     color: var(--color-action);
   }
+
+  /* Fokusring fuer helle Flaechen, siehe tokens.css. */
+  a:focus-visible {
+    outline: var(--focus-ring-width) solid var(--color-focus-ring-inverse);
+    outline-offset: var(--focus-ring-offset);
+    border-radius: var(--radius-sm);
+  }
 </style>

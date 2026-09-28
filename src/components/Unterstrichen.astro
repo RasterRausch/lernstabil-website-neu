@@ -1,4 +1,5 @@
 ---
+import { zug } from "../data/zeichnungen";
 // Roter Marker-Unterstrich unter dem Kernwort einer Sektionsueberschrift.
 //
 // Eingefuehrt am 25. September 2026 in Sektion 3 („Echte Foerderung"),
@@ -14,9 +15,7 @@
 // Kasten. Bricht die Gruppe auf schmalen Geraeten doch um, steht er
 // unter der letzten Zeile ueber die volle Breite.
 
-// Gezeichnete Linie in viewBox-Koordinaten (100 x 10), leicht
-// unregelmaessig, damit sie nicht nach Textauszeichnung aussieht.
-const zug = "M1 6 C 18 3, 34 7, 52 5 S 82 3, 99 5";
+// Die gezeichnete Linie (`zug`) kommt aus data/zeichnungen.ts.
 ---
 
 <span class="unterstrichen"

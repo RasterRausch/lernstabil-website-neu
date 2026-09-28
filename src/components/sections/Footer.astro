@@ -1,18 +1,27 @@
 ---
 import Unterstrichen from "../Unterstrichen.astro";
 import Getarnt from "../Getarnt.astro";
-import { telefon, email, verschluesseln } from "../../data/kontakt";
+import Beratung from "../Beratung.astro";
+import { telefon, email, bewerbung, verschluesseln } from "../../data/kontakt";
+
+interface Props {
+  // Welcher Aufruf oben steht. „bewerbung" auf der Seite „Dozent werden"
+  // (seit 28. September 2026): Dort lesen Bewerber, keine Eltern — die
+  // Probestunde waere der falsche Schluss.
+  aufruf?: "probestunde" | "bewerbung";
+}
+
+const { aufruf = "probestunde" } = Astro.props;
 // Sektion: Footer (seitenübergreifend, 9)
 //
 // Angelegt am 27. September 2026. Entwurf mit Alexander abgestimmt:
 //
 // - SCHWARZE FLAECHE (--color-surface-deepest). Die Fragen davor sind
 //   hellgrau — hell auf Schwarz ist der staerkste Wechsel, den die Seite
-//   hat. Schwarz ist auch der Sockel unter dem Hero: Die Seite beginnt
-//   und endet mit derselben Kante.
+//   hat.
 // - LETZTER AUFRUF oben. Wer bis hierher liest, ist noch unentschlossen.
-//   Dieselben zwei Wege wie in Hero und Preisen: Anruf (blau) und
-//   Probestunde (rot).
+//   Derselbe Aufbau wie im Hero: der rote Probestunden-Knopf, darunter
+//   der Anruf als Zeile (components/Beratung.astro).
 //
 // Die grosse Wortmarke am unteren Rand ist am 27. September 2026 auf
 // Alexanders Wunsch wieder entfallen.
@@ -64,36 +73,45 @@ const jahr = new Date().getFullYear();
 
 <footer class="footer">
   <div class="wrap">
+    {
+      aufruf === "bewerbung" && (
+        <div class="aufruf">
+          <p class="aufruf-titel">
+            Bereit <Unterstrichen>loszulegen?</Unterstrichen>
+            <span class="aufruf-zeile">
+              Schreiben Sie uns eine kurze E-Mail mit Lebenslauf und Ihren
+              Fächern.
+            </span>
+          </p>
+          <div class="knoepfe">
+            <a class="knopf-probe" data-kontakt={verschluesseln(bewerbung.href)}>
+              E-Mail schreiben
+            </a>
+          </div>
+          <p class="zeiten">
+            <Getarnt text={bewerbung.anzeige} />. Wir melden uns innerhalb weniger
+            Tage.
+          </p>
+        </div>
+      )
+    }
+
+    {aufruf === "probestunde" && (
     <div class="aufruf">
       <p class="aufruf-titel">
         Die erste Stunde ist <Unterstrichen>gratis.</Unterstrichen>
         <span class="aufruf-zeile">Alles danach ohne Vertrag.</span>
       </p>
 
+      {/* Wie im Hero (Alexander, 28. September 2026): ein Knopf, darunter
+          der Anruf als Zeile. Vorher Telefon-Knopf und Probestunde
+          nebeneinander, darunter „Mo bis Fr, 9 bis 20 Uhr". */}
       <div class="knoepfe">
-        <a class="knopf-telefon" data-kontakt={verschluesseln(telefon.href)}>
-          {/* Die Nummer steht im Linktext, das Icon ist dekorativ.
-              Dieselbe Form wie in Kopfleiste, Hero und Preisen. */}
-          <svg
-            class="icon-telefon"
-            viewBox="0 0 24 24"
-            fill="currentColor"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linejoin="round"
-            aria-hidden="true"
-            focusable="false"
-          >
-            <path
-              d="M4 3h4l2 5-2.5 1.5a12.5 12.5 0 0 0 7 7L16 14l5 2v4h-1C11 20 4 13 4 4V3z"
-            ></path>
-          </svg>
-          <span><Getarnt text={telefon.anzeige} /></span>
-        </a>
         <a class="knopf-probe" href="/probestunde">Probestunde anfragen</a>
       </div>
-      <p class="zeiten">Mo bis Fr, 9 bis 20 Uhr</p>
+      <Beratung />
     </div>
+    )}
 
     <nav class="spalten" aria-label="Fußbereich">
       {
@@ -147,6 +165,11 @@ const jahr = new Date().getFullYear();
     text-align: center;
   }
 
+  /* Die Zeile „Gratis Beratung" mittig wie der ganze Aufruf. */
+  .aufruf :global(.beratung) {
+    justify-content: center;
+  }
+
   .aufruf-titel {
     margin: 0 auto;
     max-width: 20ch;
@@ -170,8 +193,7 @@ const jahr = new Date().getFullYear();
     gap: var(--space-4);
   }
 
-  .knopf-probe,
-  .knopf-telefon {
+  .knopf-probe {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -196,26 +218,6 @@ const jahr = new Date().getFullYear();
   .knopf-probe:active {
     background: var(--color-brand-stronger);
     transform: translateY(1px);
-  }
-
-  .knopf-telefon {
-    background: var(--color-action);
-    color: var(--color-text-on-action);
-  }
-
-  .knopf-telefon:hover {
-    background: var(--color-action-strong);
-  }
-
-  .knopf-telefon:active {
-    background: var(--color-action-stronger);
-    transform: translateY(1px);
-  }
-
-  .icon-telefon {
-    width: 1.1em;
-    height: 1.1em;
-    flex-shrink: 0;
   }
 
   .zeiten {
@@ -243,7 +245,7 @@ const jahr = new Date().getFullYear();
     margin: 0;
     font-size: var(--font-size-sm);
     font-weight: var(--font-weight-bold);
-    letter-spacing: 0.04em;
+    letter-spacing: var(--letter-spacing-caps);
     text-transform: uppercase;
     color: var(--color-text-default);
   }

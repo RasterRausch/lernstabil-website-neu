@@ -1,4 +1,5 @@
 ---
+import { haken } from "../../data/zeichnungen";
 // Sektion: Was machen wir anders (Startseite, 3)
 //
 // Aufbau und Text stammen urspruenglich von der bestehenden Seite
@@ -46,14 +47,10 @@ const punkte = [
   },
 ];
 
-// Gezeichnete Linien, viewBox-Koordinaten. Der Haken reicht ueber die
-// volle Breite (0 bis 30), damit das Aufdecken von links genau mit der
-// Stiftspitze mitlaeuft. Knick bei x = 9 — der kurze Schenkel zuerst,
-// wie man einen Haken von Hand zieht.
-const haken = "M0 12 C 3 14, 6 17, 9 21 C 14 12, 21 6, 30 1";
+// Der Haken kommt aus data/zeichnungen.ts.
 ---
 
-<section class="anders" aria-labelledby="anders-titel">
+<section class="anders" id="warum" aria-labelledby="anders-titel">
   <div class="wrap">
     <div class="kopf">
       <p class="vorzeile">{vorzeile}</p>
@@ -135,6 +132,8 @@ const haken = "M0 12 C 3 14, 6 17, 9 21 C 14 12, 21 6, 30 1";
         }
         <img
           src="/bilder/schueler-sektion-3-hell.webp"
+          srcset="/bilder/schueler-sektion-3-hell-560.webp 560w, /bilder/schueler-sektion-3-hell.webp 860w"
+          sizes="(min-width: 1120px) 430px, (min-width: 768px) 340px, 280px"
           width="860"
           height="1588"
           alt=""
@@ -167,7 +166,7 @@ const haken = "M0 12 C 3 14, 6 17, 9 21 C 14 12, 21 6, 30 1";
      ACHTUNG: Der Keil traegt jetzt die WEISSE Flaeche dieser Sektion,
      nicht mehr Rot. Er schneidet damit hell in die dunkle
      Vertrauensleiste darueber. Das ist die Folge davon, dass der
-     Hintergrund weiss wurde — siehe spec.md.
+     Hintergrund weiss wurde.
      ------------------------------------------------------------------ */
   .anders {
     --keil-h: 24px;
@@ -213,8 +212,8 @@ const haken = "M0 12 C 3 14, 6 17, 9 21 C 14 12, 21 6, 30 1";
        2. September 2026 zu schmal fuer die Seitenbreite. Der Umbruch
        bleibt zweizeilig, die Zeilen werden nur laenger. In ch, waechst
        also mit der Schriftgroesse mit. */
-    max-width: 28ch;
-    font-size: var(--font-size-4xl);
+    max-width: var(--measure-heading);
+    font-size: var(--font-size-title);
     font-weight: var(--font-weight-bold);
     line-height: var(--line-height-snug);
   }
@@ -413,7 +412,7 @@ const haken = "M0 12 C 3 14, 6 17, 9 21 C 14 12, 21 6, 30 1";
   /* Der Fokusring des Projekts ist weiss — auf dieser hellen Flaeche
      waere er unsichtbar. Hier traegt ihn der dunkle Text. */
   .knopf:focus-visible {
-    outline: var(--focus-ring-width) solid var(--color-text-inverse);
+    outline: var(--focus-ring-width) solid var(--color-focus-ring-inverse);
     outline-offset: var(--focus-ring-offset);
   }
 

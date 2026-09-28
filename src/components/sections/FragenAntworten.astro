@@ -149,7 +149,6 @@ const plusSenkrecht = "M12.3 3 C 11.6 8, 12.6 15, 11.8 21";
     /* Der Junge steht auf der Unterkante; clip statt hidden, damit kein
        Scrollcontainer entsteht. */
     overflow-x: clip;
-    scroll-margin-top: var(--layout-header-height);
   }
 
   .wrap {
@@ -218,7 +217,7 @@ const plusSenkrecht = "M12.3 3 C 11.6 8, 12.6 15, 11.8 21";
 
   h2 {
     margin: var(--space-2) 0 0;
-    font-size: var(--font-size-4xl);
+    font-size: var(--font-size-title);
     font-weight: var(--font-weight-bold);
     line-height: var(--line-height-snug);
   }
@@ -237,7 +236,7 @@ const plusSenkrecht = "M12.3 3 C 11.6 8, 12.6 15, 11.8 21";
   }
 
   .einleitung a:focus-visible {
-    outline: var(--focus-ring-width) solid var(--color-text-inverse);
+    outline: var(--focus-ring-width) solid var(--color-focus-ring-inverse);
     outline-offset: var(--focus-ring-offset);
   }
 
@@ -295,7 +294,7 @@ const plusSenkrecht = "M12.3 3 C 11.6 8, 12.6 15, 11.8 21";
   }
 
   summary:focus-visible {
-    outline: var(--focus-ring-width) solid var(--color-text-inverse);
+    outline: var(--focus-ring-width) solid var(--color-focus-ring-inverse);
     outline-offset: var(--focus-ring-offset);
   }
 

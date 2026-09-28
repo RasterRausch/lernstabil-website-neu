@@ -32,9 +32,7 @@ const trustindexKarussell = "808d4748020846902d868e6fc63";
 // Nur Angaben, die das UNTERNEHMEN betreffen. Alexanders über 20 Jahre
 // Unterrichtserfahrung standen hier bis zum 1. September 2026 und sind
 // auf seinen Wunsch heraus: In einer Leiste mit Firmen-Eckdaten liest
-// sich eine persönliche Angabe, als hätte das Unternehmen sie. Ihr
-// Platz ist Sektion 5, „Wer unterrichtet", wo er in der Ich-Form
-// spricht — dort steht sie bereits in der Signatur.
+// sich eine persönliche Angabe, als hätte das Unternehmen sie.
 //
 // Die grosse Zeile darf ein Wort tragen („Seit 2021"). Das Referenzbild
 // macht es genauso, und die beiden Type-Stufen liegen weit genug
@@ -81,7 +79,7 @@ const zahlen = [
         </div>
 
         {
-          /* Beide Widgets laden asynchron von cdn.trustindex.io und
+          /* Das Widget laedt asynchron von cdn.trustindex.io und
             bringen ihr eigenes CSS mit. Wir überschreiben es nicht —
             das bricht beim nächsten Update ihrerseits. Gesteuert wird
             nur die Fläche, die sie bekommen.
@@ -153,24 +151,21 @@ const zahlen = [
     gap: var(--space-12);
   }
 
-  /* Eine Stufe höher als zuvor (war `h2`), am 1. September 2026 auf
-     Wunsch von Alexander: Die Überschrift wirkte auf der schmalen
-     Spalte verloren. `h1` ist die nächste belegte Stufe der Skala —
-     dazwischen gibt es nichts, und freie Werte sind ausgeschlossen. */
+  /* Gleiche Stufe wie alle Sektionsueberschriften (--font-size-title).
+     Am 1. September 2026 auf Wunsch von Alexander eine Stufe hoeher
+     gesetzt: Die Überschrift wirkte auf der schmalen Spalte verloren. */
   h2 {
     margin: 0;
     font-family: var(--font-family-body);
-    font-size: var(--font-size-4xl);
+    font-size: var(--font-size-title);
     font-weight: var(--font-weight-bold);
     line-height: var(--line-height-snug);
     /* In ch, wächst also mit der Schriftgröße mit. Hält die Überschrift
        auf drei kurze Zeilen, ohne feste Umbrüche im Text.
 
-       11ch statt der früheren 14ch: Mit 40 px Schrift war der Kasten
-       296 px breit, die längste gesetzte Zeile aber nur 211 px — die
-       Differenz zog die ganze Spalte auf und nahm sie den Lücken weg.
-       Jeder Wert zwischen 10ch und 17ch ergibt denselben Umbruch;
-       11ch ist der engste mit Reserve. */
+       11ch statt der früheren 14ch: Ein breiterer Kasten zog die
+       ganze Spalte auf und nahm sie den Lücken weg. 11ch ist der
+       engste Wert, bei dem „Lernen, das hält." sauber umbricht. */
     max-width: 11ch;
   }
 
@@ -194,9 +189,8 @@ const zahlen = [
     font-weight: var(--font-weight-semibold);
   }
 
-  /* Beide Widgets laden nach. Ohne reservierte Höhe springt Band B beim
-     Eintreffen nach unten. Die Werte sind gemessen, nicht geschätzt —
-     siehe spec.md, Abschnitt „Zustände". */
+  /* Das Widget laedt nach. Ohne reservierte Höhe springt Band B beim
+     Eintreffen nach unten. Die Werte sind gemessen, nicht geschätzt. */
   .widget {
     /* Alexanders Vorgabe: schmaler als die volle Spalte. Begrenzt wird
        die Fläche, nicht das Innenleben des Widgets. */
@@ -223,8 +217,8 @@ const zahlen = [
      unterscheiden sich nur noch im Ton.
 
      Der Keil am unteren Ende gehört ebenfalls nicht hierher, sondern
-     zur folgenden Sektion, die sich darüberschiebt. Siehe
-     ../03-ohne-kleingedrucktes/. */
+     zur folgenden Sektion, die sich darüberschiebt (Sektion 3,
+     WasUnsUnterscheidet.astro). */
   .band-b {
     background: var(--color-surface-raised);
     padding: var(--space-18) 0;
@@ -280,28 +274,26 @@ const zahlen = [
     text-wrap: balance;
   }
 
-  /* ab 768 ---------------------------------------------------------- */
+  /* ab 1120 — Band A zweispaltig, Zahlen nebeneinander --------------- */
 
-  @media (min-width: 768px) {
+  @media (min-width: 1120px) {
     /* Als Block zusammen mittig, nicht über die volle Breite verteilt —
-       deshalb justify-content: center und kein space-between. */
+       deshalb justify-content: center und kein space-between.
+
+       Nebeneinander erst ab 1120 px (vorher ab 768): Seit die Zahlen in
+       der Displayschrift stehen (28. September 2026), sind die drei
+       Gruppen zusammen rund 800 px breit und liefen auf dem Tablet
+       ueber den Rand. */
     .zahlen {
       flex-direction: row;
       justify-content: center;
       align-items: flex-start;
       gap: var(--space-18);
     }
-  }
 
-  /* ab 1120 — Band A dreispaltig ------------------------------------ */
-
-  @media (min-width: 1120px) {
     /* `gap` ist hier die UNTERGRENZE, nicht die feste Lücke: Was nach
        dem Deckel des Karussells übrig bleibt, verteilt space-between
-       zusätzlich auf die beiden Lücken. Auf breiten Fenstern werden
-       daraus rund 68 px, bei 1120 px bleiben es die 32 px aus der
-       Skala. So bleibt das Karussell mittig und das Badge bündig
-       rechts, ohne dass irgendwo Rest liegen bleibt. */
+       zusätzlich. */
     .spalten {
       flex-direction: row;
       align-items: flex-start;
@@ -310,26 +302,18 @@ const zahlen = [
     }
 
     /* Nur so breit wie der Inhalt — sie wächst nicht in freien Platz
-       hinein. Die Inhaltsbreite ergibt sich aus der `max-width: 42ch`
-       der Unterzeile, das sind rund 376 px.
-
-       Schrumpfen darf sie: bei 1120 px reicht die Zeile sonst nicht für
-       alle drei Spalten. Aber nicht beliebig — ohne min-width fällt sie
-       dort auf 200 px und die Überschrift bricht auseinander. Bei
-       1120 px bleiben ihr genau 260 px. */
+       hinein. Die Inhaltsbreite ergibt sich aus der Unterzeile
+       (--measure-narrow). Schrumpfen darf sie, aber nicht unter
+       250 px, sonst bricht die Überschrift auseinander. */
     .einstieg {
       flex: 0 1 auto;
       min-width: 250px;
     }
 
-    /* Die Spalten stehen bewusst nicht bündig: der Einstieg oben, das
-       Karussell mittig, das Badge tiefer. So im Referenzbild.
-
-       Das Karussell ist ab hier die flexible Spalte: Was übrig bleibt,
-       nachdem der Einstieg seine Inhaltsbreite und das Badge seine
-       280 px haben, geht an das Karussell. Das ist die Spalte, die
-       davon profitiert — sie hat eine feste Höhe und kürzt den
-       Bewertungstext ab, mehr Breite heisst also mehr Text.
+    /* Das Karussell ist ab hier die flexible Spalte: Was neben dem
+       Einstieg übrig bleibt, geht an das Karussell. Es hat eine feste
+       Höhe und kürzt den Bewertungstext ab, mehr Breite heisst also
+       mehr Text.
 
        min-width 420: die Breite, unter der zu viel Text wegfällt.
        max-width 480: darüber steht die Bewertung als breites Band und
@@ -358,9 +342,7 @@ const zahlen = [
 
   /* Fällt Trustindex aus, bleibt an der Stelle eine leere Fläche. Auf
      schmalen Geräten frisst die reservierte Höhe dann Platz ohne
-     Gegenwert, deshalb dort keine Mindesthöhe. Gilt nur noch für das
-     Karussell — das Siegel daneben ist ein Bild und bringt seine Höhe
-     über width/height im Markup mit. */
+     Gegenwert, deshalb dort keine Mindesthöhe. */
   @media (max-width: 767px) {
     .widget-karussell {
       min-height: 0;

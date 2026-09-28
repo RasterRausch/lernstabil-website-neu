@@ -1,6 +1,7 @@
 ---
-import Getarnt from "../Getarnt.astro";
-import { telefon, verschluesseln } from "../../data/kontakt";
+import { haken } from "../../data/zeichnungen";
+import Unterstrichen from "../Unterstrichen.astro";
+import Beratung from "../Beratung.astro";
 // Sektion: Hero (Startseite, 1)
 
 // Siegel von Trustindex, aus Alexanders Konto.
@@ -25,7 +26,6 @@ const punkte = [
   // 25. September 2026.
   "Einfach per PC, Laptop oder Tablet",
 ];
-const haken = "M0 12 C 3 14, 6 17, 9 21 C 14 12, 21 6, 30 1";
 
 const siegel = [
   { id: "67c6a0b8012c503e17061c29e56" },
@@ -54,9 +54,15 @@ const siegel = [
                die Betonung ist echt und nicht bloss typografisch.
                Screenreader heben <em> leicht hervor, <i> nicht. */
           }
+          {
+            /* „Einzelunterricht" mit dem roten Markerzug der
+               Sektionsueberschriften (Alexander, 28. September 2026). */
+          }
           <span class="zeile2"
             ><em
-              >Einzelunterricht, ohne Vertragslaufzeit und ohne Kleingedrucktes.</em
+              ><Unterstrichen>Einzelunterricht</Unterstrichen>, <strong
+                >ohne Vertragslaufzeit</strong
+              > und <strong>ohne Kleingedrucktes</strong>.</em
             ></span
           >
         </h1>
@@ -108,42 +114,27 @@ const siegel = [
           }
         </ul>
 
+        {
+          /* Ein Knopf, darunter der Anruf als Zeile — Aufbau nach dem
+             Vorbild grosser Anbieter (Alexander, 28. September 2026).
+             Bis dahin standen hier zwei gleich grosse Knoepfe, Telefon
+             blau und Probestunde rot, darunter „Mo bis Fr, 9 bis 20 Uhr".
+             Die Zeiten stehen jetzt in der Kopfleiste.
+
+             Sternchen verweist auf die Fussnote bei den Siegeln.
+             aria-describedby liest sie Screenreadern zum Knopf vor;
+             das Sternchen selbst bleibt fuer sie stumm. */
+        }
         <div class="aktionen">
-          <a class="knopf-primaer" data-kontakt={verschluesseln(telefon.href)}>
-            {
-              /* Der Linktext nennt die Nummer bereits, das Icon ist rein
-                dekorativ und bleibt fuer Screenreader unsichtbar. */
-            }
-            <svg
-              class="icon-telefon"
-              viewBox="0 0 24 24"
-              fill="currentColor"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linejoin="round"
-              aria-hidden="true"
-              focusable="false"
-            >
-              <path
-                d="M4 3h4l2 5-2.5 1.5a12.5 12.5 0 0 0 7 7L16 14l5 2v4h-1C11 20 4 13 4 4V3z"
-              ></path>
-            </svg>
-            <span><Getarnt text={telefon.anzeige} /></span>
-          </a>
-          {
-            /* Sternchen verweist auf die Fussnote bei den Siegeln.
-               aria-describedby liest sie Screenreadern zum Knopf vor;
-               das Sternchen selbst bleibt fuer sie stumm. */
-          }
           <a
-            class="knopf-sekundaer"
+            class="knopf-probe"
             href="/probestunde"
             aria-describedby="probestunde-hinweis"
             >Jetzt gratis testen<span aria-hidden="true">*</span></a
           >
         </div>
 
-        <p class="zeiten"><em>Mo bis Fr, 9 bis 20 Uhr</em></p>
+        <Beratung />
 
         {
           /* Siegel. Wie die Widgets in der Vertrauensleiste laden sie
@@ -157,7 +148,7 @@ const siegel = [
         <div class="siegel">
           {
             siegel.map((s) => (
-              <div class="siegel-feld siegel-widget">
+              <div class="siegel-widget">
                 <script
                   defer
                   async
@@ -183,11 +174,19 @@ const siegel = [
 
       <div class="motiv">
         {
-          /* Freigestelltes PNG mit Alphakanal, deshalb kein Blend-Modus.
-            Herkunft und Nacharbeit: bildprompt.md der Sektion. */
+          /* Freigestellt mit Alphakanal, deshalb kein Blend-Modus.
+             Erzeugte Person, auf dunklem Grund freigestellt.
+
+             Bis zum 28. September 2026 ein PNG mit 4,9 MB. Jetzt WebP in
+             drei Breiten (94 / 204 / 600 KB), erzeugt mit
+             cwebp -q 88 -alpha_q 100 -resize. sizes: Unter 1120 px geht
+             das Motiv ueber die volle Breite, darueber ist es rund 780 px
+             breit (Hoehe der Spalte mal Seitenverhaeltnis). */
         }
         <img
-          src="/bilder/hero-schuelerin.png"
+          src="/bilder/hero-schuelerin-1494.webp"
+          srcset="/bilder/hero-schuelerin-640.webp 640w, /bilder/hero-schuelerin-960.webp 960w, /bilder/hero-schuelerin-1494.webp 1494w"
+          sizes="(min-width: 1120px) 780px, 100vw"
           width="1494"
           height="1628"
           alt=""
@@ -219,13 +218,13 @@ const siegel = [
       </div>
     </div>
   </div>
-  {/* Schwarze Abschlusskante. Rein dekorativ, deshalb ohne Inhalt. */}
+  {/* Roter Sockel als Abschlusskante. Rein dekorativ, ohne Inhalt. */}
   <div class="sockel"></div>
 </section>
 
 <style>
   .hero {
-    /* Hoehe des schwarzen Sockels am unteren Rand. Steht hier, weil die
+    /* Hoehe des roten Sockels am unteren Rand. Steht hier, weil die
        Mindesthoehe damit rechnet. */
     --sockel-h: var(--space-12);
 
@@ -264,7 +263,7 @@ const siegel = [
       var(--color-surface-default);
   }
 
-  /* Schwarze Kante am unteren Rand des Hero, bevor die naechste Sektion
+  /* Rote Kante am unteren Rand des Hero, bevor die naechste Sektion
      beginnt.
 
      flex: 0 0 — als Flex-Kind gaebe der Sockel sonst nach, sobald der
@@ -293,10 +292,9 @@ const siegel = [
   }
 
   /* Unter 1120 px steht das Motiv NACH dem Text, nicht davor. Grund:
-     Als erstes Element nahm es 425 px Hoehe und schob den Telefon-Knopf
-     auf 1009 px — auf einem 844 px hohen Handy weit unter die Falte.
-     So steht der Knopf bei rund 620 px. Gemessen am 1. September 2026,
-     Zahlen in spec.md. */
+     Als erstes Element nahm es 425 px Hoehe und schob den Knopf auf
+     1009 px — auf einem 844 px hohen Handy weit unter die Falte. So
+     steht er bei rund 620 px. Gemessen am 1. September 2026. */
   .motiv {
     /* position: relative auch hier, nicht erst ab 1120 px: Der Stempel
        haengt absolut an dieser Flaeche. Ohne den Bezug wuerde er auf
@@ -385,7 +383,7 @@ const siegel = [
 
   /* Der Satz laeuft dreizeilig, klein und ruhig — die Zahl soll
      tragen, nicht er. 0.1em ist rund ein Zehntel des Durchmessers,
-     bei 128 px also knapp 13 px. */
+     bei 162 px also rund 16 px. */
   .stempel-satz {
     font-size: 0.1em;
     font-weight: var(--font-weight-semibold);
@@ -459,6 +457,23 @@ const siegel = [
     line-height: var(--line-height-normal);
   }
 
+  /* Der Zug ist fuer Ueberschriften ab 40 px gezeichnet (6 px dick).
+     Unter 21-px-Text waere er zu schwer, deshalb duenner und mit etwas
+     mehr Abstand zur Grundlinie. Geometrie der Zeichnung. */
+  /* Die beiden Versprechen eine Stufe kraeftiger als der Rest der
+     Zeile, nicht fett (Alexander, 28. September 2026): Sie sollen
+     leicht markiert sein, neben dem unterstrichenen „Einzelunterricht"
+     aber nicht mit ihm konkurrieren. Echter halbfetter Kursivschnitt,
+     siehe @font-face im BaseLayout. */
+  .zeile2 strong {
+    font-weight: var(--font-weight-semibold);
+  }
+
+  .zeile2 :global(.unterstrichen) {
+    --zug-dicke: 4px;
+    --zug-abstand: -0.18em;
+  }
+
   .unterzeile {
     margin: var(--space-6) 0 0;
     color: var(--color-text-subtle);
@@ -471,7 +486,7 @@ const siegel = [
 
      font-weight: inherit hebt die Fettung von <strong> wieder auf.
      Zwei Signale — heller UND fetter — waeren an dieser Stelle eines
-     zu viel: Die Zeile steht direkt unter einer 64-px-Ueberschrift,
+     zu viel: Die Zeile steht direkt unter der grossen Ueberschrift,
      eine zweite fette Stelle darunter macht den Kopf unruhig. Die
      Bedeutung von <strong> bleibt fuer Screenreader erhalten, sie wird
      nur anders sichtbar gemacht. */
@@ -526,106 +541,48 @@ const siegel = [
   .aktionen {
     margin-top: var(--space-12);
     display: flex;
-    flex-direction: column;
-    gap: var(--space-4);
   }
 
-  .knopf-primaer,
-  .knopf-sekundaer {
+  /* Ein Knopf, fett und kursiv (Alexander, 28. September 2026: zwei
+     aufrechte Knoepfe wirkten „steril"). Echter Kursivschnitt, siehe
+     @font-face im BaseLayout. Auf dem Handy ueber die volle Breite.
+
+     Weiss auf --color-brand (#d00000) = 5,70:1.
+     WCAG 2.2, Target Size: 44 px Mindesthoehe fuer Tippziele. */
+  .knopf-probe {
     display: block;
+    flex: 1;
     text-align: center;
     text-decoration: none;
-    font-weight: var(--font-weight-semibold);
-    font-size: var(--font-size-md);
-    padding: var(--space-3) var(--space-8);
-    border-radius: var(--radius-sm);
-    /* WCAG 2.2, Target Size: 44 px Mindesthoehe fuer Tippziele. Mit
-       17 px Schrift und je 12 px Innenabstand sind es rund 50 px. Die
-       Untergrenze steht hier trotzdem, damit sie beim Aendern der
-       Abstaende nicht unbemerkt unterschritten wird. */
+    font-size: var(--font-size-lg);
+    font-style: italic;
+    font-weight: var(--font-weight-bold);
+    padding: var(--space-3) var(--space-12);
     min-height: var(--tap-target-min);
-  }
-
-  /* Der primaere Knopf traegt Icon und Nummer nebeneinander, deshalb
-     Flex statt Block. Zentriert wird ueber justify-content, nicht mehr
-     ueber text-align. */
-  .knopf-primaer {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: var(--space-2);
-    background: var(--color-action);
-    color: var(--color-text-on-action);
-  }
-
-  /* Waechst mit der Beschriftung mit, deshalb em statt Pixel. */
-  .icon-telefon {
-    width: 1.1em;
-    height: 1.1em;
-    flex-shrink: 0;
-  }
-
-  /* Kontraste, nachgerechnet am 1. September 2026:
-     Weiss auf --color-brand  (#d00000) = 5,70:1
-     Weiss auf --color-action (#1f4e98) = 8,05:1
-     Beide liegen ueber 4,5:1 und sind damit unabhaengig von der
-     Schriftgroesse sauber. Die frueher noetige Bedingung „nur zulaessig,
-     weil die Beschriftung gross ist" ist mit dem Wechsel von #ff0000
-     auf #d00000 entfallen. */
-  .knopf-sekundaer {
+    border-radius: var(--radius-sm);
     background: var(--color-brand);
-    border: 1px solid var(--color-brand);
     color: var(--color-text-on-brand);
   }
 
-  /* Zustaende --------------------------------------------------------
-     Vorgabe aus spec.md, Abschnitt „Zustaende".
-
-     Die abgedunkelten Flaechen sind aus den Token-Farben abgeleitet,
-     nicht frei gewaehlt: Hover ist die -dark-Stufe der jeweiligen
-     Akzentfarbe, Aktiv dieselbe Farbe noch einmal abgedunkelt. Jeder
-     Knopf bleibt dabei in seiner Farbfamilie — der blaue wird nicht
-     rot. Ein dritter Rot- oder Blauwert kommt nicht in die Palette. */
-
-  .knopf-primaer:hover {
-    background: var(--color-action-strong);
-  }
-
-  .knopf-primaer:active {
-    background: var(--color-action-stronger);
-    transform: translateY(1px);
-  }
-
-  .knopf-sekundaer:hover {
+  /* Zustaende aus den Token-Farben abgeleitet: Hover die dunkle Stufe,
+     Aktiv noch einmal abgedunkelt. */
+  .knopf-probe:hover {
     background: var(--color-brand-strong);
-    border-color: var(--color-brand-strong);
   }
 
-  .knopf-sekundaer:active {
+  .knopf-probe:active {
     background: var(--color-brand-stronger);
-    border-color: var(--color-brand-stronger);
     transform: translateY(1px);
   }
 
-  /* Ohne diese Regel zeichnet jeder Browser seinen eigenen Ring — in
-     Chrome eine 1 px blaue Linie ohne Abstand, auf den farbigen
-     Knoepfen kaum zu erkennen. Auf dem blauen waere sie unsichtbar. */
-  .knopf-primaer:focus-visible,
-  .knopf-sekundaer:focus-visible {
+  .knopf-probe:focus-visible {
     outline: var(--focus-ring-width) solid var(--color-focus-ring);
     outline-offset: var(--focus-ring-offset);
   }
 
-  .zeiten {
-    margin: var(--space-4) 0 0;
-    font-size: var(--font-size-sm);
-    line-height: var(--line-height-relaxed);
-    color: var(--color-text-subtle);
-  }
-
   /* Siegel -----------------------------------------------------------
-     Zwei Fremd-Widgets nebeneinander, linksbuendig unter den
-     Oeffnungszeiten. Sie bringen ihre eigenen Groessen mit; wir geben
+     Zwei Fremd-Widgets nebeneinander, linksbuendig unter Knopf und
+     Beratungszeile. Sie bringen ihre eigenen Groessen mit; wir geben
      ihnen nur die Zeile und den Abstand.
 
      flex-wrap bleibt: Auf schmalen Geraeten sollen sie umbrechen
@@ -634,7 +591,7 @@ const siegel = [
     margin-top: var(--space-8);
     display: flex;
     flex-wrap: wrap;
-    /* Unten buendig: Alle drei Siegel stehen auf derselben Linie,
+    /* Unten buendig: Beide Siegel stehen auf derselben Linie,
        obwohl sie unterschiedlich hoch sind. */
     align-items: flex-end;
     gap: var(--space-6);
@@ -643,17 +600,6 @@ const siegel = [
   /* Alle Groessen unten sind am 1. September 2026 im Browser gemessen,
      nicht entworfen. Sie gehoeren den Widgets, nicht uns. */
 
-  /* Beide Siegel auf die Haelfte, Vorgabe von Alexander am
-     1. September 2026.
-
-     Die Widgets bringen feste Groessen mit. Trustindex bietet keine
-     Groesseneinstellung dafuer, deshalb `zoom`.
-
-     Warum zoom und nicht transform: transform verkleinert nur die
-     Optik, der Kasten belegt weiter die alte Flaeche — daneben bliebe
-     ein Loch. zoom rechnet die Verkleinerung ins Layout ein.
-
-     --siegel-massstab gilt fuer beide Widgets. Ein Wert, eine Stelle. */
   /* Fussnote: klein, gedaempft, nicht kursiv. --color-text-subtle auf
      der Heroflaeche rund 8:1. Die Breite haelt sie auf drei kurze
      Zeilen neben den Siegeln. */
@@ -667,10 +613,17 @@ const siegel = [
     color: var(--color-text-subtle);
   }
 
+  /* Die Widgets bringen feste Groessen mit. Trustindex bietet keine
+     Groesseneinstellung dafuer, deshalb `zoom`.
+
+     Warum zoom und nicht transform: transform verkleinert nur die
+     Optik, der Kasten belegt weiter die alte Flaeche — daneben bliebe
+     ein Loch. zoom rechnet die Verkleinerung ins Layout ein.
+
+     --siegel-massstab gilt fuer beide Widgets. Ein Wert, eine Stelle. */
   .siegel-widget {
-    /* 0,78125 = 0,5 x 1,25 x 1,25. Am 1. September 2026 dreimal
-       angepasst: erst auf die Haelfte, dann zweimal um ein Viertel
-       wieder hinauf.
+    /* Am 1. September 2026 auf die Haelfte, danach mehrfach
+       nachjustiert, zuletzt 0,65.
 
        Am 25. September 2026 von 0,65 um 15 % vergroessert, Vorgabe von
        Alexander: 0,65 x 1,15 = 0,7475.
@@ -687,14 +640,10 @@ const siegel = [
 
   @media (min-width: 768px) {
     .aktionen {
-      flex-direction: row;
+      display: block;
     }
 
-    .knopf-primaer {
-      display: inline-flex;
-    }
-
-    .knopf-sekundaer {
+    .knopf-probe {
       display: inline-block;
     }
   }
@@ -711,7 +660,7 @@ const siegel = [
 
     /* Die Textspalte wird zur Flex-Spalte, damit die Siegel per
        margin-top: auto an ihren unteren Rand rutschen. Ohne das haengen
-       sie direkt unter den Oeffnungszeiten und der Abstand zum Sockel
+       sie direkt unter der Beratungszeile und der Abstand zum Sockel
        waechst mit jedem hoeheren Fenster. */
     .text {
       display: flex;
@@ -762,9 +711,9 @@ const siegel = [
 
     /* --text-unten ist der Abstand zwischen der letzten Textzeile und
        der Sockelkante. Ab 1120 px steht in diesem Raum nichts mehr —
-       die Siegel liegen im Fluss direkt unter den Oeffnungszeiten und
+       die Siegel liegen im Fluss direkt unter der Beratungszeile und
        werden nur optisch hineingeschoben. Der Wert bestimmt damit
-       allein, wie weit die Knoepfe ueber dem Sockel stehen.
+       allein, wie weit der Knopf ueber dem Sockel steht.
 
        Alexander war der Abstand am 2. September 2026 zu gross; vorher
        stand hier --space-28 wie oben. Oben bleibt es dabei, unten sind
@@ -774,9 +723,15 @@ const siegel = [
        zum 2. September 2026 stand --space-28 an beiden Stellen
        getrennt — der Kommentar am Siegel-Block behauptete eine
        Kopplung, die es nicht gab. Jetzt gibt es sie. */
+    /* position + z-index: Seit das Motiv 15 % groesser ist
+       (28. September 2026), reichen die Haarstraehnen bis in die
+       zweite Zeile der Ueberschrift. Der Text liegt darueber und bleibt
+       lesbar. */
     .text {
       --text-unten: var(--space-8);
 
+      position: relative;
+      z-index: 1;
       flex: 0 0 55%;
       padding-top: var(--space-28);
       padding-bottom: var(--text-unten);
@@ -803,7 +758,10 @@ const siegel = [
          --motiv-unten   Abstand der Bildunterkante zur Sektionskante.
                          0 = das Motiv wird von der Kante angeschnitten.
          ------------------------------------------------------------ */
-      --motiv-hoehe: 85%;
+      /* Am 28. September 2026 erst um 15 % vergroessert (85 x 1,15 =
+         97,75), dann wieder um 5 % verkleinert: 97,75 x 0,95 = 92,86.
+         Vorgaben von Alexander. */
+      --motiv-hoehe: 92.86%;
       --motiv-rechts: 48px;
       --motiv-unten: 0px;
     }

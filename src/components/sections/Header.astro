@@ -1,4 +1,5 @@
 ---
+import { zug } from "../../data/zeichnungen";
 // Sektion: Header (seitenübergreifend, 1)
 // Die Komponente setzt keine eigenen Farb- und Abstandswerte. Sie
 // arbeitet ausschliesslich mit den semantischen Rollen aus
@@ -10,12 +11,20 @@ import { telefon, verschluesseln } from "../../data/kontakt";
 
 // marke: Markenname hinter dem Text, in der Schrift des Logos (globale
 // Klasse .marke im BaseLayout).
+//
+// „Dozent werden" ist am 28. September 2026 aus der Leiste raus
+// (Alexander): Die Seite richtet sich an Eltern, der Link lenkte ab. Er
+// steht weiter im Footer. „Warum #Lernstabil" fuehrt zu Sektion 3
+// („Echte Foerderung statt Franchise-Fliessband"), „Faecher" zu
+// Sektion 6 — beide Ziele fehlten bis dahin.
 const links: { text: string; href: string; marke?: string }[] = [
   { text: "Fächer", href: "/#faecher" },
-  { text: "Dozent werden", href: "/fuer-dozenten" },
   { text: "Warum", marke: "#Lernstabil", href: "/#warum" },
   { text: "Preise", href: "/#preise" },
 ];
+
+// Markerzug unter dem Link beim Ueberfahren (`zug`, oben importiert):
+// derselbe wie unter den Sektionsueberschriften.
 ---
 
 <header class="leiste" data-leiste>
@@ -38,6 +47,15 @@ const links: { text: string; href: string; marke?: string }[] = [
                     <span class="marke">{l.marke}</span>
                   </>
                 )}
+                <svg
+                  class="zug"
+                  viewBox="0 0 100 10"
+                  preserveAspectRatio="none"
+                  aria-hidden="true"
+                  focusable="false"
+                >
+                  <path d={zug} />
+                </svg>
               </a>
             </li>
           ))
@@ -50,26 +68,46 @@ const links: { text: string; href: string; marke?: string }[] = [
         Der Name fuer Screenreader kommt jetzt aus dem Linktext —
         „Anrufen:" unsichtbar davor, die Nummer auf dem Handy nur
         optisch versteckt statt entfernt. */}
+    {/* Aufbau nach dem Vorbild grosser Anbieter (Alexander,
+        28. September 2026): Hoerer direkt vor der Nummer, beide gross,
+        darunter mittig eine Zeile mit dem Grund zum Anrufen. „Gratis
+        Beratung" ist Alexanders Formulierung. Auf dem Handy steht nur
+        der Hoerer. */}
     <a class="kontakt" data-kontakt={verschluesseln(telefon.href)}>
-      {/* Selbst gezeichnet, kein Icon-Paket. Flaechig seit dem
-          25. September 2026 (vorher Umriss), Wunsch von Alexander. Die
-          Kontur in derselben Farbe rundet die Ecken ab. Dieselbe Form
-          steht in den Anruf-Knoepfen von Hero und Preisen. */}
-      <svg
-        class="hoerer"
-        viewBox="0 0 24 24"
-        fill="currentColor"
-        stroke="currentColor"
-        stroke-width="2"
-        stroke-linejoin="round"
-        aria-hidden="true"
+      <span class="kontakt-oben">
+        {/* Selbst gezeichnet, kein Icon-Paket. Flaechig seit dem
+            25. September 2026 (vorher Umriss), Wunsch von Alexander.
+            Die Kontur in derselben Farbe rundet die Ecken ab. Dieselbe
+            Form steht im Anruf-Knopf der Preise. */}
+        <svg
+          class="hoerer"
+          viewBox="0 0 24 24"
+          fill="currentColor"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linejoin="round"
+          aria-hidden="true"
+        >
+          <path
+            d="M4 3h4l2 5-2.5 1.5a12.5 12.5 0 0 0 7 7L16 14l5 2v4h-1C11 20 4 13 4 4V3z"
+          ></path>
+        </svg>
+        <span class="nur-vorlesen">Anrufen: </span>
+        <span class="kontakt-nummer"
+          ><Getarnt text={telefon.anzeige} /><svg
+            class="zug"
+            viewBox="0 0 100 10"
+            preserveAspectRatio="none"
+            aria-hidden="true"
+            focusable="false"><path d={zug}></path></svg
+          ></span
+        >
+      </span>
+      {/* Ohne Skript stehen die Wochentage da. Das Skript unten macht an
+          Werktagen vor 20 Uhr „heute" daraus. */}
+      <span class="kontakt-zeile"
+        >Gratis Beratung (<span data-erreichbar>Mo bis Fr 9–20 Uhr</span>)</span
       >
-        <path
-          d="M4 3h4l2 5-2.5 1.5a12.5 12.5 0 0 0 7 7L16 14l5 2v4h-1C11 20 4 13 4 4V3z"
-        ></path>
-      </svg>
-      <span class="nur-vorlesen">Anrufen: </span>
-      <span class="kontakt-nummer"><Getarnt text={telefon.anzeige} /></span>
     </a>
 
     <button
@@ -88,19 +126,39 @@ const links: { text: string; href: string; marke?: string }[] = [
 </header>
 
 <script>
+  // „heute" statt der Wochentage, solange heute noch jemand abnimmt:
+  // Montag bis Freitag vor 20 Uhr, deutsche Zeit. Sonst bleibt „Mo bis
+  // Fr 9–20 Uhr" stehen — lieber allgemein als falsch. Feiertage kennt
+  // die Regel nicht.
+  // Gilt fuer alle Stellen mit data-erreichbar (Kopfleiste, Preise).
+  const erreichbar = document.querySelectorAll("[data-erreichbar]");
+  if (erreichbar.length) {
+    const teile = new Intl.DateTimeFormat("de-DE", {
+      timeZone: "Europe/Berlin",
+      weekday: "short",
+      hour: "numeric",
+      hourCycle: "h23",
+    }).formatToParts(new Date());
+    const tag = teile.find((t) => t.type === "weekday")?.value ?? "";
+    const stunde = Number(teile.find((t) => t.type === "hour")?.value);
+    if (!["Sa", "So"].includes(tag.replace(".", "")) && stunde < 20) {
+      erreichbar.forEach((e) => (e.textContent = "heute 9–20 Uhr"));
+    }
+  }
+
   const leiste = document.querySelector("[data-leiste]");
   const burger = document.querySelector("[data-burger]");
   const nav = document.getElementById("hauptnav");
 
   if (leiste && burger && nav) {
-    const setzen = (offen) => {
+    const setzen = (offen: boolean) => {
       leiste.classList.toggle("offen", offen);
       burger.setAttribute("aria-expanded", String(offen));
       burger.setAttribute(
         "aria-label",
         offen ? "Menü schließen" : "Menü öffnen",
       );
-      if (offen) nav.querySelector("a")?.focus();
+      if (offen) nav.querySelector<HTMLAnchorElement>("a")?.focus();
     };
 
     burger.addEventListener("click", () => {
@@ -151,10 +209,9 @@ const links: { text: string; href: string; marke?: string }[] = [
      sind Bruchteile der Blockbreite --logo-b; der Block trägt
      font-size: var(--logo-b), dadurch ist 1em = Blockbreite.
 
-     Der Block trägt accent, die Leiste accent-dark. Zusammen mit
-     Rundung und Schatten setzt er sich damit als eigene Fläche ab,
-     statt in der Leiste zu verschwinden. Siehe spec.md, Abschnitt
-     „Farbe". */
+     Der Block trägt die Markenfarbe (Rot), die Leiste die Aktionsfarbe
+     (Blau). Zusammen mit Rundung und Schatten setzt er sich damit als
+     eigene Fläche ab, statt in der Leiste zu verschwinden. */
   .logo {
     /* Blockbreite des Logos. Alles darin ist ein Bruchteil davon, der
        Nachbau skaliert also proportional mit — Schriftzug, Claim,
@@ -236,24 +293,57 @@ const links: { text: string; href: string; marke?: string }[] = [
     gap: var(--space-4);
   }
 
+  /* Links ------------------------------------------------------------
+     Am 28. September 2026 ruhiger gemacht (Alexander: „wirkt wie ein
+     WordPress-Widget"). Vorher kursiv und halbfett, beim Ueberfahren
+     unterstrichen. Jetzt aufrecht, ohne Unterstreichung; beim
+     Ueberfahren zieht sich darunter derselbe weisse Markerzug wie unter
+     den Ueberschriften der Seite — die Handschrift der Marke statt der
+     Standard-Unterstreichung des Browsers.
+
+     --zug-dicke, --zug-abstand: Geometrie der Zeichnung. */
   .nav a {
+    --zug-dicke: 3px;
+    --zug-abstand: -0.35em;
+
+    position: relative;
+    display: inline-block;
     color: var(--color-text-on-action);
     text-decoration: none;
     font-weight: var(--font-weight-semibold);
-    font-style: italic;
   }
 
-  /* Die beiden Werte sind Schriftgeometrie, keine Abstaende: Sie
-     richten sich nach der Strichstaerke der Schrift, nicht nach dem
-     Raster der Seite. Deshalb lokal und nicht aus der Skala. */
-  .nav a:hover,
-  .kontakt:hover .kontakt-nummer {
-    --unterstrich-staerke: 2px;
-    --unterstrich-abstand: 3px;
+  .zug {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: var(--zug-abstand);
+    width: 100%;
+    height: 0.3em;
+    overflow: visible;
+    pointer-events: none;
+    clip-path: inset(-50% 100% -50% 0);
+  }
 
-    text-decoration: underline;
-    text-decoration-thickness: var(--unterstrich-staerke);
-    text-underline-offset: var(--unterstrich-abstand);
+  .zug path {
+    fill: none;
+    stroke: var(--color-text-on-action);
+    stroke-width: var(--zug-dicke);
+    stroke-linecap: round;
+    vector-effect: non-scaling-stroke;
+  }
+
+  .nav a:hover .zug,
+  .nav a:focus-visible .zug,
+  .kontakt:hover .zug,
+  .kontakt:focus-visible .zug {
+    clip-path: inset(-50% 0 -50% 0);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .zug {
+      transition: clip-path 200ms ease-out;
+    }
   }
 
   .nav a:active {
@@ -269,14 +359,20 @@ const links: { text: string; href: string; marke?: string }[] = [
   .kontakt {
     margin-left: auto;
     display: inline-flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
     min-width: var(--tap-target-min);
     min-height: var(--tap-target-min);
-    gap: var(--space-2);
     color: var(--color-text-on-action);
     text-decoration: none;
     flex: none;
+  }
+
+  .kontakt-oben {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
   }
 
   .hoerer {
@@ -287,9 +383,12 @@ const links: { text: string; href: string; marke?: string }[] = [
 
   /* Fuer Screenreader da, fuers Auge nicht. Die uebliche Technik: auf
      einen Pixel zusammengezogen und weggeschnitten. display: none oder
-     visibility: hidden wuerden den Text auch aus dem Vorlesen nehmen. */
+     visibility: hidden wuerden den Text auch aus dem Vorlesen nehmen.
+     Auf dem Handy gilt das fuer Nummer und Zeile: Dort steht nur der
+     Hoerer. */
   .nur-vorlesen,
-  .kontakt-nummer {
+  .kontakt-nummer,
+  .kontakt-zeile {
     position: absolute;
     width: 1px;
     height: 1px;
@@ -298,11 +397,30 @@ const links: { text: string; href: string; marke?: string }[] = [
     white-space: nowrap;
   }
 
+  /* Fett und kursiv (28. September 2026, Alexander: die aufrechten
+     Ziffern wirkten „zu mechanisch, wie aus dem Textprogramm"). Echter
+     Kursivschnitt der Source Sans 3, siehe @font-face im BaseLayout.
+     Beim Ueberfahren derselbe Markerzug wie unter den Links — die
+     Unterstreichung des Browsers war an den Stoerzeichen der Tarnung
+     unterbrochen und sah gestrichelt aus. Der Zug sitzt knapp unter
+     den Ziffern (keine Unterlaengen), damit er die Zeile darunter nicht
+     streift. */
   .kontakt-nummer {
-    font-size: var(--font-size-md);
-    font-weight: var(--font-weight-semibold);
+    --zug-dicke: 3px;
+    --zug-abstand: -0.1em;
+
+    font-size: var(--font-size-lg);
     font-style: italic;
-    white-space: nowrap;
+    font-weight: var(--font-weight-bold);
+    line-height: var(--line-height-tight);
+  }
+
+  /* Mittig unter Hoerer und Nummer, kursiv wie die Nummer.
+     Weiss auf dem Blau der Leiste: 8,1:1. */
+  .kontakt-zeile {
+    font-size: var(--font-size-sm);
+    font-style: italic;
+    line-height: var(--line-height-normal);
   }
 
   /* Burger ---------------------------------------------------------- */
@@ -374,8 +492,10 @@ const links: { text: string; href: string; marke?: string }[] = [
       height: var(--icon-size-md);
     }
 
-    .kontakt-nummer {
-      position: static;
+    .kontakt-nummer,
+    .kontakt-zeile {
+      position: relative;
+      display: block;
       width: auto;
       height: auto;
       overflow: visible;
@@ -410,6 +530,11 @@ const links: { text: string; href: string; marke?: string }[] = [
        var(--space-8) ist nur der Mindestabstand zur Navigation. */
     .kontakt {
       padding-left: var(--space-8);
+    }
+
+    /* Volle Leistenhoehe (64 px): Nummer eine Stufe groesser. */
+    .kontakt-nummer {
+      font-size: var(--font-size-xl);
     }
 
     .burger {

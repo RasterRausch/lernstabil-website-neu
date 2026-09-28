@@ -60,7 +60,7 @@ const bereiche = [
 ];
 ---
 
-<section class="faecher" aria-labelledby="faecher-titel">
+<section class="faecher" id="faecher" aria-labelledby="faecher-titel">
   <div class="wrap">
     <div class="kopf">
       <p class="vorzeile">{vorzeile}</p>
@@ -134,7 +134,7 @@ const bereiche = [
     font-size: var(--font-size-md);
     font-weight: var(--font-weight-bold);
     line-height: var(--line-height-relaxed);
-    letter-spacing: 0.04em;
+    letter-spacing: var(--letter-spacing-caps);
     text-transform: uppercase;
   }
 
@@ -142,8 +142,8 @@ const bereiche = [
     margin: var(--space-2) auto 0;
     /* 28ch wie in Sektion 3. Bei 22 brach die kurze Ueberschrift
        unnoetig auf zwei Zeilen. */
-    max-width: 28ch;
-    font-size: var(--font-size-4xl);
+    max-width: var(--measure-heading);
+    font-size: var(--font-size-title);
     font-weight: var(--font-weight-bold);
     line-height: var(--line-height-snug);
   }

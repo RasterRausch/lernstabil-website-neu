@@ -2,7 +2,7 @@
 // Formular „Gratis-Probestunde anfragen". Angelegt am 27. September
 // 2026, Entwurf mit Alexander abgestimmt:
 //
-// DREI SCHRITTE, FUENF FELDER. Erst zwei Fragen, die sich mit einem
+// DREI SCHRITTE, SECHS FELDER. Erst zwei Fragen, die sich mit einem
 // Tipp beantworten lassen und nichts Persoenliches verlangen (Fach,
 // Klasse), dann erst Name und Telefon. Wer zwei Fragen beantwortet
 // hat, bricht beim dritten Schritt selten ab. Mehrstufig lohnt sich nur,
@@ -208,7 +208,7 @@ const i = (name: string) => `${id}-${name}`;
       </div>
       <input type="hidden" name="t" data-zeit />
 
-      <p class="fehler fehler-allgemein" data-fehler="formular" role="alert"></p>
+      <p class="fehler" data-fehler="formular" role="alert"></p>
       <p class="versand-fehler" data-versand-fehler hidden>
         Das hat leider nicht geklappt. Bitte versuchen Sie es noch einmal oder
         rufen Sie uns an:{" "}
@@ -464,7 +464,7 @@ const i = (name: string) => `${id}-${name}`;
     transform: translateY(calc(-1 * var(--space-1) / 2));
   }
 
-  /* Rot auf Weiss bzw. Weiss auf Rot: 5,9:1, auch der kleine Zusatz
+  /* Rot auf Weiss bzw. Weiss auf Rot: 5,70:1, auch der kleine Zusatz
      („Klasse 1–4") bleibt lesbar. */
   .kachel:has(input:checked) {
     border-color: var(--color-brand);
@@ -484,7 +484,7 @@ const i = (name: string) => `${id}-${name}`;
   }
 
   .kachel:has(input:focus-visible) {
-    outline: var(--focus-ring-width) solid var(--color-action);
+    outline: var(--focus-ring-width) solid var(--color-focus-ring-inverse);
     outline-offset: var(--focus-ring-offset);
   }
 
@@ -532,7 +532,7 @@ const i = (name: string) => `${id}-${name}`;
   }
 
   .eingabe:focus-visible {
-    outline: var(--focus-ring-width) solid var(--color-action);
+    outline: var(--focus-ring-width) solid var(--color-focus-ring-inverse);
     outline-offset: var(--focus-ring-offset);
   }
 
@@ -555,7 +555,7 @@ const i = (name: string) => `${id}-${name}`;
   }
 
   /* Fehler ------------------------------------------------------------------
-     Rot auf Weiss: #d00000 erreicht 5,9:1 — auch fuer kleine Schrift. */
+     Rot auf Weiss: #d00000 erreicht 5,70:1 — auch fuer kleine Schrift. */
   .fehler {
     margin: 0;
     color: var(--color-brand);
@@ -637,7 +637,7 @@ const i = (name: string) => `${id}-${name}`;
 
   .knopf-weiter:focus-visible,
   .knopf-zurueck:focus-visible {
-    outline: var(--focus-ring-width) solid var(--color-action);
+    outline: var(--focus-ring-width) solid var(--color-focus-ring-inverse);
     outline-offset: var(--focus-ring-offset);
   }
 

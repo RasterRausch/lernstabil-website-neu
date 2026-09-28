@@ -1,6 +1,8 @@
 ---
+import { zug as strich } from "../../data/zeichnungen";
 import Unterstrichen from "../Unterstrichen.astro";
 import Getarnt from "../Getarnt.astro";
+import Beratung from "../Beratung.astro";
 import { telefon, verschluesseln } from "../../data/kontakt";
 // Sektion: Preise (Startseite, 7)
 //
@@ -98,14 +100,12 @@ const stufen = [
   },
 ];
 
-// Gezeichneter Markerstrich, einmal fuer das Durchstreichen, einmal
-// fuer die Unterstreichung am Zettel. Die Welle ist leicht
-// unregelmaessig, damit der Strich nicht nach Textauszeichnung
-// aussieht. viewBox 100 x 10, gestreckt ueber preserveAspectRatio.
-const strich = "M1 6 C 18 3, 34 7, 52 5 S 82 3, 99 5";
+// Der Markerstrich (`strich`, oben importiert aus data/zeichnungen.ts)
+// dient zweimal: zum Durchstreichen der Posten und als Unterstreichung
+// am Zettel.
 
 // Senkrechter Markerzug links neben „Einzelunterricht mit festem
-// Dozenten", derselbe Zug wie oben, nur hochkant (viewBox 10 x 100).
+// Dozenten", derselbe Zug wie der Strich, nur hochkant (viewBox 10 x 100).
 // Ersetzt am 28. September 2026 die gerade rote Kante — die wirkte
 // neben dem handgeschriebenen Preis zu akkurat (Alexander). Der Zug
 // wackelt leicht und endet unten nicht genau senkrecht.
@@ -131,7 +131,7 @@ const kante = "M5 2 C 3 20, 7 36, 5 52 S 3 80, 6 98";
 
     {/* Grundpreis und was nicht dazukommt ---------------------------- */}
     <div class="grundpreis">
-      <div class="betrag-block">
+      <div>
         <p class="betrag">28,95&nbsp;€</p>
         <p class="einheit">je Unterrichtsstunde (45&nbsp;Minuten)</p>
         {
@@ -164,7 +164,7 @@ const kante = "M5 2 C 3 20, 7 36, 5 52 S 3 80, 6 98";
           {
             posten.map((p, i) => (
               <li tabindex="0" aria-describedby={`posten-klartext-${i}`}>
-                <span class="posten-zeile">
+                <span>
                   <span class="posten-name">
                     {p.name}
                     <svg
@@ -302,26 +302,31 @@ const kante = "M5 2 C 3 20, 7 36, 5 52 S 3 80, 6 98";
             aria-describedby="probestunde-hinweis-preise"
             >Gratis Probestunde sichern<span aria-hidden="true">*</span></a
           >
-          <a class="knopf-telefon" data-kontakt={verschluesseln(telefon.href)}>
-            {/* Die Nummer steht im Linktext, das Icon ist dekorativ. */}
-            <svg
-              class="icon-telefon"
-              viewBox="0 0 24 24"
-              fill="currentColor"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linejoin="round"
-              aria-hidden="true"
-              focusable="false"
-            >
-              <path
-                d="M4 3h4l2 5-2.5 1.5a12.5 12.5 0 0 0 7 7L16 14l5 2v4h-1C11 20 4 13 4 4V3z"
-              ></path>
-            </svg>
-            <span><Getarnt text={telefon.anzeige} /></span>
-          </a>
+          {/* Unter dem Telefon-Knopf der Grund zum Anrufen, wie im Hero
+              (Alexander, 28. September 2026). Ersetzt die graue Zeile
+              „Mo bis Fr, 9 bis 20 Uhr" unter beiden Knoepfen. */}
+          <div class="telefon-gruppe">
+            <a class="knopf-telefon" data-kontakt={verschluesseln(telefon.href)}>
+              {/* Die Nummer steht im Linktext, das Icon ist dekorativ. */}
+              <svg
+                class="icon-telefon"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linejoin="round"
+                aria-hidden="true"
+                focusable="false"
+              >
+                <path
+                  d="M4 3h4l2 5-2.5 1.5a12.5 12.5 0 0 0 7 7L16 14l5 2v4h-1C11 20 4 13 4 4V3z"
+                ></path>
+              </svg>
+              <span><Getarnt text={telefon.anzeige} /></span>
+            </a>
+            <Beratung nummer={false} />
+          </div>
         </div>
-        <p class="zeiten">Mo bis Fr, 9 bis 20 Uhr</p>
         {/* Fussnote zum Sternchen, Wortlaut wie im Hero. */}
         <p class="fussnote" id="probestunde-hinweis-preise">
           <span aria-hidden="true">*</span> Die Gratis-Probestunde dauert 45
@@ -432,11 +437,10 @@ const kante = "M5 2 C 3 20, 7 36, 5 52 S 3 80, 6 98";
     /* Die Hand der Strich-Animation kommt von rechts ausserhalb herein.
        Ohne das entstuende waehrenddessen eine waagerechte Scrollleiste.
        clip statt hidden: Es entsteht kein Scrollcontainer, die sticky
-       Kopfleiste und scroll-margin bleiben unberuehrt. */
+       Kopfleiste bleibt unberuehrt. Den Abstand unter der Kopfleiste
+       beim Sprung ueber „Preise" regelt scroll-padding-top im
+       BaseLayout fuer alle Sprungziele. */
     overflow-x: clip;
-    /* Die Kopfleiste ist sticky. Ohne diesen Abstand verschwaende die
-       Vorzeile beim Sprung ueber „Preise" in der Navigation darunter. */
-    scroll-margin-top: var(--layout-header-height);
   }
 
   /* Rote Kante ------------------------------------------------------------
@@ -477,14 +481,14 @@ const kante = "M5 2 C 3 20, 7 36, 5 52 S 3 80, 6 98";
     font-size: var(--font-size-md);
     font-weight: var(--font-weight-bold);
     line-height: var(--line-height-relaxed);
-    letter-spacing: 0.04em;
+    letter-spacing: var(--letter-spacing-caps);
     text-transform: uppercase;
   }
 
   h2 {
     margin: var(--space-2) auto 0;
-    max-width: 28ch;
-    font-size: var(--font-size-4xl);
+    max-width: var(--measure-heading);
+    font-size: var(--font-size-title);
     font-weight: var(--font-weight-bold);
     line-height: var(--line-height-snug);
   }
@@ -595,7 +599,7 @@ const kante = "M5 2 C 3 20, 7 36, 5 52 S 3 80, 6 98";
 
   .ohne h3 {
     font-size: var(--font-size-md);
-    letter-spacing: 0.04em;
+    letter-spacing: var(--letter-spacing-caps);
     text-transform: uppercase;
     color: var(--color-text-subtle);
   }
@@ -1102,10 +1106,26 @@ const kante = "M5 2 C 3 20, 7 36, 5 52 S 3 80, 6 98";
     gap: var(--space-4);
   }
 
+  /* Telefon-Knopf mit der Zeile „Gratis Beratung" darunter. Die Zeile
+     steht mittig unter dem Knopf, der Abstand ist knapper als zwischen
+     den Knoepfen: Sie gehoert zu ihm. */
+  .telefon-gruppe {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .telefon-gruppe :global(.beratung) {
+    justify-content: center;
+    margin-top: var(--space-2);
+    font-size: var(--font-size-sm);
+  }
+
   @media (min-width: 768px) {
     .knoepfe {
       flex-direction: row;
       justify-content: center;
+      align-items: flex-start;
     }
   }
 
@@ -1164,12 +1184,6 @@ const kante = "M5 2 C 3 20, 7 36, 5 52 S 3 80, 6 98";
     width: 1.1em;
     height: 1.1em;
     flex-shrink: 0;
-  }
-
-  .zeiten {
-    margin: var(--space-4) 0 0;
-    font-size: var(--font-size-sm);
-    color: var(--color-text-subtle);
   }
 
   /* Fussnote zum Sternchen am Knopf — wie im Hero: klein, gedaempft,

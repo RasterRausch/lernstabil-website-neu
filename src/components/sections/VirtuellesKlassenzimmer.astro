@@ -1,10 +1,11 @@
 ---
+import { haken } from "../../data/zeichnungen";
 import Unterstrichen from "../Unterstrichen.astro";
 // Sektion: Echte Nachhilfe im virtuellen Klassenzimmer (Startseite, 5)
 //
 // Aufbau und Bild von der bestehenden Seite lernstabil.de.
 //
-// FLAECHE: Weiss. Darueber steht die rote Vorteile-Flaeche, darunter
+// FLAECHE: Weiss. Darueber steht die Kreidetafel der Vorteile, darunter
 // die dunkle Kreidetafel — Weiss trennt beide, statt dass zwei
 // kraeftige Flaechen aneinanderstossen. Kopf und Knopf deshalb wie in
 // Sektion 3, die ebenfalls weiss ist.
@@ -48,8 +49,7 @@ const punkte = [
   },
 ];
 
-// Haken wie in Sektion 3 (viewBox 0 0 30 24).
-const haken = "M0 12 C 3 14, 6 17, 9 21 C 14 12, 21 6, 30 1";
+// Haken wie in Sektion 3, aus data/zeichnungen.ts.
 ---
 
 <section class="klassenzimmer" aria-labelledby="klassenzimmer-titel">
@@ -344,7 +344,7 @@ const haken = "M0 12 C 3 14, 6 17, 9 21 C 14 12, 21 6, 30 1";
   h2 {
     margin: var(--space-2) auto 0;
     max-width: 36ch;
-    font-size: var(--font-size-4xl);
+    font-size: var(--font-size-title);
     font-weight: var(--font-weight-bold);
     line-height: var(--line-height-snug);
   }
@@ -357,8 +357,8 @@ const haken = "M0 12 C 3 14, 6 17, 9 21 C 14 12, 21 6, 30 1";
 
   /* Punkte ---------------------------------------------------------------
      Wie in Sektion 3: roter Marker-Haken, Ueberschrift in der
-     Displayschrift. Hier ohne Hand — die hakt in Sektion 3 ab; ein
-     zweites Mal waere Wiederholung. Ab 1120 px drei nebeneinander.
+     Displayschrift, abgehakt von derselben Doodly-Hand. Ab 1120 px drei
+     nebeneinander.
 
      --haken-*: Geometrie der Zeichnung, wie in Sektion 3. */
   .punkte-block {
@@ -667,7 +667,7 @@ const haken = "M0 12 C 3 14, 6 17, 9 21 C 14 12, 21 6, 30 1";
   }
 
   .knopf:focus-visible {
-    outline: var(--focus-ring-width) solid var(--color-text-inverse);
+    outline: var(--focus-ring-width) solid var(--color-focus-ring-inverse);
     outline-offset: var(--focus-ring-offset);
   }
 

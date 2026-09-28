@@ -15,6 +15,8 @@ interface Props {
   // Fuer Seiten, die niemand ueber Google finden soll (Danke-Seite,
   // Fehlerseite des Formulars).
   noindex?: boolean;
+  // Aufruf oben im Footer, siehe components/sections/Footer.astro.
+  footerAufruf?: 'probestunde' | 'bewerbung';
 }
 
 const {
@@ -23,6 +25,7 @@ const {
   lang = 'de',
   probestundeDialog = true,
   noindex = false,
+  footerAufruf = 'probestunde',
 } = Astro.props;
 ---
 
@@ -35,12 +38,25 @@ const {
     {description && <meta name="description" content={description} />}
     {noindex && <meta name="robots" content="noindex" />}
 
-    {/* Die Textschrift steht in jedem Absatz ueber dem Falz, deshalb
-        vorgeladen. Die Kursive nicht: Sie kommt nur in der Hero-Unterzeile
-        vor und wird geladen, sobald der Browser sie braucht. */}
+    {/* Favicon von der alten Seite uebernommen (28. September 2026):
+        weisses # auf rotem Quadrat, 512 px. Das Apple-Touch-Icon ist
+        dasselbe Bild auf 180 px, fuer den Home-Bildschirm auf dem iPhone. */}
+    <link rel="icon" type="image/png" href="/favicon.png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+
+    {/* Beide Schnitte der Textschrift stehen ueber dem Falz — die
+        Kursive seit 28. September 2026 in der Telefonnummer der
+        Kopfleiste und im Hero —, deshalb beide vorgeladen. */}
     <link
       rel="preload"
       href="/fonts/source-sans-3-latin.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link
+      rel="preload"
+      href="/fonts/source-sans-3-italic-latin.woff2"
       as="font"
       type="font/woff2"
       crossorigin
@@ -64,7 +80,7 @@ const {
     <a class="sprungmarke" href="#inhalt">Zum Inhalt springen</a>
     <Header />
     <slot />
-    <Footer />
+    <Footer aufruf={footerAufruf} />
     {probestundeDialog && <ProbestundeDialog />}
   </body>
 </html>
@@ -99,13 +115,10 @@ const {
      Variable Schrift: Eine Datei traegt alle Gewichte. Freigegeben sind
      400 bis 700 — die drei Schnitte aus tokens.css liegen darin.
 
-     Kursiv nur 400, wie vorher bei Google: Der Kursivschnitt kam am
-     2. September 2026 fuer die Hervorhebungen in der zweiten Zeile der
-     Hero-Ueberschrift dazu. Ohne echten Schnitt schert der Browser die
-     aufrechte Schrift nur schraeg — bei Source Sans 3 gut sichtbar,
-     weil die echte Kursive andere Buchstabenformen hat (a, e, g). Wird
-     Kursiv spaeter in einem fetteren Text noetig, hier den Bereich
-     erweitern; die Datei kann es schon. */
+     Kursiv ebenfalls als echter Schnitt (Datei unten): Ohne ihn schert
+     der Browser die aufrechte Schrift nur schraeg — bei Source Sans 3
+     gut sichtbar, weil die echte Kursive andere Buchstabenformen hat
+     (a, e, g). */
   @font-face {
     font-family: 'Source Sans 3';
     font-style: normal;
@@ -114,16 +127,35 @@ const {
     src: url('/fonts/source-sans-3-latin.woff2') format('woff2');
   }
 
+  /* Seit 28. September 2026 400 bis 700: Die Telefonnummer in der
+     Kopfleiste steht fett und kursiv. Die bisherige Datei enthielt nur
+     den Schnitt 400 (anders als oben vermerkt) und ist am selben Tag
+     durch die variable Fassung von Google ersetzt worden: gleicher
+     Latin-Teilsatz, unveraendert, 28 KB statt 16 KB. */
   @font-face {
     font-family: 'Source Sans 3';
     font-style: italic;
-    font-weight: 400;
+    font-weight: 400 700;
     font-display: swap;
     src: url('/fonts/source-sans-3-italic-latin.woff2') format('woff2');
   }
 
   * {
     box-sizing: border-box;
+  }
+
+  /* Sprungmarken der Navigation gleiten statt zu springen (Alexander,
+     28. September 2026). scroll-padding-top haelt das Ziel unter der
+     klebenden Kopfleiste frei, fuer alle Sprungziele an einer Stelle.
+     Wer Bewegung abbestellt hat, springt wie vorher. */
+  html {
+    scroll-padding-top: var(--layout-header-height);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    html {
+      scroll-behavior: smooth;
+    }
   }
 
   /* Der Markenname „#Lernstabil" steht ueberall in der Schrift des
