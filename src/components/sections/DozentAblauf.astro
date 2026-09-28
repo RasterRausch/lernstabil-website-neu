@@ -1,0 +1,168 @@
+---
+// Sektion: So laeuft es ab (Seite „Dozent werden", 3)
+// Angelegt am 28. September 2026.
+//
+// Inhalt von der alten Karriere-Seite: kurze E-Mail mit Lebenslauf und
+// Faechern, Rueckmeldung innerhalb weniger Tage, Hilfe beim Einstieg,
+// Materialien, immer ansprechbar. Ein Gespraech oder eine Probestunde
+// fuer Bewerber stand dort nicht — deshalb hier auch nicht.
+//
+// Gestaltung wie die Preise: dunkle Flaeche mit roter Kante oben,
+// grosse Ziffern in der Displayschrift.
+
+import Unterstrichen from "../Unterstrichen.astro";
+
+const schritte = [
+  {
+    titel: "E-Mail schreiben",
+    text: "Schicken Sie uns Ihren Lebenslauf und die Fächer, die Sie unterrichten möchten. Ein paar Zeilen genügen.",
+  },
+  {
+    titel: "Wir melden uns",
+    text: "Innerhalb weniger Tage bekommen Sie eine Antwort von uns.",
+  },
+  {
+    titel: "Start mit Begleitung",
+    text: "Wir helfen Ihnen beim Einstieg, stellen Materialien bereit und sind ansprechbar, wenn Fragen aufkommen.",
+  },
+];
+---
+
+<section class="ablauf" aria-labelledby="ablauf-titel">
+  {/* Rote Kante oben wie bei den Preisen. Rein dekorativ. */}
+  <div class="keil"></div>
+
+  <div class="wrap">
+    <div class="kopf">
+      <p class="vorzeile">So läuft es ab</p>
+      <h2 id="ablauf-titel">
+        In drei Schritten zur{" "}
+        <Unterstrichen>ersten Stunde</Unterstrichen>
+      </h2>
+      <p class="einleitung">
+        Sie geben Online-Einzelunterricht, flexibel von zu Hause aus, mit
+        Schülern, die wirklich etwas lernen wollen. Keine Massenkurse, kein
+        starrer Lehrplan. Um den Rest kümmern wir uns.
+      </p>
+    </div>
+
+    <ol class="schritte">
+      {
+        schritte.map((s, i) => (
+          <li>
+            <span class="ziffer" aria-hidden="true">
+              {i + 1}
+            </span>
+            <h3>{s.titel}</h3>
+            <p>{s.text}</p>
+          </li>
+        ))
+      }
+    </ol>
+  </div>
+</section>
+
+<style>
+  .ablauf {
+    background: var(--color-surface-default);
+    color: var(--color-text-default);
+    padding-bottom: var(--space-18);
+  }
+
+  /* Wie .keil in Preise.astro: links tiefer als rechts.
+     --keil-rest: Hoehe am rechten Rand, Geometrie der Zeichnung. */
+  .keil {
+    --keil-rest: 25%;
+
+    height: var(--space-12);
+    background: var(--color-brand-strong);
+    clip-path: polygon(0 0, 100% 0, 100% var(--keil-rest), 0 100%);
+  }
+
+  .wrap {
+    width: 100%;
+    max-width: var(--layout-content-max);
+    margin: 0 auto;
+    padding: var(--space-18) var(--layout-gutter) 0;
+  }
+
+  .kopf {
+    text-align: center;
+  }
+
+  /* Auf dunkler Flaeche weiss und in Versalien wie bei den Preisen: Das
+     Blau der hellen Sektionen reicht hier nicht fuer den Kontrast. */
+  .vorzeile {
+    margin: 0;
+    font-size: var(--font-size-md);
+    font-weight: var(--font-weight-bold);
+    letter-spacing: var(--letter-spacing-caps);
+    line-height: var(--line-height-relaxed);
+    text-transform: uppercase;
+  }
+
+  h2 {
+    margin: var(--space-2) auto 0;
+    max-width: var(--measure-heading);
+    font-size: var(--font-size-title);
+    font-weight: var(--font-weight-bold);
+    line-height: var(--line-height-snug);
+  }
+
+  .einleitung {
+    margin: var(--space-6) auto 0;
+    max-width: var(--measure-wide);
+    color: var(--color-text-subtle);
+  }
+
+  .schritte {
+    margin: var(--space-12) 0 0;
+    padding: 0;
+    list-style: none;
+    display: grid;
+    gap: var(--space-12);
+  }
+
+  /* Grosse Ziffer in der Displayschrift, geneigt wie von Hand
+     geschrieben. Staerker als der Preis (-1,5deg): Eine einzelne Ziffer
+     wirkt bei derselben Neigung fast gerade. */
+  .ziffer {
+    --neigung: -4deg;
+
+    display: block;
+    font-family: var(--font-family-display);
+    font-size: var(--font-size-5xl);
+    font-weight: var(--font-weight-bold);
+    line-height: var(--line-height-tight);
+    color: var(--color-brand);
+    transform: rotate(var(--neigung));
+    transform-origin: left center;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .ziffer {
+      --neigung: 0deg;
+    }
+  }
+
+  .schritte h3 {
+    margin: var(--space-3) 0 0;
+    font-family: var(--font-family-display);
+    font-size: var(--font-size-xl);
+    font-weight: var(--font-weight-bold);
+    line-height: var(--line-height-snug);
+  }
+
+  .schritte p {
+    margin: var(--space-2) 0 0;
+    color: var(--color-text-subtle);
+    max-width: var(--measure-default);
+  }
+
+  @media (min-width: 1120px) {
+    .schritte {
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--space-12);
+    }
+  }
+</style>

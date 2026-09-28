@@ -1,4 +1,5 @@
 ---
+import { haken } from "../../data/zeichnungen";
 import Getarnt from "../Getarnt.astro";
 import { bewerbung, telefon, verschluesseln } from "../../data/kontakt";
 // Sektion: Hero der Seite „Dozent werden" (/fuer-dozenten).
@@ -10,20 +11,18 @@ import { bewerbung, telefon, verschluesseln } from "../../data/kontakt";
 // sehen, dass er noch bei #Lernstabil ist. Ohne Siegel und Stempel —
 // die sprechen Eltern an, nicht Bewerber.
 //
-// TEXT: Nur Tatsachen, die auf der Seite schon stehen — Einzelunterricht,
-// online, fester Dozent je Schueler, die meisten Schueler bleiben ueber
-// ein Jahr. Honorar, Anstellungsart und Anforderungen fehlen noch; die
-// kommen von Alexander und gehoeren in die folgenden Sektionen.
+// TEXT: Die drei Haken sind die staerksten Punkte der alten
+// Karriere-Seite (lernstabil.de/karriere): ortsunabhaengig, Honorar pro
+// Stunde, persoenliche Begleitung. Ausfuehrlich in DozentVorteile.astro.
 //
-// Anrede „Sie" wie auf der ganzen Seite.
+// Anrede „Sie" wie auf der ganzen Seite (Alexander, 28. September 2026).
 
 const punkte = [
-  "Einzelunterricht, nie Gruppe",
-  "Online unterrichten, ohne Anfahrt",
-  "Feste Schüler statt ständig neuer Gesichter",
+  "Online und ortsunabhängig",
+  "Faires Honorar pro Stunde",
+  "Persönliche Begleitung im kleinen Team",
 ];
-// Derselbe Marker-Haken wie im Hero der Startseite.
-const haken = "M0 12 C 3 14, 6 17, 9 21 C 14 12, 21 6, 30 1";
+// Derselbe Marker-Haken wie im Hero der Startseite (data/zeichnungen.ts).
 ---
 
 <section class="hero" aria-labelledby="dozent-titel">
@@ -290,6 +289,12 @@ const haken = "M0 12 C 3 14, 6 17, 9 21 C 14 12, 21 6, 30 1";
   .nebenweg a {
     color: var(--color-text-default);
     white-space: nowrap;
+  }
+
+  .nebenweg a:focus-visible {
+    outline: var(--focus-ring-width) solid var(--color-focus-ring);
+    outline-offset: var(--focus-ring-offset);
+    border-radius: var(--radius-sm);
   }
 
   /* Unter 1120 px steht das Motiv unter dem Text, ueber die volle

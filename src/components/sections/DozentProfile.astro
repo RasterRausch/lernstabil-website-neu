@@ -1,0 +1,144 @@
+---
+// Sektion: Wer zu uns passt (Seite „Dozent werden", 4)
+// Angelegt am 28. September 2026.
+//
+// Die drei Gruppen von der alten Karriere-Seite: Studenten aller
+// Fachrichtungen, Akademiker, ehemalige Lehrer. Nicht gegendert, auch
+// nicht in Ersatzformen („Lehrkraefte") — Vorgabe von Alexander.
+//
+// Gestaltung wie die Fragen der Startseite: weisse Zettel auf
+// hellgrauer Flaeche, abwechselnd leicht gekippt.
+
+import Unterstrichen from "../Unterstrichen.astro";
+
+const profile = [
+  {
+    titel: "Studenten aller Fachrichtungen",
+    text: "Sie studieren und möchten nebenbei flexibel Geld verdienen? Bei uns geben Sie Ihr Wissen weiter und sammeln wertvolle Berufserfahrung.",
+  },
+  {
+    titel: "Akademiker",
+    text: "Sie haben einen Hochschulabschluss und möchten Ihr Wissen einsetzen? Wir freuen uns auf Ihre fachliche Erfahrung.",
+  },
+  {
+    titel: "Ehemalige Lehrer",
+    text: "Sie waren Lehrer und möchten flexibel weiterunterrichten? Online-Nachhilfe gibt Ihnen genau diese Freiheit.",
+  },
+];
+---
+
+<section class="profile" aria-labelledby="profile-titel">
+  <div class="wrap">
+    <div class="kopf">
+      <p class="vorzeile">Wer zu uns passt</p>
+      <h2 id="profile-titel">
+        Wissen, das Sie <Unterstrichen>weitergeben</Unterstrichen>{" "}wollen
+      </h2>
+      <p class="einleitung">
+        Wir suchen engagierte Menschen mit Fachwissen und Freude am
+        Unterrichten, aus ganz unterschiedlichen Richtungen.
+      </p>
+    </div>
+
+    <ul class="zettel-liste">
+      {
+        profile.map((p) => (
+          <li class="zettel">
+            <h3>{p.titel}</h3>
+            <p>{p.text}</p>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>
+
+<style>
+  .profile {
+    background: var(--color-surface-inverse-muted);
+    color: var(--color-text-inverse);
+    padding: var(--space-18) 0;
+  }
+
+  .wrap {
+    width: 100%;
+    max-width: var(--layout-content-max);
+    margin: 0 auto;
+    padding: 0 var(--layout-gutter);
+  }
+
+  .kopf {
+    text-align: center;
+  }
+
+  .vorzeile {
+    margin: 0;
+    color: var(--color-action);
+    font-size: var(--font-size-md);
+    font-weight: var(--font-weight-bold);
+    line-height: var(--line-height-relaxed);
+  }
+
+  h2 {
+    margin: var(--space-2) auto 0;
+    max-width: var(--measure-heading);
+    font-size: var(--font-size-title);
+    font-weight: var(--font-weight-bold);
+    line-height: var(--line-height-snug);
+  }
+
+  .einleitung {
+    margin: var(--space-6) auto 0;
+    max-width: var(--measure-wide);
+    color: var(--color-text-inverse-subtle);
+  }
+
+  /* Zettel wie in FragenAntworten.astro: weisses Blatt, kleiner
+     Schatten, abwechselnd gekippt. --kippen: Winkel der Zeichnung. */
+  .zettel-liste {
+    margin: var(--space-12) 0 0;
+    padding: 0;
+    list-style: none;
+    display: grid;
+    gap: var(--space-8);
+  }
+
+  .zettel {
+    --kippen: -0.8deg;
+
+    padding: var(--space-8) var(--space-6);
+    background: var(--color-surface-inverse);
+    box-shadow: var(--shadow-sm);
+    transform: rotate(var(--kippen));
+  }
+
+  .zettel:nth-child(even) {
+    --kippen: 0.6deg;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .zettel,
+    .zettel:nth-child(even) {
+      --kippen: 0deg;
+    }
+  }
+
+  .zettel h3 {
+    margin: 0;
+    font-family: var(--font-family-display);
+    font-size: var(--font-size-xl);
+    font-weight: var(--font-weight-bold);
+    line-height: var(--line-height-snug);
+  }
+
+  .zettel p {
+    margin: var(--space-3) 0 0;
+    color: var(--color-text-inverse-subtle);
+  }
+
+  @media (min-width: 1120px) {
+    .zettel-liste {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+</style>

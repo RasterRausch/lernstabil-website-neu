@@ -1,0 +1,194 @@
+---
+import { haken } from "../../data/zeichnungen";
+// Sektion: Warum #Lernstabil (Seite „Dozent werden", 2)
+// Angelegt am 28. September 2026.
+//
+// Inhalt von der alten Karriere-Seite (lernstabil.de/karriere, Stand
+// 28. September 2026): kleines Team, Einzelunterricht, flexibel und
+// ortsunabhaengig, persoenliche Begleitung, Materialien, faires Honorar
+// pro Stunde. Neu geschrieben in der Sie-Form und ohne Gedankenstriche,
+// ohne neue Behauptungen.
+//
+// Gestaltung wie Sektion 3 der Startseite: weisse Flaeche, blaue
+// Vorzeile, Ueberschrift mit Marker-Unterstrich, rote Marker-Haken,
+// Punkt-Ueberschriften in der Displayschrift.
+
+import Unterstrichen from "../Unterstrichen.astro";
+
+const punkte = [
+  {
+    titel: "Ein kleines Team",
+    text: "Man kennt Sie. Bei uns sind Sie keine Nummer, sondern Teil eines kleinen, engagierten Teams.",
+  },
+  {
+    titel: "Unterricht, der wirkt",
+    text: "Einzelunterricht statt Massenabfertigung. Bei uns steht echter Lernerfolg im Mittelpunkt.",
+  },
+  {
+    titel: "Flexibel und ortsunabhängig",
+    text: "Sie unterrichten online, wann und wo es für Sie passt. Ganz ohne Pendeln.",
+  },
+  {
+    titel: "Sie sind nicht allein",
+    text: "Wir begleiten Sie persönlich, vom Start bis zur letzten Frage. Ohne Hierarchien, ohne Bürokratie.",
+  },
+  {
+    titel: "Material ist da",
+    text: "Wir stellen Ihnen passende Materialien bereit. Eigene Ideen sind trotzdem willkommen.",
+  },
+  {
+    titel: "Faire Bezahlung",
+    text: "Ein klares Honorar pro Stunde. Ohne versteckte Abzüge, ohne Spielchen.",
+  },
+];
+
+// Derselbe Marker-Haken wie in Sektion 3 (data/zeichnungen.ts).
+---
+
+<section class="vorteile" aria-labelledby="vorteile-titel">
+  <div class="wrap">
+    <div class="kopf">
+      <p class="vorzeile">Warum #Lernstabil</p>
+      <h2 id="vorteile-titel">
+        <Unterstrichen>Persönlich</Unterstrichen>{" "}statt anonym
+      </h2>
+      <p class="einleitung">
+        Gute Nachhilfe lebt von engagierten Lehrern. Bei <strong class="marke"
+          >#Lernstabil</strong
+        > geben Sie Ihr Wissen weiter: flexibel, fair bezahlt und mit persönlicher
+        Begleitung.
+      </p>
+    </div>
+
+    <ul class="punkte">
+      {
+        punkte.map((p) => (
+          <li>
+            <svg
+              class="haken"
+              viewBox="0 0 30 24"
+              preserveAspectRatio="none"
+              aria-hidden="true"
+              focusable="false"
+            >
+              <path d={haken} />
+            </svg>
+            <h3>{p.titel}</h3>
+            <p>{p.text}</p>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>
+
+<style>
+  .vorteile {
+    background: var(--color-surface-inverse);
+    color: var(--color-text-inverse);
+    padding: var(--space-18) 0;
+  }
+
+  .wrap {
+    width: 100%;
+    max-width: var(--layout-content-max);
+    margin: 0 auto;
+    padding: 0 var(--layout-gutter);
+  }
+
+  .kopf {
+    text-align: center;
+  }
+
+  .vorzeile {
+    margin: 0;
+    color: var(--color-action);
+    font-size: var(--font-size-md);
+    font-weight: var(--font-weight-bold);
+    line-height: var(--line-height-relaxed);
+  }
+
+  h2 {
+    margin: var(--space-2) auto 0;
+    max-width: var(--measure-heading);
+    font-size: var(--font-size-title);
+    font-weight: var(--font-weight-bold);
+    line-height: var(--line-height-snug);
+  }
+
+  .einleitung {
+    margin: var(--space-6) auto 0;
+    max-width: var(--measure-wide);
+    color: var(--color-text-inverse-subtle);
+  }
+
+  /* Rot als Schrift nur auf Weiss: 5,7:1, siehe Sektion 3. */
+  .einleitung strong {
+    color: var(--color-brand);
+    font-weight: var(--font-weight-bold);
+  }
+
+  /* Punkte: Haken links, Ueberschrift und Text daneben. Geometrie des
+     Hakens wie in Sektion 3 (WasUnsUnterscheidet.astro). */
+  .punkte {
+    margin: var(--space-12) 0 0;
+    padding: 0;
+    list-style: none;
+    display: grid;
+    gap: var(--space-8) var(--space-12);
+  }
+
+  .punkte li {
+    --haken-breite: 32px;
+    --haken-hoehe: 26px;
+    --haken-dicke: 5px;
+    --haken-oben: 2px;
+
+    display: grid;
+    grid-template-columns: var(--haken-breite) 1fr;
+    column-gap: var(--space-4);
+    align-content: start;
+  }
+
+  .haken {
+    grid-row: span 2;
+    width: var(--haken-breite);
+    height: var(--haken-hoehe);
+    margin-top: var(--haken-oben);
+    overflow: visible;
+  }
+
+  .haken path {
+    fill: none;
+    stroke: var(--color-brand);
+    stroke-width: var(--haken-dicke);
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    vector-effect: non-scaling-stroke;
+  }
+
+  .punkte h3 {
+    margin: 0;
+    font-family: var(--font-family-display);
+    font-size: var(--font-size-xl);
+    font-weight: var(--font-weight-bold);
+    line-height: var(--line-height-snug);
+  }
+
+  .punkte p {
+    margin: var(--space-2) 0 0;
+    color: var(--color-text-inverse-subtle);
+  }
+
+  @media (min-width: 768px) {
+    .punkte {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (min-width: 1120px) {
+    .punkte {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+</style>

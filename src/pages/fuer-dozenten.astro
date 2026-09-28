@@ -1,19 +1,32 @@
 ---
 // Seite „Dozent werden". Angelegt am 28. September 2026. Kopfleiste und
-// Footer verlinken hierher; bis heute fuehrte der Link ins Leere.
+// Footer verlinken hierher; bis dahin fuehrte der Link ins Leere.
 //
-// Bisher steht nur der Hero. Was folgt (Anforderungen, Angebot, Ablauf
-// der Bewerbung), braucht Angaben von Alexander.
+// Inhalt von der alten Karriere-Seite (lernstabil.de/karriere), neu
+// geschrieben in der Sie-Form und im Stil der Startseite. Die alte
+// Seite nannte karriere@lernstabil.de — dieses Postfach gibt es bei
+// mittwald nicht, Bewerbungen gehen an bewerbung@ (src/data/kontakt.ts).
+//
+// Reihenfolge: Hero (dunkel), Warum (weiss), Ablauf (dunkel, rote
+// Kante), Wer passt (hellgrau, Zettel), dann der Footer mit dem
+// Bewerbungsaufruf statt der Probestunde.
 
 import BaseLayout from "../layouts/BaseLayout.astro";
 import DozentHero from "../components/sections/DozentHero.astro";
+import DozentVorteile from "../components/sections/DozentVorteile.astro";
+import DozentAblauf from "../components/sections/DozentAblauf.astro";
+import DozentProfile from "../components/sections/DozentProfile.astro";
 ---
 
 <BaseLayout
   title="Dozent werden — #Lernstabil"
-  description="Online-Nachhilfe im Einzelunterricht geben: Werden Sie Dozent bei #Lernstabil. Feste Schüler, online und ohne Anfahrt."
+  description="Online-Nachhilfe im Einzelunterricht geben: Werden Sie Dozent bei #Lernstabil. Flexibel, ortsunabhängig, mit fairem Honorar pro Stunde und persönlicher Begleitung."
+  footerAufruf="bewerbung"
 >
   <main id="inhalt">
     <DozentHero />
+    <DozentVorteile />
+    <DozentAblauf />
+    <DozentProfile />
   </main>
 </BaseLayout>
