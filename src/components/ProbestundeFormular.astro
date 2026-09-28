@@ -9,7 +9,9 @@
 // solange es kurz bleibt — kein weiteres Pflichtfeld ohne Grund.
 //
 // TELEFON IST PFLICHT, E-MAIL NICHT: Der Weg zu #Lernstabil ist der
-// Anruf. Keine Einwilligungs-Checkbox — die Anfrage ist eine
+// Anruf. Am 28. September 2026 kurz als Pflichtfeld erwogen und
+// verworfen (Alexander) — wer eine Adresse angibt, bekommt daran die
+// Eingangsbestaetigung. Keine Einwilligungs-Checkbox — die Anfrage ist eine
 // vorvertragliche Massnahme (Art. 6 Abs. 1 lit. b DSGVO), der Hinweis
 // auf die Datenschutzerklaerung genuegt.
 //
@@ -49,11 +51,25 @@ const i = (name: string) => `${id}-${name}`;
   >
     {titel && <h2 class="titel" id={i("titel")}>{titel}</h2>}
 
-    <div class="fortschritt nur-mit-js" aria-hidden="true">
-      <p class="fortschritt-text">
-        Schritt <span data-schritt-nr>1</span> von 3
-      </p>
-      <div class="balken"><div class="balken-fuellung" data-balken></div></div>
+    {/* Kopfzeile: links der Schritt, rechts der Ausweg zum Telefon. Wer
+        sich mitten im Formular doch fuer den Anruf entscheidet, soll die
+        Nummer nicht suchen muessen (Alexander, 28. September 2026). Der
+        Telefonweg ist auf der ganzen Seite blau. */}
+    <div class="fortschritt">
+      <div class="kopfzeile">
+        <p class="fortschritt-text nur-mit-js" aria-hidden="true">
+          Schritt <span data-schritt-nr>1</span> von 3
+        </p>
+        <p class="anrufen">
+          Lieber anrufen?{" "}
+          <a data-kontakt={verschluesseln(telefon.href)}
+            ><Getarnt text={telefon.anzeige} /></a
+          >
+        </p>
+      </div>
+      <div class="balken nur-mit-js" aria-hidden="true">
+        <div class="balken-fuellung" data-balken></div>
+      </div>
     </div>
 
     {/* Schritt 1: Fach ---------------------------------------------- */}
@@ -275,11 +291,41 @@ const i = (name: string) => `${id}-${name}`;
   /* Fortschritt ---------------------------------------------------------
      Rot wie der Knopf, der das Formular geoeffnet hat. --anteil setzt
      das Skript (1/3, 2/3, 3/3). */
-  .fortschritt-text {
-    margin: 0 0 var(--space-2);
+  /* Schritt und Telefon in einer Zeile. Wird es zu eng (Handy), rutscht
+     das Telefon unter den Schritt statt sich zu quetschen. Ohne Skript
+     fehlt der Schritt, das Telefon steht dann allein. */
+  .fortschritt {
+    display: grid;
+    gap: var(--space-2);
+  }
+
+  .kopfzeile {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--space-1) var(--space-4);
+  }
+
+  .fortschritt-text,
+  .anrufen {
+    margin: 0;
     font-size: var(--font-size-sm);
     font-weight: var(--font-weight-semibold);
     color: var(--color-text-inverse-subtle);
+  }
+
+  .anrufen {
+    margin-left: auto;
+  }
+
+  .anrufen a {
+    color: var(--color-action);
+    white-space: nowrap;
+  }
+
+  .anrufen a:hover {
+    color: var(--color-action-strong);
   }
 
   .balken {
@@ -368,13 +414,32 @@ const i = (name: string) => `${id}-${name}`;
        groesser sein als das Minimum. */
     min-height: calc(var(--tap-target-min) + var(--space-3));
     padding: var(--space-3) var(--space-4);
-    border: 2px solid var(--color-border-inverse);
+    /* Drei Zustaende, klar unterscheidbar (28. September 2026 — vorher
+       weiss mit grauem Rand, und beim Ueberfahren wurde nur der Rand
+       etwas dunkler; Alexander: „sieht man kaum"):
+         Ruhe      graue Flaeche, der Rand faellt nicht auf
+         Hover     weiss, roter Rand, hebt sich leicht an
+         gewaehlt  rot gefuellt, weisse Schrift — wie der Knopf „Weiter"
+       Rot, weil das Formular der Weg zur Probestunde ist und dort alles
+       rot ist: Fortschritt, Weiter, Senden. Der Rand bleibt 2 px stark
+       und aendert nur die Farbe, damit nichts springt. */
+    border: 2px solid var(--color-surface-inverse-muted);
     border-radius: var(--radius-sm);
-    background: var(--color-surface-inverse);
+    background: var(--color-surface-inverse-muted);
     text-align: center;
     font-weight: var(--font-weight-semibold);
     line-height: var(--line-height-normal);
     cursor: pointer;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .kachel {
+      transition:
+        background-color 120ms ease-out,
+        border-color 120ms ease-out,
+        box-shadow 120ms ease-out,
+        transform 120ms ease-out;
+    }
   }
 
   .kachel small {
@@ -393,12 +458,29 @@ const i = (name: string) => `${id}-${name}`;
   }
 
   .kachel:hover {
-    border-color: var(--color-text-inverse);
+    border-color: var(--color-brand);
+    background: var(--color-surface-inverse);
+    box-shadow: var(--shadow-md);
+    transform: translateY(calc(-1 * var(--space-1) / 2));
   }
 
+  /* Rot auf Weiss bzw. Weiss auf Rot: 5,9:1, auch der kleine Zusatz
+     („Klasse 1–4") bleibt lesbar. */
   .kachel:has(input:checked) {
     border-color: var(--color-brand);
-    box-shadow: inset 0 0 0 1px var(--color-brand);
+    background: var(--color-brand);
+    color: var(--color-text-on-brand);
+    box-shadow: none;
+    transform: none;
+  }
+
+  .kachel:has(input:checked) small {
+    color: var(--color-text-on-brand);
+  }
+
+  .kachel:has(input:checked):hover {
+    border-color: var(--color-brand-strong);
+    background: var(--color-brand-strong);
   }
 
   .kachel:has(input:focus-visible) {
@@ -443,6 +525,10 @@ const i = (name: string) => `${id}-${name}`;
     background: var(--color-surface-inverse);
     color: var(--color-text-inverse);
     font: inherit;
+  }
+
+  .eingabe:hover {
+    border-color: var(--color-text-inverse);
   }
 
   .eingabe:focus-visible {

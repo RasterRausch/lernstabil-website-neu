@@ -57,14 +57,11 @@ import ProbestundeFormular from "./ProbestundeFormular.astro";
         ?.focus();
     });
 
+    // Geschlossen wird nur ueber das X (und Escape, siehe oben). Ein Klick
+    // auf die Abdunklung schloss bis zum 28. September 2026 ebenfalls —
+    // Alexander wollte das nicht: Ein Fehlklick neben das Fenster warf
+    // halb ausgefuellte Angaben weg.
     dialog.querySelector("[data-schliessen]")?.addEventListener("click", () => dialog.close());
-
-    // Klick auf die Abdunklung schliesst. Der Innenbereich fuellt das
-    // Fenster ganz aus — trifft ein Klick das <dialog> selbst, war es
-    // die Flaeche dahinter.
-    dialog.addEventListener("click", (e) => {
-      if (e.target === dialog) dialog.close();
-    });
   }
 </script>
 
