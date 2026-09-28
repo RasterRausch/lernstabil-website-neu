@@ -118,9 +118,10 @@ Die Datei erklärt den Aufbau.
   2026): eigene Weblizenz zum Selbsthosten bei der Schriftschmiede,
   Ersatz durch eine freie Marker-Schrift oder Adobe behalten.
 - Impressum und Datenschutz lässt Alexander vor dem Livegang prüfen.
-- Probestunden-Formular einmal mit echtem Versand testen: SMTP-Werte
-  des Postfachs info@ in `.env` eintragen, Anfrage abschicken, Eingang
-  prüfen. Bis dahin ist nur der Weg ohne Versand (Terminal) getestet.
+- SMTP-Werte (SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASS) als
+  Umgebungsvariablen der App auf mittwald eintragen. Lokal mit `.env`
+  am 28. September 2026 erfolgreich getestet (Produktionsbuild,
+  Eingang in info@ bestätigt).
 
 ## Deployment
 

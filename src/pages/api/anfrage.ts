@@ -1,6 +1,8 @@
 // Nimmt Anfragen aus dem Probestunden-Formular an und schickt sie per
-// E-Mail an info@lernstabil.de. Die einzige Adresse der Seite, die auf
-// dem Server laeuft (siehe astro.config.mjs).
+// E-Mail an info@lernstabil.de. Haben die Eltern eine E-Mail-Adresse
+// angegeben, bekommen sie eine Eingangsbestaetigung (Vorlagen in
+// src/mail/). Die einzige Adresse der Seite, die auf dem Server laeuft
+// (siehe astro.config.mjs).
 //
 // Zwei Arten von Aufrufen:
 // - Mit JavaScript schickt das Formular per fetch und will JSON zurueck
@@ -27,6 +29,8 @@ import { SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASS } from "astro:env/server";
 import nodemailer from "nodemailer";
 import { email } from "../../data/kontakt";
 import { alleFaecher, klassen, zeiten } from "../../data/probestunde";
+import { benachrichtigung } from "../../mail/benachrichtigung";
+import { bestaetigung } from "../../mail/bestaetigung";
 
 export const prerender = false;
 
@@ -128,24 +132,15 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
   const { fehler, werte } = pruefen(daten);
   if (Object.keys(fehler).length) return antwort(request, 400, fehler);
 
-  const betreff = `Probestunde: ${werte.fach}, ${werte.klasse} – ${werte.vorname}`;
-  const text = [
-    "Neue Anfrage für eine Gratis-Probestunde über lernstabil.de",
-    "",
-    `Fach:        ${werte.fach}`,
-    `Klasse:      ${werte.klasse}`,
-    "",
-    `Vorname:     ${werte.vorname}`,
-    `Telefon:     ${werte.telefon}`,
-    `E-Mail:      ${werte.mail || "–"}`,
-    `Erreichbar:  ${werte.erreichbar.join(", ") || "keine Angabe"}`,
-    "",
-    "Zugesagt auf der Website: Wir melden uns innerhalb von 24 Stunden.",
-  ].join("\n");
+  const intern = benachrichtigung(werte, new Date());
+  const eltern = werte.mail ? bestaetigung(werte) : null;
 
   if (!SMTP_HOST || !SMTP_USER || !SMTP_PASS) {
     if (import.meta.env.DEV) {
-      console.log(`\n[anfrage] Kein SMTP eingerichtet — nur Ausgabe:\n${betreff}\n\n${text}\n`);
+      console.log(
+        `\n[anfrage] Kein SMTP eingerichtet — nur Ausgabe:\n${intern.betreff}\n\n${intern.text}\n` +
+          (eltern ? `\n[anfrage] Bestätigung an ${werte.mail}:\n${eltern.betreff}\n` : ""),
+      );
       return antwort(request, 200);
     }
     console.error("[anfrage] SMTP_HOST, SMTP_USER oder SMTP_PASS fehlt.");
@@ -160,17 +155,38 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
     auth: { user: SMTP_USER, pass: SMTP_PASS },
   });
 
+  // Erst die Benachrichtigung an uns: Scheitert sie, darf keine
+  // Bestaetigung rausgehen — sonst glauben die Eltern, die Anfrage sei
+  // angekommen, und wir wissen nichts davon.
   try {
     await transport.sendMail({
       from: `"#Lernstabil Website" <${SMTP_USER}>`,
       to: email.anzeige,
       replyTo: werte.mail || undefined,
-      subject: betreff,
-      text,
+      subject: intern.betreff,
+      text: intern.text,
+      html: intern.html,
     });
   } catch (e) {
     console.error("[anfrage] Versand fehlgeschlagen:", e);
     return antwort(request, 500, { formular: "versand" });
+  }
+
+  // Die Bestaetigung ist ein Zusatz. Scheitert sie (etwa an einer
+  // vertippten Adresse), ist die Anfrage trotzdem bei uns — also Erfolg
+  // melden und den Fehler nur protokollieren.
+  if (eltern) {
+    try {
+      await transport.sendMail({
+        from: `"#Lernstabil" <${SMTP_USER}>`,
+        to: werte.mail,
+        subject: eltern.betreff,
+        text: eltern.text,
+        html: eltern.html,
+      });
+    } catch (e) {
+      console.error("[anfrage] Bestätigung an die Eltern fehlgeschlagen:", e);
+    }
   }
 
   return antwort(request, 200);

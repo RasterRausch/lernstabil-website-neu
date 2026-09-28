@@ -24,7 +24,9 @@ import { telefon, email, verschluesseln } from '../data/kontakt';
 // 27. September 2026 gebaut wurde: Felder aus
 // components/ProbestundeFormular.astro, Versand ueber
 // pages/api/anfrage.ts per E-Mail an das eigene Postfach bei mittwald,
-// IP nur zur Mengenbegrenzung im Arbeitsspeicher. Aendert sich eins
+// IP nur zur Mengenbegrenzung im Arbeitsspeicher. Seit 28. September
+// 2026 geht bei angegebener E-Mail-Adresse eine Eingangsbestaetigung an
+// die Eltern (src/mail/bestaetigung.ts). Aendert sich eins
 // davon, diesen Abschnitt nachziehen.
 //
 // Gegenueber der alten Fassung geaendert:
@@ -101,7 +103,9 @@ import { telefon, email, verschluesseln } from '../data/kontakt';
         falls Sie sie angeben, Ihre E-Mail-Adresse und die Zeiten, zu denen
         Sie erreichbar sind. Das Formular wird von unserem Server (siehe
         Abschnitt 2) entgegengenommen und per E-Mail an unser eigenes Postfach
-        übermittelt. Eine Weitergabe an Dritte erfolgt nicht.
+        übermittelt. Haben Sie eine E-Mail-Adresse angegeben, schicken wir
+        Ihnen daran eine Bestätigung, dass Ihre Anfrage eingegangen ist. Eine
+        Weitergabe an Dritte erfolgt nicht.
       </p>
       <p>
         Zum Schutz vor Missbrauch begrenzt der Server die Zahl der Anfragen je
