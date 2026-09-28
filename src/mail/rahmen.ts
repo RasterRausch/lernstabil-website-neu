@@ -43,16 +43,15 @@ export const color = {
   textDefault: "#ffffff",
   brand: "#d00000",
   action: "#1f4e98",
-  actionStrong: "#16386d",
 };
 
-export const fontSize = { xs: 13, sm: 15, md: 17, lg: 21, xl: 26, "2xl": 32 };
+export const fontSize = { xs: 13, sm: 15, md: 17, lg: 21, "2xl": 32 };
 export const space = { 1: 4, 2: 8, 3: 12, 4: 16, 6: 24, 8: 32, 12: 48 };
 export const radius = { sm: 4, md: 10, full: 999 };
 
 // Einfache Anfuehrungszeichen in den Schriftlisten: Sie stehen in
 // style="…" und wuerden das Attribut sonst vorzeitig beenden.
-export const fontBody = "'Source Sans 3', 'Segoe UI', Helvetica, Arial, sans-serif";
+const fontBody = "'Source Sans 3', 'Segoe UI', Helvetica, Arial, sans-serif";
 const fontLogo = "'Comic Neue', 'Comic Sans MS', 'Chalkboard SE', cursive";
 
 // Breite der Mail. 600 px ist der uebliche Wert, den alle Programme
@@ -147,7 +146,7 @@ export function rahmen({ titel, vorschau, inhalt, fuss }: Rahmen): string {
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="color-scheme" content="light">
 <meta name="supported-color-schemes" content="light">
-<title>${titel}</title>
+<title>${esc(titel)}</title>
 <style>
   @media (max-width: 620px) {
     .innen { padding-left: 20px !important; padding-right: 20px !important; }
@@ -155,7 +154,7 @@ export function rahmen({ titel, vorschau, inhalt, fuss }: Rahmen): string {
 </style>
 </head>
 <body style="margin:0;padding:0;background:${color.surfaceInverseMuted};">
-<div style="display:none;max-height:0;overflow:hidden;opacity:0;color:transparent;">${vorschau}</div>
+<div style="display:none;max-height:0;overflow:hidden;opacity:0;color:transparent;">${esc(vorschau)}</div>
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" bgcolor="${color.surfaceInverseMuted}" style="background:${color.surfaceInverseMuted};">
 <tr><td align="center" style="padding:${space[6]}px ${space[2]}px ${space[12]}px;">
 

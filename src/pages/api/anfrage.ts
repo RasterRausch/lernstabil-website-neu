@@ -12,16 +12,26 @@
 //   die Browser-Pruefung (required, type=tel) faengt das meiste vorher
 //   ab.
 //
-// SPAM-SCHUTZ ohne Captcha (jede Huerde kostet Anfragen):
+// SPAM-SCHUTZ ohne Captcha (jede Huerde kostet Anfragen). Am
+// 28. September 2026 nach einer Sicherheitspruefung verschaerft:
 // - Honigtopf: Das Feld „website" ist fuer Menschen unsichtbar. Wer es
 //   fuellt, ist ein Bot.
 // - Zeitpruefung: Das Formular-Skript setzt beim Oeffnen einen
-//   Zeitstempel. Unter drei Sekunden bis zum Absenden schafft kein
-//   Mensch drei Schritte. Ohne JavaScript fehlt der Stempel, dann
-//   entfaellt die Pruefung.
-// - Mengenbegrenzung: hoechstens 5 Anfragen je IP in 10 Minuten. Die IP
-//   liegt dafuer nur im Arbeitsspeicher und verfaellt nach 10 Minuten
-//   (steht so in der Datenschutzerklaerung, Abschnitt 3 b).
+//   Zeitstempel. Mit JavaScript (Accept: application/json) muss er da
+//   sein und zwischen 3 Sekunden und 24 Stunden alt sein — vorher liess
+//   er sich durch Weglassen umgehen. Ohne JavaScript fehlt er; die
+//   Anfrage kommt trotzdem an, nur ohne Eingangsbestaetigung.
+// - Mengenbegrenzung: hoechstens 5 gueltige Anfragen je IP in 10
+//   Minuten. Die IP liegt dafuer nur im Arbeitsspeicher und verfaellt
+//   nach 10 Minuten (steht so in der Datenschutzerklaerung, 3 b).
+// - Obergrenzen fuer alle zusammen: hoechstens 30 Benachrichtigungen und
+//   20 Bestaetigungen je Stunde, dieselbe Adresse hoechstens eine
+//   Bestaetigung in 24 Stunden. Sonst liesse sich ueber das Formular
+//   fremde Postfaecher mit Mails von info@ fluten — das schadet dem Ruf
+//   der Domain bei den Mailanbietern.
+// - Vorname nur aus Buchstaben, Leerzeichen, Bindestrich, Apostroph,
+//   Punkt: Er steht in Betreff und Bestaetigung und darf keinen Link
+//   oder HTML transportieren.
 // Bots bekommen eine Erfolgsmeldung, damit sie nicht nachbessern.
 
 import type { APIRoute } from "astro";
@@ -35,23 +45,64 @@ import { bestaetigung } from "../../mail/bestaetigung";
 export const prerender = false;
 
 const MINDESTZEIT_MS = 3000;
+const HOECHSTALTER_MS = 24 * 60 * 60 * 1000;
 const LIMIT = 5;
 const FENSTER_MS = 10 * 60 * 1000;
+const STUNDE_MS = 60 * 60 * 1000;
+const MAX_BENACHRICHTIGUNGEN_JE_STUNDE = 30;
+const MAX_BESTAETIGUNGEN_JE_STUNDE = 20;
+// Obergrenze fuer die Tabellen im Arbeitsspeicher. Mit gefaelschten
+// Adressen liessen sie sich sonst beliebig fuellen.
+const MAX_EINTRAEGE = 5000;
 
 const zugriffe = new Map<string, number[]>();
+const benachrichtigt: number[] = [];
+const bestaetigt: number[] = [];
+const bestaetigtAn = new Map<string, number>();
+
+// Die Besucher-IP haengt der Proxy von mittwald als LETZTEN Eintrag an
+// X-Forwarded-For an. Den ersten Eintrag setzt der Absender selbst —
+// wer ihn bei jeder Anfrage aendert, umginge sonst die Begrenzung.
+function besucherIp(request: Request, clientAddress: string): string {
+  const kette = (request.headers.get("x-forwarded-for") ?? "")
+    .split(",")
+    .map((s) => s.trim())
+    .filter(Boolean);
+  return (kette.at(-1) || clientAddress).slice(0, 45);
+}
 
 function zuVieleAnfragen(ip: string): boolean {
   const jetzt = Date.now();
   const frisch = (zugriffe.get(ip) ?? []).filter((t) => jetzt - t < FENSTER_MS);
   frisch.push(jetzt);
   zugriffe.set(ip, frisch);
-  // Aufraeumen, damit die Liste nicht waechst: abgelaufene IPs raus.
-  if (zugriffe.size > 1000) {
+  // Aufraeumen: abgelaufene IPs raus, und nie mehr als MAX_EINTRAEGE.
+  if (zugriffe.size > MAX_EINTRAEGE) {
     for (const [schluessel, zeitpunkte] of zugriffe) {
       if (zeitpunkte.every((t) => jetzt - t >= FENSTER_MS)) zugriffe.delete(schluessel);
     }
+    if (zugriffe.size > MAX_EINTRAEGE) zugriffe.clear();
   }
   return frisch.length > LIMIT;
+}
+
+/** Zaehlt einen Versand in einem Stundenfenster; false, wenn voll. */
+function imStundenlimit(liste: number[], max: number): boolean {
+  const jetzt = Date.now();
+  while (liste.length && jetzt - liste[0] > STUNDE_MS) liste.shift();
+  if (liste.length >= max) return false;
+  liste.push(jetzt);
+  return true;
+}
+
+/** Hoechstens eine Bestaetigung je Adresse in 24 Stunden. */
+function adresseFrei(mail: string): boolean {
+  const jetzt = Date.now();
+  const schluessel = mail.toLowerCase();
+  if (jetzt - (bestaetigtAn.get(schluessel) ?? 0) < HOECHSTALTER_MS) return false;
+  if (bestaetigtAn.size > MAX_EINTRAEGE) bestaetigtAn.clear();
+  bestaetigtAn.set(schluessel, jetzt);
+  return true;
 }
 
 type Fehler = Record<string, string>;
@@ -74,6 +125,11 @@ function einzeilig(wert: FormDataEntryValue | null, max: number): string {
   return String(wert ?? "").replace(/[\r\n]+/g, " ").trim().slice(0, max);
 }
 
+// Buchstaben aller Sprachen, Leerzeichen, Bindestrich, Apostroph, Punkt.
+const VORNAME = /^\p{L}[\p{L}\p{M} .'’-]*$/u;
+// Streng: keine Anzeigenamen („Text <adresse>"), genau eine Adresse.
+const EMAIL = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
+
 function pruefen(daten: FormData) {
   const fehler: Fehler = {};
 
@@ -87,6 +143,9 @@ function pruefen(daten: FormData) {
 
   const vorname = einzeilig(daten.get("vorname"), 60);
   if (!vorname) fehler.vorname = "Bitte geben Sie Ihren Vornamen an.";
+  else if (!VORNAME.test(vorname)) {
+    fehler.vorname = "Bitte geben Sie nur Ihren Vornamen an, ohne Ziffern oder Zeichen.";
+  }
 
   const telefon = einzeilig(daten.get("telefon"), 30);
   const ziffern = telefon.replace(/\D/g, "").length;
@@ -95,14 +154,19 @@ function pruefen(daten: FormData) {
   }
 
   const mail = einzeilig(daten.get("email"), 120);
-  if (mail && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(mail)) {
+  if (mail && !EMAIL.test(mail)) {
     fehler.email = "Diese E-Mail-Adresse sieht nicht vollständig aus.";
   }
 
-  const erreichbar = daten
-    .getAll("zeiten")
-    .map((z) => String(z))
-    .filter((z) => zeiten.includes(z));
+  // Doppelte raus: Sonst liesse sich die Mail mit Wiederholungen aufblaehen.
+  const erreichbar = [
+    ...new Set(
+      daten
+        .getAll("zeiten")
+        .map((z) => String(z))
+        .filter((z) => zeiten.includes(z)),
+    ),
+  ];
 
   return { fehler, werte: { fach: gewaehltesFach, klasse, vorname, telefon, mail, erreichbar } };
 }
@@ -117,23 +181,40 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
 
   // Honigtopf und Zeitpruefung: still „Erfolg" melden.
   if (einzeilig(daten.get("website"), 200)) return antwort(request, 200);
+  const mitSkript = request.headers.get("accept")?.includes("application/json") ?? false;
   const start = Number(daten.get("t"));
-  if (start && Date.now() - start < MINDESTZEIT_MS) return antwort(request, 200);
+  const alter = Date.now() - start;
+  const zeitGueltig = Number.isFinite(start) && alter >= MINDESTZEIT_MS && alter <= HOECHSTALTER_MS;
+  if (mitSkript && !zeitGueltig) return antwort(request, 200);
+  if (start && alter < MINDESTZEIT_MS) return antwort(request, 200);
 
-  // Hinter dem Proxy steht die Besucher-IP in X-Forwarded-For.
-  const ip =
-    request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || clientAddress;
-  if (zuVieleAnfragen(ip)) {
+  const { fehler, werte } = pruefen(daten);
+  if (Object.keys(fehler).length) return antwort(request, 400, fehler);
+
+  // Erst nach der Pruefung zaehlen: Wer ohne Skript ein paar Mal ein
+  // Feld falsch ausfuellt, soll dadurch nicht gesperrt werden.
+  if (zuVieleAnfragen(besucherIp(request, clientAddress))) {
+    return antwort(request, 429, {
+      formular: "Es kamen gerade sehr viele Anfragen. Bitte rufen Sie uns an.",
+    });
+  }
+  if (!imStundenlimit(benachrichtigt, MAX_BENACHRICHTIGUNGEN_JE_STUNDE)) {
+    console.error("[anfrage] Stundenlimit fuer Benachrichtigungen erreicht.");
     return antwort(request, 429, {
       formular: "Es kamen gerade sehr viele Anfragen. Bitte rufen Sie uns an.",
     });
   }
 
-  const { fehler, werte } = pruefen(daten);
-  if (Object.keys(fehler).length) return antwort(request, 400, fehler);
-
   const intern = benachrichtigung(werte, new Date());
-  const eltern = werte.mail ? bestaetigung(werte) : null;
+  // Bestaetigung nur mit gueltigem Zeitstempel (also mit Skript), nur
+  // einmal je Adresse in 24 Stunden und innerhalb der Stundengrenze.
+  const eltern =
+    werte.mail &&
+    zeitGueltig &&
+    adresseFrei(werte.mail) &&
+    imStundenlimit(bestaetigt, MAX_BESTAETIGUNGEN_JE_STUNDE)
+      ? bestaetigung(werte)
+      : null;
 
   if (!SMTP_HOST || !SMTP_USER || !SMTP_PASS) {
     if (import.meta.env.DEV) {

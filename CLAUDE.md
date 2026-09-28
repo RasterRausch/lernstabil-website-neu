@@ -103,8 +103,21 @@ Die Datei erklärt den Aufbau.
 
 ## Offene Punkte vor dem Livegang
 
-- `public/bilder/hero-schuelerin.png` wiegt **4,9 MB**. Nach WebP
-  wandeln und mehrere Größen über `srcset` ausliefern.
+- Nach dem Deploy einmal echt über das Formular absenden. Die
+  Herkunftsprüfung von Astro verlässt sich darauf, dass der Proxy von
+  mittwald `X-Forwarded-Proto: https` sendet (`security.allowedDomains`
+  in `astro.config.mjs`). Kommt 403 zurück, liegt es daran.
+- Die IP-Begrenzung nimmt den letzten Eintrag aus `X-Forwarded-For`.
+  Nach dem Deploy einmal prüfen, wie mittwald die Kopfzeile befüllt.
+- Sicherheits-Header (HSTS, nosniff, Referrer-Policy, frame-ancestors)
+  setzt der Node-Adapter nicht. Bei mittwald prüfen, was der Proxy
+  setzt, sonst ergänzen.
+- Die alte Seite zeigt Telefon und E-Mail im Klartext (Startseite,
+  Impressum). Sie stehen damit wahrscheinlich schon in Sammlerlisten;
+  der Schutz der neuen Seite verhindert nur neues Sammeln.
+- Six Hands Marker gibt es im Adobe-Kit nur im Schnitt 400. Überall,
+  wo sie fett gesetzt ist, fettet der Browser künstlich. Einheitlich
+  festlegen (Stand 28. September 2026: teils fett, teils normal).
 - Trustindex lädt `loader.js` je Widget neu — dieselbe Datei, 89 KB pro
   Stück. Bei Trustindex nachfragen, ob mehrere Widgets über einen
   Loader gehen.

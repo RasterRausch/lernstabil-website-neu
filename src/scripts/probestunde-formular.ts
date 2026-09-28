@@ -14,7 +14,9 @@ const LETZTER_SCHRITT = 3;
 // Dieselben Regeln wie in pages/api/anfrage.ts — der Server prueft
 // ohnehin noch einmal, hier geht es nur um schnelle Rueckmeldung.
 const TELEFON_ZEICHEN = /^[0-9+()/.\s-]+$/;
-const EMAIL_FORM = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+// Dieselben Regeln wie auf dem Server (pages/api/anfrage.ts).
+const EMAIL_FORM = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
+const VORNAME_FORM = /^\p{L}[\p{L}\p{M} .'’-]*$/u;
 
 type Fehler = Record<string, string>;
 
@@ -90,7 +92,11 @@ function einrichten(wurzel: HTMLElement) {
       fehler.klasse = "Bitte wählen Sie die Klasse.";
     }
     if (schritt === 3) {
-      if (!wert("vorname")) fehler.vorname = "Bitte geben Sie Ihren Vornamen an.";
+      const vorname = wert("vorname");
+      if (!vorname) fehler.vorname = "Bitte geben Sie Ihren Vornamen an.";
+      else if (!VORNAME_FORM.test(vorname)) {
+        fehler.vorname = "Bitte geben Sie nur Ihren Vornamen an, ohne Ziffern oder Zeichen.";
+      }
       const tel = wert("telefon");
       if (!TELEFON_ZEICHEN.test(tel) || tel.replace(/\D/g, "").length < 6) {
         fehler.telefon = "Bitte geben Sie eine Telefonnummer an, unter der wir Sie erreichen.";

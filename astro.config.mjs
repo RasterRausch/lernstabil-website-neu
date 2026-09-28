@@ -17,6 +17,21 @@ export default defineConfig({
     // halten Riesen-Uploads von der Server-Adresse fern (Vorgabe: 1 GB).
     bodySizeLimit: 16 * 1024,
   }),
+  // Hinter dem Proxy von mittwald kommt beim Server nur http an, der
+  // Browser schickt aber „Origin: https://lernstabil.de". Ohne diese
+  // Liste haelt Astro sich fuer http://…, die Herkunftspruefung fuer
+  // POST schlaegt fehl und JEDE Anfrage aus dem Formular endet mit 403
+  // (Sicherheitspruefung am 28. September 2026, im Build nachgestellt).
+  // Mit der Liste wertet Astro X-Forwarded-Proto/-Host aus — aber nur
+  // fuer diese beiden Adressen, fremde Herkunft bleibt gesperrt.
+  // Voraussetzung: Der Proxy sendet X-Forwarded-Proto. Nach dem Deploy
+  // einmal echt absenden.
+  security: {
+    allowedDomains: [
+      { hostname: 'lernstabil.de', protocol: 'https' },
+      { hostname: 'www.lernstabil.de', protocol: 'https' },
+    ],
+  },
   env: {
     // Zugangsdaten des Postfachs, ueber das die Anfragen verschickt
     // werden. context 'server' + access 'secret': nur auf dem Server,
