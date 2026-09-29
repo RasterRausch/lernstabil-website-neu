@@ -6,6 +6,11 @@
 // Die Aussagen zur Probestunde stammen aus den Fragen (Sektion 8) und
 // der Bestaetigung im Formular, beide von Alexander bestaetigt. Wer hier
 // etwas zusagt, das dort nicht steht, muss es erst mit ihm klaeren.
+//
+// Bis 29. September 2026 stand unter dem Ablauf ein Kasten „Lieber
+// gleich sprechen?" mit grossem Anrufen-Knopf. Nach dem Ablauf las er
+// sich wie eine Alternative zur Probestunde (Alexander). Jetzt eine
+// ruhige Zeile, die den Anruf als Zusatz fuer Fragen anbietet.
 
 import { telefon } from "../data/kontakt";
 import {
@@ -19,7 +24,6 @@ import {
   fussLink,
   hervorgehoben,
   kicker,
-  knopf,
   radius,
   rahmen,
   space,
@@ -79,12 +83,10 @@ ${absatz("Stimmt etwas nicht? Antworten Sie einfach auf diese E-Mail.", `font-si
 ${zwischentitel("So läuft die Probestunde ab")}
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0">${schritte}</table>
 
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:${space[4]}px 0 ${space[8]}px;border:2px solid ${color.surfaceInverseMuted};border-radius:${radius.md}px;">
-<tr><td style="padding:${space[6]}px;">
-<p style="margin:0 0 ${space[1]}px;font-size:${fontSize.lg}px;line-height:1.25;font-weight:700;color:${color.textInverse};">Lieber gleich sprechen?</p>
-<p style="margin:0 0 ${space[4]}px;font-size:${fontSize.md}px;line-height:1.5;color:${color.textInverseSubtle};">Montag bis Freitag von 9 bis 20 Uhr.</p>
-${knopf(telefon.href, `${telefon.anzeige} anrufen`)}
-</td></tr></table>
+${absatz(
+    `Sie haben bis dahin noch Fragen? Rufen Sie gern an: <a href="${telefon.href}" style="color:${color.action};font-weight:700;white-space:nowrap;">${telefon.anzeige}</a> (Montag bis Freitag, 9 bis 20 Uhr).`,
+    `margin:${space[4]}px 0 ${space[8]}px;`,
+  )}
 
 ${absatz("Herzliche Grüße", "margin-bottom:0;")}
 ${absatz(`<strong style="font-weight:700;">Alexander Ritter</strong><br><span style="color:${color.textInverseSubtle};">#Lernstabil · Online-Nachhilfe</span>`, "margin:0;")}
@@ -120,7 +122,7 @@ ${absatz(`<strong style="font-weight:700;">Alexander Ritter</strong><br><span st
     "SO LÄUFT DIE PROBESTUNDE AB",
     ...SCHRITTE.map(([kopf, t], i) => `${i + 1}. ${kopf} ${t}`),
     "",
-    `Lieber gleich sprechen? ${telefon.anzeige}, Montag bis Freitag von 9 bis 20 Uhr.`,
+    `Sie haben bis dahin noch Fragen? Rufen Sie gern an: ${telefon.anzeige} (Montag bis Freitag, 9 bis 20 Uhr).`,
     "",
     "Herzliche Grüße",
     "Alexander Ritter",
