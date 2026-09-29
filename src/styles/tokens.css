@@ -29,8 +29,9 @@
    BREAKPOINTS: CSS kann in @media keine Variablen auswerten. Die Werte
    768 und 1120 stehen deshalb als Zahlen in den Dateien. Sie sind
    trotzdem verbindlich:
-     md  768 px   Knoepfe und Zahlen nebeneinander, groessere Gutter
-     lg 1120 px   Hero und Sektionen zweispaltig, Navigation offen
+     md  768 px   Knoepfe und Zahlen nebeneinander, groessere Gutter,
+                  Hero zweispaltig (seit 29. September 2026)
+     lg 1120 px   Sektionen zweispaltig, Navigation offen
    ===================================================================== */
 
 :root {
@@ -126,6 +127,13 @@
      Eingabefeldern muessen sich mit 3:1 abheben (WCAG 1.4.11) —
      #6b6b6b auf Weiss: 5,3:1. neutral-400 haette nur 2,1:1. */
   --color-border-inverse: var(--color-neutral-500);
+
+  /* Trennlinien auf hellen Flaechen, die nichts umrahmen, sondern nur
+     gliedern. Angelegt am 29. September 2026 fuer die Zeilen des
+     aufgeklappten Menues. neutral-500 waere dafuer zu hart; neutral-400
+     (2,1:1 auf Weiss) reicht, weil die Linie keine Information traegt
+     (WCAG 1.4.11 gilt fuer Bedienelemente, nicht fuer Schmuck). */
+  --color-border-inverse-subtle: var(--color-neutral-400);
 
   /* Abdunklung hinter einem Dialog, der ueber der Seite liegt. Angelegt
      am 27. September 2026 fuer das Probestunden-Formular. Stark genug,

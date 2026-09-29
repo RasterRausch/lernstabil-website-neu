@@ -44,13 +44,18 @@ const links: { text: string; href: string; marke?: string }[] = [
           links.map((l) => (
             <li>
               <a href={l.href}>
-                {l.text}
-                {l.marke && (
-                  <>
-                    {" "}
-                    <span class="marke">{l.marke}</span>
-                  </>
-                )}
+                {/* Text in einer Klammer: Im Menue ist der Link eine
+                    Flex-Zeile. Ohne Klammer verteilte sie „Warum" und
+                    „#Lernstabil" als zwei Teile ueber die Zeile. */}
+                <span class="link-text">
+                  {l.text}
+                  {l.marke && (
+                    <>
+                      {" "}
+                      <span class="marke">{l.marke}</span>
+                    </>
+                  )}
+                </span>
                 <svg
                   class="zug"
                   viewBox="0 0 100 10"
@@ -65,7 +70,50 @@ const links: { text: string; href: string; marke?: string }[] = [
           ))
         }
       </ul>
+
+      {/* Handlung im aufgeklappten Menue (29. September 2026, Alexander:
+          „sieht sehr einfach aus"). Wer auf dem Handy das Menue oeffnet,
+          sucht meist die Probestunde oder die Nummer — der rote Knopf der
+          Leiste erscheint erst ab 1120 px. Aufbau wie im Hero: roter
+          Knopf, darunter der Anruf. Ab 1120 px ausgeblendet. */}
+      <div class="nav-handlung">
+        <a class="nav-probe" href="/probestunde">Gratis-Probestunde</a>
+        <a class="nav-telefon" data-kontakt={verschluesseln(telefon.href)}>
+          <svg
+            class="hoerer"
+            viewBox="0 0 24 24"
+            fill="currentColor"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linejoin="round"
+            aria-hidden="true"
+            focusable="false"
+          >
+            <path
+              d="M4 3h4l2 5-2.5 1.5a12.5 12.5 0 0 0 7 7L16 14l5 2v4h-1C11 20 4 13 4 4V3z"
+            ></path>
+          </svg>
+          <span class="nur-vorlesen">Anrufen: </span>
+          <Getarnt text={telefon.anzeige} />
+        </a>
+        <p class="nav-zeile">
+          Gratis Beratung (<span data-erreichbar>Mo bis Fr 9–20 Uhr</span>)
+        </p>
+      </div>
     </nav>
+
+    {/* Abdunklung der Seite hinter dem offenen Menue. Ein Tipp darauf
+        schliesst es (Skript unten). */}
+    <div class="abdunklung" data-abdunklung aria-hidden="true"></div>
+
+    {/* Probestunde in der Leiste (29. September 2026). Die Leiste bleibt
+        beim Scrollen stehen, der Knopf im Hero nicht — so ist die
+        Hauptaktion auf der ganzen Seite eine Bewegung entfernt. Zugleich
+        fuellt er die Luecke zwischen Navigation und Telefon, die leer
+        wirkte (Alexander). Wie jeder Link auf /probestunde oeffnet er
+        das Formularfenster (ProbestundeDialog). Erst ab 1120 px: darunter
+        teilen sich Logo, Hoerer und Burger die Leiste. */}
+    <a class="knopf-kopf" href="/probestunde">Gratis-Probestunde</a>
 
     {/* Kein aria-label mehr: Es stand im Klartext im HTML und damit
         jedem Adresssammler offen (Schutz siehe src/data/kontakt.ts).
@@ -114,6 +162,12 @@ const links: { text: string; href: string; marke?: string }[] = [
       >
     </a>
 
+    {/* Neu gebaut am 29. September 2026: Bis dahin bestand das Symbol
+        aus drei leeren <span> im Knopf, und Alexander sah es auf iPad
+        und im Handy-Vorschaufenster gar nicht — das Menue war
+        unauffindbar. Jetzt zwei gezeichnete Symbole (Striche und Kreuz),
+        die das Skript nur umschaltet. Das Wort „Menü" darunter stand
+        dort kurz und ist wieder raus (Alexander). */}
     <button
       class="burger"
       type="button"
@@ -122,9 +176,22 @@ const links: { text: string; href: string; marke?: string }[] = [
       aria-label="Menü öffnen"
       data-burger
     >
-      <span class="burger-strich"></span>
-      <span class="burger-strich"></span>
-      <span class="burger-strich"></span>
+      <svg
+        class="burger-symbol burger-auf"
+        viewBox="0 0 24 24"
+        aria-hidden="true"
+        focusable="false"
+      >
+        <path d="M3 6h18M3 12h18M3 18h18" />
+      </svg>
+      <svg
+        class="burger-symbol burger-zu"
+        viewBox="0 0 24 24"
+        aria-hidden="true"
+        focusable="false"
+      >
+        <path d="M5 5l14 14M19 5L5 19" />
+      </svg>
     </button>
   </div>
 </header>
@@ -153,25 +220,35 @@ const links: { text: string; href: string; marke?: string }[] = [
   const leiste = document.querySelector("[data-leiste]");
   const burger = document.querySelector<HTMLButtonElement>("[data-burger]");
   const nav = document.getElementById("hauptnav");
+  const abdunklung = document.querySelector("[data-abdunklung]");
 
   if (leiste && burger && nav) {
-    const setzen = (offen: boolean) => {
+    // tastatur: Nur wer das Menue mit der Tastatur oeffnet, bekommt den
+    // Fokus auf den ersten Link. Beim Antippen stand sonst ein Fokusring
+    // um „Fächer", der wie ein Fehler aussah.
+    const setzen = (offen: boolean, tastatur = false) => {
       leiste.classList.toggle("offen", offen);
       burger.setAttribute("aria-expanded", String(offen));
       burger.setAttribute(
         "aria-label",
         offen ? "Menü schließen" : "Menü öffnen",
       );
-      if (offen) nav.querySelector<HTMLAnchorElement>("a")?.focus();
+      if (offen && tastatur) nav.querySelector<HTMLAnchorElement>("a")?.focus();
     };
 
-    burger.addEventListener("click", () => {
-      setzen(burger.getAttribute("aria-expanded") !== "true");
+    // detail === 0: Der Klick kam von Enter oder Leertaste, nicht vom
+    // Zeiger.
+    burger.addEventListener("click", (e) => {
+      setzen(burger.getAttribute("aria-expanded") !== "true", e.detail === 0);
     });
 
+    // closest statt instanceof: Der Tipp landet oft auf dem Text im
+    // Link, nicht auf dem Link selbst.
     nav.addEventListener("click", (e) => {
-      if (e.target instanceof HTMLAnchorElement) setzen(false);
+      if (e.target instanceof Element && e.target.closest("a")) setzen(false);
     });
+
+    abdunklung?.addEventListener("click", () => setzen(false));
 
     document.addEventListener("keydown", (e) => {
       if (e.key === "Escape" && leiste.classList.contains("offen")) {
@@ -273,28 +350,16 @@ const links: { text: string; href: string; marke?: string }[] = [
     display: none;
   }
 
-  /* Die aufgeklappte Navigation bleibt in der Farbfamilie der Leiste:
-     dieselbe Aktionsfarbe, eine Stufe dunkler, damit sie sich als
-     eigene Flaeche absetzt. Bis zum 1. September 2026 stand hier das
-     dunkle Rot — ein Rest aus der Zeit, als die Leiste selbst rot war. */
-  .leiste.offen .nav {
-    display: block;
-    position: absolute;
-    top: 100%;
-    left: 0;
-    right: 0;
-    z-index: 1;
-    background: var(--color-action-strong);
+  .nav ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
   }
 
-  .nav ul {
-    max-width: var(--layout-content-max);
-    margin: 0 auto;
-    padding: var(--space-4) var(--layout-gutter) var(--space-6);
-    list-style: none;
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-4);
+  /* Nur im aufgeklappten Menue (unter 1120 px), siehe dort. */
+  .nav-handlung,
+  .abdunklung {
+    display: none;
   }
 
   /* Links ------------------------------------------------------------
@@ -427,61 +492,233 @@ const links: { text: string; href: string; marke?: string }[] = [
     line-height: var(--line-height-normal);
   }
 
+  /* Probestunde ------------------------------------------------------
+     Derselbe Knopf wie im Hero (Markenrot, fett, kursiv), eine Stufe
+     kleiner, damit er in die 64 px der Leiste passt. Schatten wie am
+     Logo: Beide roten Flaechen liegen auf dem Blau. */
+  .knopf-kopf {
+    display: none;
+    flex: none;
+    align-items: center;
+    min-height: var(--tap-target-min);
+    padding: 0 var(--space-6);
+    border-radius: var(--radius-sm);
+    background: var(--color-brand);
+    color: var(--color-text-on-brand);
+    box-shadow: var(--shadow-sm);
+    font-style: italic;
+    font-weight: var(--font-weight-bold);
+    text-decoration: none;
+    white-space: nowrap;
+  }
+
+  .knopf-kopf:hover {
+    background: var(--color-brand-strong);
+  }
+
+  .knopf-kopf:active {
+    background: var(--color-brand-stronger);
+    transform: translateY(1px);
+  }
+
   /* Burger ---------------------------------------------------------- */
 
-  /* 44 px ist die Untergrenze fuer Tippziele aus WCAG 2.2. Die
-     Innenabstaende und der negative Aussenabstand sind Geometrie
-     dieses Kaestchens: Sie richten den sichtbaren Strich optisch an
-     der Kante des Rasters aus, waehrend die Trefferflaeche darueber
-     hinausreicht. */
-  .burger {
-    --burger-strich-hoehe: 2px;
-    --burger-versatz: 10px;
+  /* 44 px ist die Untergrenze fuer Tippziele aus WCAG 2.2. Das Symbol ist
+     weiss auf der Leiste.
 
+     appearance: none und die ausdrueckliche Farbe: Safari gibt Knoepfen
+     sonst eigene Vorgaben mit (Farbe, Innenabstand). Die Symbole sind
+     gezeichnet (stroke: currentColor) und haben feste Masse — sie
+     haengen nicht mehr davon ab, wie ein Browser leere Elemente in
+     einem Knopf streckt.
+
+     --burger-versatz: Geometrie. Er rueckt das Symbol optisch an die
+     Kante des Rasters, die Trefferflaeche reicht darueber hinaus. */
+  .burger {
+    --burger-versatz: 6px;
+
+    appearance: none;
     flex: none;
-    width: var(--tap-target-min);
-    height: var(--tap-target-min);
-    padding: 11px var(--burger-versatz);
+    min-width: var(--tap-target-min);
+    min-height: var(--tap-target-min);
     margin-right: calc(-1 * var(--burger-versatz));
+    padding: 0 var(--burger-versatz);
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-1);
     background: none;
     border: 0;
+    color: var(--color-text-on-action);
+    font: inherit;
     cursor: pointer;
   }
 
-  .burger-strich {
+  .burger-symbol {
     display: block;
-    height: var(--burger-strich-hoehe);
-    background: var(--color-text-on-action);
-    border-radius: calc(var(--burger-strich-hoehe) / 2);
-    transition:
-      transform 150ms ease,
-      opacity 150ms ease;
+    width: var(--icon-size-md);
+    height: var(--icon-size-md);
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2.5;
+    stroke-linecap: round;
   }
 
-  .leiste.offen .burger-strich:nth-child(1) {
-    transform: translateY(10px) rotate(45deg);
+  .burger-zu,
+  .leiste.offen .burger-auf {
+    display: none;
   }
 
-  .leiste.offen .burger-strich:nth-child(2) {
-    opacity: 0;
+  .leiste.offen .burger-zu {
+    display: block;
   }
 
-  .leiste.offen .burger-strich:nth-child(3) {
-    transform: translateY(-10px) rotate(-45deg);
-  }
 
   /* Fokus ------------------------------------------------------------ */
 
   .logo:focus-visible,
   .nav a:focus-visible,
+  .knopf-kopf:focus-visible,
   .kontakt:focus-visible,
   .burger:focus-visible {
     outline: var(--focus-ring-width) solid var(--color-focus-ring);
     outline-offset: var(--focus-ring-offset);
     border-radius: var(--radius-sm);
+  }
+
+  /* Aufgeklapptes Menue (unter 1120 px) -----------------------------------
+     Neu am 29. September 2026 (Alexander: „sieht sehr einfach aus", „viel
+     kontrastreicher"). Vorher drei weisse Links auf dunklerem Blau, direkt
+     unter dem Logo.
+
+     Jetzt eine weisse Flaeche mit dunkler Schrift — die kontrastreichste
+     Paarung der Seite (15,9:1) und klar abgesetzt von der blauen Leiste
+     und dem dunklen Hero. Die Links sind grosse Zeilen ueber die volle
+     Breite, getrennt durch Linien: jede Zeile ein Tippziel. Ohne Pfeil
+     am Ende (Alexander): Ein Pfeil verspricht ein Untermenue, das es
+     nicht gibt. Darunter die Handlung wie im Hero, rot und blau. Die Seite
+     dahinter wird abgedunkelt und scrollt nicht mit.
+
+     padding-top: Der rote Logoblock ragt unter die Leiste (auf dem
+     Handy rund 11 px, auf dem Tablet rund 15 px). --space-8 haelt den
+     ersten Link frei davon. */
+  @media (max-width: 1119px) {
+    .leiste.offen .nav {
+      display: block;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      z-index: 1;
+      max-height: calc(100dvh - var(--layout-header-height));
+      overflow-y: auto;
+      overscroll-behavior: contain;
+      padding: var(--space-8) var(--layout-gutter) var(--space-8);
+      background: var(--color-surface-inverse);
+      color: var(--color-text-inverse);
+      box-shadow: var(--shadow-md);
+    }
+
+    .nav ul,
+    .nav-handlung {
+      max-width: var(--measure-default);
+      margin-inline: auto;
+    }
+
+    .nav li + li {
+      border-top: 1px solid var(--color-border-inverse-subtle);
+    }
+
+    .nav li a {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-4);
+      min-height: var(--tap-target-min);
+      padding: var(--space-4) 0;
+      color: var(--color-text-inverse);
+      font-size: var(--font-size-xl);
+      font-weight: var(--font-weight-bold);
+      line-height: var(--line-height-tight);
+    }
+
+    /* Kein Markerzug im Menue: Er gehoert zum Ueberfahren mit der Maus,
+       und hier tippt man. */
+    .nav li a .zug {
+      display: none;
+    }
+
+    .nav li a:focus-visible {
+      outline-color: var(--color-focus-ring-inverse);
+    }
+
+    .nav-handlung {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-3);
+      margin-top: var(--space-6);
+    }
+
+    /* .nav davor: Die Grundregel .nav a (fuer die Links der Leiste)
+       waere sonst staerker. */
+    .nav .nav-probe,
+    .nav .nav-telefon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-2);
+      min-height: var(--tap-target-min);
+      padding: var(--space-3) var(--space-6);
+      border-radius: var(--radius-sm);
+      font-size: var(--font-size-lg);
+      font-style: italic;
+      font-weight: var(--font-weight-bold);
+      text-decoration: none;
+    }
+
+    .nav .nav-probe {
+      background: var(--color-brand);
+      color: var(--color-text-on-brand);
+    }
+
+    .nav .nav-probe:hover {
+      background: var(--color-brand-strong);
+    }
+
+    .nav .nav-telefon {
+      background: var(--color-action);
+      color: var(--color-text-on-action);
+    }
+
+    .nav .nav-telefon:hover {
+      background: var(--color-action-strong);
+    }
+
+    .nav .nav-probe:focus-visible,
+    .nav .nav-telefon:focus-visible {
+      outline: var(--focus-ring-width) solid var(--color-focus-ring-inverse);
+      outline-offset: var(--focus-ring-offset);
+    }
+
+    .nav-zeile {
+      margin: 0;
+      text-align: center;
+      font-size: var(--font-size-sm);
+      font-style: italic;
+      color: var(--color-text-inverse-subtle);
+    }
+
+    .leiste.offen .abdunklung {
+      display: block;
+      position: fixed;
+      inset: var(--layout-header-height) 0 0;
+      background: var(--color-overlay);
+    }
+
+    :global(html:has(.leiste.offen)) {
+      overflow: hidden;
+    }
   }
 
   /* ab 768 ----------------------------------------------------------- */
@@ -514,26 +751,32 @@ const links: { text: string; href: string; marke?: string }[] = [
       --logo-b: 224px;
     }
 
-    .nav,
-    .leiste.offen .nav {
+    .nav {
       display: block;
-      position: static;
       margin-left: var(--space-12);
-      background: none;
     }
 
     .nav ul {
-      max-width: none;
-      margin: 0;
-      padding: 0;
-      flex-direction: row;
+      display: flex;
       gap: var(--space-8);
     }
 
-    /* margin-left bleibt auto — die Gruppe steht rechts im Raster.
-       var(--space-8) ist nur der Mindestabstand zur Navigation. */
+    /* Knopf und Telefon stehen als Gruppe rechts im Raster: Der Knopf
+       schluckt mit margin-left: auto den freien Platz, das Telefon folgt
+       mit festem Abstand. */
+    .knopf-kopf {
+      display: inline-flex;
+      margin-left: auto;
+    }
+
     .kontakt {
-      padding-left: var(--space-8);
+      margin-left: var(--space-8);
+    }
+
+    /* Mehrteilige Links („Warum #Lernstabil") brechen nicht um. Wird es
+       eng, rueckt unten alles zusammen. */
+    .nav a {
+      white-space: nowrap;
     }
 
     /* Volle Leistenhoehe (64 px): Nummer eine Stufe groesser. */
@@ -543,6 +786,31 @@ const links: { text: string; href: string; marke?: string }[] = [
 
     .burger {
       display: none;
+    }
+  }
+
+  /* 1120 bis 1279 — eng --------------------------------------------------
+     Logo, drei Links, Knopf und Telefon brauchen mit den vollen
+     Abstaenden rund 1065 px, bei 1120 px Fenster stehen 1024 zur
+     Verfuegung — bei 1150 px brach „Warum #Lernstabil" um. Jede Luecke
+     eine Stufe kleiner spart 56 px. Geprueft bei 1120, 1280 und 1760 px
+     am 29. September 2026. */
+
+  @media (min-width: 1120px) and (max-width: 1279px) {
+    .nav {
+      margin-left: var(--space-8);
+    }
+
+    .nav ul {
+      gap: var(--space-6);
+    }
+
+    .knopf-kopf {
+      padding: 0 var(--space-4);
+    }
+
+    .kontakt {
+      margin-left: var(--space-6);
     }
   }
 </style>

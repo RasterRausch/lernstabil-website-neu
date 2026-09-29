@@ -340,12 +340,57 @@ const zahlen = [
 
   }
 
-  /* Fällt Trustindex aus, bleibt an der Stelle eine leere Fläche. Auf
-     schmalen Geräten frisst die reservierte Höhe dann Platz ohne
-     Gegenwert, deshalb dort keine Mindesthöhe. */
+  /* 768 bis 1119 — Tablet: Band A zweispaltig -------------------------
+     Seit 29. September 2026 (Alexander): Untereinander standen links
+     Ueberschrift und Unterzeile, darunter mittig das Karussell, rechts
+     daneben eine grosse leere Flaeche. Jetzt wie am Desktop die Stimmen
+     rechts daneben.
+
+     Das Karussell ist hier schmaler als die 420 px, ab denen am Desktop
+     der Text der laengsten Bewertung steht: Neben dem Einstieg bleiben
+     bei 768 px rund 350 px. Trustindex kuerzt den Text dann staerker ab,
+     die Hoehe (256 px) bleibt gleich. Eine Kuerzung mit „Weiterlesen"
+     ist besser als das Loch daneben. */
+  @media (min-width: 768px) and (max-width: 1119px) {
+    .spalten {
+      flex-direction: row;
+      align-items: center;
+      gap: var(--space-8);
+    }
+
+    .einstieg {
+      flex: 0 1 auto;
+    }
+
+    .widget-karussell {
+      flex: 1 1 0;
+      min-width: 0;
+      max-width: 480px;
+      margin-inline: auto;
+    }
+  }
+
+  /* unter 768 — Handy ---------------------------------------------------
+     Einstieg zentriert, das Karussell mittig darunter (Alexander,
+     29. September 2026). Linksbuendig standen Ueberschrift und Text
+     neben einem zentrierten Karussell — zwei Achsen untereinander.
+
+     Faellt Trustindex aus, bleibt an der Stelle eine leere Flaeche. Die
+     reservierte Hoehe fraesse hier Platz ohne Gegenwert, deshalb keine
+     Mindesthoehe. */
   @media (max-width: 767px) {
+    .einstieg {
+      text-align: center;
+    }
+
+    h2,
+    .unterzeile {
+      margin-inline: auto;
+    }
+
     .widget-karussell {
       min-height: 0;
+      margin-inline: auto;
     }
   }
 </style>

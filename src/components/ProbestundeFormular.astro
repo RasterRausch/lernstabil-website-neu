@@ -96,7 +96,16 @@ const i = (name: string) => `${id}-${name}`;
         </select>
       </div>
       <p class="fehler" id={i("fach-fehler")} data-fehler="fach"></p>
+      {/* Links neben „Weiter", was die Probestunde ist (Alexander,
+          29. September 2026). Stand bis dahin als Fussnote zu einem
+          Sternchen an jedem Probestunden-Knopf der Seite; hier steht er
+          einmal, im Moment der Entscheidung und ohne Sternchen. Nur in
+          Schritt 1: In Schritt 2 und 3 steht links „Zurueck". */}
       <div class="steuerung nur-mit-js">
+        <p class="steuerung-hinweis">
+          Die Gratis-Probestunde dauert 45&nbsp;Minuten und dient zugleich
+          als Leistungsanalyse.
+        </p>
         <button class="knopf-weiter" type="button" data-weiter>Weiter</button>
       </div>
     </fieldset>
@@ -286,6 +295,17 @@ const i = (name: string) => `${id}-${name}`;
     font-size: var(--font-size-xl);
     font-weight: var(--font-weight-bold);
     line-height: var(--line-height-snug);
+  }
+
+  /* Neben „Weiter": klein und gedaempft wie die Schrittanzeige. Die
+     Breite haelt den Satz auf zwei Zeilen, damit er den Knopf nicht
+     nach rechts draengt. */
+  .steuerung-hinweis {
+    margin: 0;
+    max-width: var(--measure-narrow);
+    font-size: var(--font-size-sm);
+    line-height: var(--line-height-normal);
+    color: var(--color-text-inverse-subtle);
   }
 
   /* Fortschritt ---------------------------------------------------------

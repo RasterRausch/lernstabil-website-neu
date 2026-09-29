@@ -27,9 +27,11 @@ const punkte = [
   "Einfach per PC, Laptop oder Tablet",
 ];
 
+// Google zuerst (Alexander, 29. September 2026): die bekanntere Marke
+// vorn. Vorher stand Trustindex links.
 const siegel = [
-  { id: "67c6a0b8012c503e17061c29e56" },
-  { id: "d7ec3be801f95047135619f0996" },
+  { id: "d7ec3be801f95047135619f0996", quelle: "Google" },
+  { id: "67c6a0b8012c503e17061c29e56", quelle: "Trustindex" },
 ];
 ---
 
@@ -121,14 +123,19 @@ const siegel = [
              blau und Probestunde rot, darunter „Mo bis Fr, 9 bis 20 Uhr".
              Die Zeiten stehen jetzt in der Kopfleiste.
 
-             Sternchen verweist auf die Fussnote direkt darunter.
-             aria-describedby liest sie Screenreadern zum Knopf vor;
-             das Sternchen selbst bleibt fuer sie stumm.
+             Bis zum 29. September 2026 stand unter der Beratung „Die
+             Gratis-Probestunde dauert 45 Minuten und dient zugleich als
+             Leistungsanalyse.", zuletzt als Fussnote zu einem Sternchen am
+             Knopf. Entfernt (Alexander): Die Seite verspricht „ohne
+             Kleingedrucktes", ein Sternchen ist das typische Zeichen dafuer.
+             Der Satz steht jetzt einmal im Formular neben „Weiter", Dauer
+             und Leistungsanalyse nennen auch die Fragen (Sektion 8).
+             Dasselbe an allen Probestunden-Knoepfen der Seite; keine
+             Sternchen-Fussnoten mehr.
 
-             Ab 1120 px stehen die Siegel RECHTS neben Knopf, Beratung und
-             Fussnote (Alexander, 28. September 2026). Vorher standen sie
-             darunter und ragten in den Sockel — der Hero war damit immer
-             rund 1030 px hoch und passte auf keinen MacBook-Bildschirm. */
+             Die Siegel stehen unter Knopf und Beratung und ragen in den
+             Sockel (Alexander, 29. September 2026). Die Geschichte der
+             Anordnung steht am CSS ab 768 px (zweispaltig). */
         }
         <div class="handlung">
           <div class="aufruf">
@@ -136,19 +143,11 @@ const siegel = [
               <a
                 class="knopf-probe"
                 href="/probestunde"
-                aria-describedby="probestunde-hinweis"
-                >Jetzt gratis testen<span aria-hidden="true">*</span></a
+                >Jetzt gratis testen</a
               >
             </div>
 
             <Beratung />
-
-            {/* Fussnote zum Sternchen am Knopf. Inhalt von Alexander,
-                25. September 2026. */}
-            <p class="fussnote" id="probestunde-hinweis">
-              <span aria-hidden="true">*</span> Die Gratis-Probestunde dauert 45
-              Minuten und dient zugleich als Leistungsanalyse.
-            </p>
           </div>
 
           {
@@ -183,17 +182,26 @@ const siegel = [
              Erzeugte Person, auf dunklem Grund freigestellt.
 
              Bis zum 28. September 2026 ein PNG mit 4,9 MB. Jetzt WebP in
-             vier Breiten (77 / 158 / 239 / 466 KB), erzeugt mit
-             cwebp -q 82 -alpha_q 100 -resize. Die 1200er-Stufe fuer
+             vier Breiten (94 / 190 / 284 / 512 KB), erzeugt mit
+             cwebp -q 82 -alpha_q 100 -resize.
+
+             Seit 29. September 2026 haelt sie einen korrigierten
+             Englischtest (Photoshop, Quelle vorlagen/hero-schuelerin-test-2.png,
+             nicht im Repo). Der Name „Lena" und die Note darauf sind
+             Requisite: nirgends auf der Seite als echter Fall ausgeben,
+             auch nicht im alt-Text. Die 1200er-Stufe fuer
              Handys mit hoher Pixeldichte (rund 1070 Bildpunkte), die
-             sonst die grosse Datei geladen haetten. sizes: Unter 1120 px geht
-             das Motiv ueber die volle Breite, darueber ist es rund 780 px
-             breit (Hoehe der Spalte mal Seitenverhaeltnis). */
+             sonst die grosse Datei geladen haetten. sizes: Unter 768 px geht
+             das Motiv ueber die volle Breite. Von 768 bis 1119 px ist es
+             180 % der rechten Spalte breit, rund 71 bis 73 % des Fensters
+             (gerechnet: 0,45 x 1,8 x (Fenster - 96)), angesetzt mit 75vw.
+             Ab 1120 px rund 780 px (Hoehe der Spalte mal
+             Seitenverhaeltnis). */
         }
         <img
           src="/bilder/hero-schuelerin-1494.webp"
           srcset="/bilder/hero-schuelerin-640.webp 640w, /bilder/hero-schuelerin-960.webp 960w, /bilder/hero-schuelerin-1200.webp 1200w, /bilder/hero-schuelerin-1494.webp 1494w"
-          sizes="(min-width: 1120px) 780px, 100vw"
+          sizes="(min-width: 1120px) 780px, (min-width: 768px) 75vw, 100vw"
           width="1494"
           height="1628"
           alt=""
@@ -246,9 +254,9 @@ const siegel = [
 
     /* Lichtkegel hinter dem Motiv, nachgebaut nach dem Studiolicht im
        Originalfoto: heller Bereich hinter Kopf und Schultern, nach
-       aussen abfallend. Der Kegel wandert mit dem Motiv: unter 1120 px
+       aussen abfallend. Der Kegel wandert mit dem Motiv: unter 768 px
        steht es unten, deshalb --licht-y: 72% — dort liegt der Kopf.
-       Ab 1120 px steht es rechts.
+       Ab 768 px steht es rechts.
 
        --licht-staerke: 0.075 ist die Obergrenze. Die Freistellung ist
        auf dunklem Grund entstanden, halbtransparente Haarpixel tragen
@@ -298,12 +306,10 @@ const siegel = [
     flex-direction: column;
   }
 
-  /* Unter 1120 px steht das Motiv NACH dem Text, nicht davor. Grund:
-     Als erstes Element nahm es 425 px Hoehe und schob den Knopf auf
-     1009 px — auf einem 844 px hohen Handy weit unter die Falte. So
-     steht er bei rund 620 px. Gemessen am 1. September 2026. */
+  /* Unter 768 px steht das Motiv VOR dem Text, zugeschnitten und mit
+     schraeger Unterkante — siehe Block „unter 768" am Ende. */
   .motiv {
-    /* position: relative auch hier, nicht erst ab 1120 px: Der Stempel
+    /* position: relative auch hier, nicht erst ab 768 px: Der Stempel
        haengt absolut an dieser Flaeche. Ohne den Bezug wuerde er auf
        schmalen Geraeten an die Sektion springen. */
     position: relative;
@@ -343,7 +349,7 @@ const siegel = [
        Hand. Vorher 24 px ueber der Unterkante. Negativ = ueber die
        Kante des Motivs hinaus.
 
-       Nach rechts versetzt wird er erst ab 1120 px (siehe unten):
+       Nach rechts versetzt wird er erst ab 768 px (siehe unten):
        Darunter reicht das Motiv bis an den Bildschirmrand, und der
        Stempel wuerde angeschnitten. */
     --stempel-rechts: var(--space-2);
@@ -545,7 +551,7 @@ const siegel = [
     vector-effect: non-scaling-stroke;
   }
 
-  /* Handlung: links Knopf, Beratungszeile und Fussnote, rechts bzw.
+  /* Handlung: links Knopf und Beratungszeile, rechts bzw.
      auf dem Handy darunter die Siegel. */
   .handlung {
     margin-top: var(--space-12);
@@ -596,8 +602,8 @@ const siegel = [
   }
 
   /* Siegel -----------------------------------------------------------
-     Zwei Fremd-Widgets nebeneinander. Auf dem Handy unter der
-     Fussnote, ab 1120 px rechts neben Knopf und Beratungszeile. Sie
+     Zwei Fremd-Widgets nebeneinander. Unter der Beratungszeile,
+     ab 768 px zusaetzlich in den Sockel ragend. Sie
      bringen ihre eigenen Groessen mit; wir geben ihnen nur die Zeile
      und den Abstand.
 
@@ -615,17 +621,6 @@ const siegel = [
   /* Alle Groessen unten sind am 1. September 2026 im Browser gemessen,
      nicht entworfen. Sie gehoeren den Widgets, nicht uns. */
 
-  /* Fussnote: klein, gedaempft, nicht kursiv, direkt unter der
-     Beratungszeile. --color-text-subtle auf der Heroflaeche rund 8:1.
-     Die Breite haelt sie auf zwei kurze Zeilen. */
-  .fussnote {
-    max-width: var(--measure-narrow);
-    margin: var(--space-3) 0 0;
-    font-size: var(--font-size-sm);
-    line-height: var(--line-height-normal);
-    color: var(--color-text-subtle);
-  }
-
   /* Die Widgets bringen feste Groessen mit. Trustindex bietet keine
      Groesseneinstellung dafuer, deshalb `zoom`.
 
@@ -642,16 +637,20 @@ const siegel = [
        Alexander: 0,65 x 1,15 = 0,7475.
 
        Am 28. September 2026 noch einmal um 15 %, Vorgabe von
-       Alexander: 0,7475 x 1,15 = 0,8596. */
-    --siegel-massstab: 0.8596;
+       Alexander: 0,7475 x 1,15 = 0,8596.
+
+       Am selben Tag wieder um 5 % verkleinert, Vorgabe von Alexander:
+       0,8596 x 0,95 = 0,8166. */
+    --siegel-massstab: 0.8166;
     /* Hoehe, die ein Siegel vor dem Laden belegt. Sonst springt beim
        Nachladen alles darunter nach unten (Lighthouse, 28. September
        2026: CLS 0,04 aus genau dieser Stelle). Gemessen: 183 px bei
        Massstab 0,8596, also 213 px ungezoomt — zoom rechnet auch die
-       Mindesthoehe mit. Wert des Fremdsystems. */
+       Mindesthoehe mit, der Wert gilt deshalb fuer jeden Massstab.
+       Wert des Fremdsystems. */
     --siegel-hoehe: 213px;
-    /* Ebenso die Breite, sonst rutscht die Fussnote daneben beim Laden
-       zur Seite. Gemessen: 120 und 127 px bei 0,8596, das breitere
+    /* Ebenso die Breite, sonst rutscht beim Laden, was daneben
+       steht, zur Seite. Gemessen: 120 und 127 px bei 0,8596, das breitere
        ungezoomt 148 px. */
     --siegel-breite: 148px;
 
@@ -661,6 +660,22 @@ const siegel = [
     zoom: var(--siegel-massstab);
   }
 
+  /* Beide Karten gleich gross (Alexander, 29. September 2026). Von
+     sich aus ist die Trustindex-Karte 139 x 193 px, die Google-Karte
+     148 x 198 px (ungezoomt, gemessen) — nebeneinander sah man den
+     Versatz. Die weisse Karte ist .ti-header; sie bekommt die Masse der
+     groesseren. Der Inhalt verteilt sich per space-between, damit
+     „verifiziert von" bei beiden unten steht. Werte des Fremdsystems. */
+  .siegel-widget :global(.ti-header) {
+    --siegel-karte-hoehe: 198px;
+
+    display: inline-flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: var(--siegel-breite);
+    min-height: var(--siegel-karte-hoehe);
+  }
+
   /* ab 768 ---------------------------------------------------------- */
 
   @media (min-width: 768px) {
@@ -668,23 +683,21 @@ const siegel = [
       display: block;
     }
 
-    /* Tablet: Das Motiv steht unter dem Text. Ueber die volle Breite
-       waere es auf dem iPad quer ueber 1100 px hoch; so bleibt es bei
-       rund 700. Der Stempel haengt an .motiv und wandert mit. */
-    .motiv {
-      width: 100%;
-      max-width: 640px;
-      margin: 0 auto;
-    }
-
     .knopf-probe {
       display: inline-block;
     }
   }
 
-  /* ab 1120 — zweispaltig ------------------------------------------- */
+  /* ab 768 — zweispaltig -------------------------------------------- 
 
-  @media (min-width: 1120px) {
+     Seit 29. September 2026 schon ab 768 px statt ab 1120 (Alexander,
+     nach dem Vorbild Studienkreis): Auf dem iPad stand das Motiv unter
+     dem Text, dazwischen eine grosse Luecke, und die Siegel hingen
+     allein darueber. Jetzt wie am Desktop: links Text und Siegel,
+     rechts das Motiv. Was nur fuers Tablet anders ist, steht im
+     Block „768 bis 1119" darunter. */
+
+  @media (min-width: 768px) {
     /* Stempel ueber die rechte Kante des Motivs hinaus, damit er
        weniger von Blatt und Hand verdeckt. Rechts ist hier Platz: Das
        Motiv endet vor dem Bildschirmrand. */
@@ -693,17 +706,31 @@ const siegel = [
     }
 
 
-    /* Siegel rechts neben Knopf, Beratung und Fussnote, mittig zu
-       ihnen. Passt die Zeile nicht (knapp ueber 1120 px), rutschen sie
-       darunter. */
+    /* Siegel UNTER Knopf und Beratung, unten an der Spalte, und sie
+       ragen wie der Stempel rechts in den roten Sockel (Alexander,
+       29. September 2026). Vom 28. bis 29. September standen sie rechts
+       daneben, auf einer Linie mit der Fussnote, die es nicht mehr gibt.
+
+       margin-top: auto schiebt sie an die Unterkante der Spalte, wenn
+       die Mindesthoehe des Hero sie laenger macht als ihren Inhalt.
+       Der negative margin-bottom zieht sie ueber den Innenabstand der
+       Spalte (--text-unten) hinaus und --space-8 tief in den Sockel —
+       so tief wie der Stempel. margin statt translate: Die Siegel
+       belegen dann keinen Platz im Innenabstand, und der Hero wird
+       nur um das hoeher, was sie ueber dem Innenabstand brauchen.
+
+       Gemessen am 29. September 2026: Hero 789 px bei 1440 x 850, die
+       Siegel enden 13 px ueber dem Fensterrand (MacBook Air). Dafuer
+       sind die Abstaende zwischen Punkten, Knopf und Siegeln kleiner
+       als vorher (.handlung: margin-top und gap). */
     .handlung {
-      flex-direction: row;
-      flex-wrap: wrap;
-      align-items: center;
-      gap: var(--space-6);
+      flex: 1;
+      gap: var(--space-4);
     }
 
     .siegel {
+      margin-top: auto;
+      margin-bottom: calc(-1 * (var(--text-unten) + var(--space-8)));
       gap: var(--space-4);
     }
 
@@ -729,17 +756,36 @@ const siegel = [
 
        position + z-index: Die Haarstraehnen des Motivs reichen bis in
        die zweite Zeile der Ueberschrift. Der Text liegt darueber und
-       bleibt lesbar. */
+       bleibt lesbar.
+
+       display: flex, damit .handlung den Rest der Spaltenhoehe fuellen
+       kann (siehe oben). */
     .text {
       position: relative;
       z-index: 1;
       flex: 0 0 55%;
+      display: flex;
+      flex-direction: column;
       padding-top: clamp(var(--space-12), calc(12svh - var(--space-12)), var(--space-28));
-      padding-bottom: clamp(var(--space-8), 5svh, var(--space-18));
+      /* Als Variable, weil die Siegel diesen Abstand ueberbruecken
+         (siehe .siegel oben). */
+      --text-unten: clamp(var(--space-8), 5svh, var(--space-18));
+      padding-bottom: var(--text-unten);
+
+      /* Einzug der Siegel (Alexander, 29. September 2026): Alles steht an
+         der Kante, nur die Siegel ruecken ein. So endet die linke Kante
+         nicht wie mit dem Lineal gezogen. Kurz zuvor war alles unter der
+         Ueberschrift eingerueckt; das war zu viel. Auf dem Tablet halb so
+         tief, die Spalte ist dort schmal. */
+      --einzug: var(--space-12);
+    }
+
+    .siegel {
+      margin-left: var(--einzug);
     }
 
     .handlung {
-      margin-top: clamp(var(--space-6), 5svh, var(--space-12));
+      margin-top: clamp(var(--space-4), 3svh, var(--space-12));
     }
 
     .punkte {
@@ -755,7 +801,8 @@ const siegel = [
 
       /* ------------------------------------------------------------
          FEINJUSTIERUNG MOTIV — nur diese drei Werte anfassen.
-         Gilt ab 1120 px, also fuer die zweispaltige Ansicht.
+         Gilt ab 1120 px. Von 768 bis 1119 px richtet sich das Bild
+         nach --motiv-breite (Block „768 bis 1119" unten).
 
          --motiv-hoehe   Hoehe des Bildes in Prozent der Spaltenhoehe.
                          Groesser = Bild groesser. Weil das Bild an der
@@ -784,6 +831,130 @@ const siegel = [
       width: auto;
       max-width: none;
       display: block;
+    }
+  }
+
+  /* 768 bis 1119 — Tablet -----------------------------------------------
+     Die Textspalte ist hier schmal und dadurch hoch. Richtete sich das
+     Motiv wie am Desktop nach der Spaltenhoehe, wuerde es rund 700 px
+     breit und schoebe sich mit Gesicht und Blatt unter den Text
+     (gemessen bei 820 px, 29. September 2026). Deshalb richtet es sich
+     hier nach der Breite der rechten Spalte: --motiv-breite in Prozent
+     davon. Ueber 100 %, weil das Motiv nach links in die Haare
+     auslaufen darf — die liegen hinter dem Text, Gesicht und Blatt
+     nicht. */
+  @media (min-width: 768px) and (max-width: 1119px) {
+    .text {
+      --einzug: var(--space-6);
+    }
+
+    .motiv {
+      --motiv-breite: 180%;
+    }
+
+    .motiv img {
+      height: auto;
+      width: var(--motiv-breite);
+    }
+  }
+
+  /* unter 768 — Handy ------------------------------------------------------
+     Aufbau nach dem Vorbild Studienkreis (Alexander, 29. September
+     2026): das Motiv zuerst, direkt unter der Kopfleiste, auf Gesicht
+     und Test zugeschnitten und mit schraeger Unterkante; darunter der
+     Text zentriert, der Knopf ueber die volle Breite, Beratung und
+     Siegel mittig.
+
+     Bis dahin stand das Motiv NACH dem Text: Als erstes Element nahm
+     es in voller Hoehe (425 px) so viel Platz, dass der Knopf auf
+     einem 844 px hohen Handy bei 1009 px lag (1. September 2026). Der
+     Zuschnitt haelt diesen Preis klein. */
+  @media (max-width: 767px) {
+    .hero {
+      --licht-y: 20%;
+    }
+
+    /* --motiv-format: Seitenverhaeltnis des Ausschnitts, Breite zu
+       Hoehe. --motiv-fokus: welcher Teil des Bildes im Ausschnitt
+       steht (0 % oben, 100 % unten) — so, dass Gesicht und die Note
+       oben auf dem Test drin sind. --motiv-schraege: wie weit die
+       Unterkante rechts hoeher endet als links. Geometrie des
+       Zuschnitts. */
+    .motiv {
+      --motiv-format: 3 / 2;
+      --motiv-fokus: 34%;
+      --motiv-schraege: 14%;
+
+      order: -1;
+    }
+
+    .motiv img {
+      aspect-ratio: var(--motiv-format);
+      object-fit: cover;
+      object-position: 50% var(--motiv-fokus);
+      clip-path: polygon(
+        0 0,
+        100% 0,
+        100% calc(100% - var(--motiv-schraege)),
+        0 100%
+      );
+    }
+
+    /* Stempel links unten am Bild, wie der Kreis bei Studienkreis, und
+       kleiner als am Desktop: 162 px nahmen auf 390 px Breite fast die
+       halbe Bildbreite ein. */
+    .stempel {
+      --stempel-gr: 112px;
+
+      right: auto;
+      left: var(--layout-gutter);
+      bottom: var(--space-4);
+    }
+
+    /* Unten knapp: Die Siegel stehen wie bei Studienkreis kurz vor der
+       roten Kante. */
+    .text {
+      padding-top: var(--space-6);
+      padding-bottom: var(--space-8);
+      text-align: center;
+    }
+
+    h1 {
+      align-items: center;
+    }
+
+    .zeile1 {
+      transform-origin: center;
+    }
+
+    .unterzeile {
+      margin-inline: auto;
+    }
+
+    /* Die Punkte bleiben linksbuendig untereinander, der Block steht
+       mittig. */
+    .punkte {
+      width: fit-content;
+      margin-inline: auto;
+      text-align: left;
+    }
+
+    .handlung {
+      margin-top: var(--space-8);
+    }
+
+    .aufruf :global(.beratung) {
+      justify-content: center;
+    }
+
+    .siegel {
+      justify-content: center;
+      gap: var(--space-4);
+    }
+
+    /* Kleiner als am Desktop (Alexander, 29. September 2026). */
+    .siegel-widget {
+      --siegel-massstab: 0.65;
     }
   }
 </style>

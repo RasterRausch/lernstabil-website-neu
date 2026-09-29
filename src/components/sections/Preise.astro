@@ -52,11 +52,12 @@ import { telefon, verschluesseln } from "../../data/kontakt";
 
 // Was bei uns nicht dazukommt. Jeder Posten wird durchgestrichen.
 //
-// `bedingung`: Der Posten bekommt ein Sternchen, die Bedingung steht
-// als Fussnote unter der Liste. Bis zum 28. September 2026 stand sie
-// klein direkt unter dem Wort; Alexander wollte sie als Sternchen, wie
-// beim Knopf zur Probestunde. Das Sternchen steht neben dem Strich,
-// nicht darunter — es gilt ja weiter.
+// `bedingung`: steht klein und ungestrichen direkt unter dem Wort — sie
+// gilt ja weiter. Vom 28. bis 29. September 2026 war sie ein Sternchen
+// mit Fussnote unter der Liste. Zurueckgenommen (Alexander): Die Seite
+// verspricht „ohne Kleingedrucktes", und ausgerechnet die einzige echte
+// Einschraenkung stand im Sternchen. Weglassen darf man sie nicht —
+// „keine Ausfallgebuehr" ohne die 24 Stunden waere irrefuehrend.
 //
 // `klartext` erscheint als Infobox beim Ueberfahren, Antippen oder
 // Fokussieren — durchgestrichen ist der Posten schwer zu lesen
@@ -69,7 +70,7 @@ const posten = [
   { name: "Kündigungsfrist", klartext: "Keine Kündigungsfrist" },
   {
     name: "Ausfallgebühr",
-    bedingung: "Gilt bei Absage bis 24 Stunden vor dem Termin.",
+    bedingung: "bei Absage bis 24 Stunden vorher",
     klartext: "Keine Ausfallgebühr, wenn Sie bis 24 Stunden vorher absagen",
   },
   {
@@ -177,10 +178,8 @@ const kante = "M5 2 C 3 20, 7 36, 5 52 S 3 80, 6 98";
                       <path d={strich} />
                     </svg>
                   </span>
-                  {p.bedingung && (
-                    <span class="sternchen" aria-hidden="true">*</span>
-                  )}
                 </span>
+                {p.bedingung && <span class="bedingung">{p.bedingung}</span>}
                 <span
                   class="klartext"
                   role="tooltip"
@@ -192,15 +191,6 @@ const kante = "M5 2 C 3 20, 7 36, 5 52 S 3 80, 6 98";
             ))
           }
         </ul>
-        {
-          posten
-            .filter((p) => p.bedingung)
-            .map((p) => (
-              <p class="posten-fussnote">
-                <span aria-hidden="true">*</span> {p.bedingung}
-              </p>
-            ))
-        }
 
         {
           /* Hand, die die Posten streicht. Erzeugtes Bild (Firefly),
@@ -295,24 +285,20 @@ const kante = "M5 2 C 3 20, 7 36, 5 52 S 3 80, 6 98";
           kann er dadurch schon die nächste Stufe erreichen.
         </p>
 
-        {/* Zwei Spalten: links der Probestunden-Knopf mit der Fussnote
-            zu seinem Sternchen, rechts der Telefon-Knopf mit der
-            Beratungszeile. Bis zum 28. September 2026 stand die Fussnote
-            unter beiden Knoepfen und kollidierte mit der Beratungszeile
-            (Alexander). */}
+        {/* Zwei Spalten: links der Telefon-Knopf mit der Beratungszeile,
+            rechts der Probestunden-Knopf. Auf dem Handy in derselben
+            Reihenfolge untereinander. Getauscht am 29. September 2026
+            (Alexander), vorher stand die Probestunde vorn. Die
+            Reihenfolge steht im Markup, nicht per CSS-order: So lesen
+            Tastatur und Screenreader sie genauso.
+
+            Bis zum 29. September 2026 stand unter dem Probestunden-Knopf
+            „Die Gratis-Probestunde dauert 45 Minuten ...", erst als
+            Fussnote zu einem Sternchen, dann offen. Entfernt, wie an
+            allen Knoepfen der Seite (Alexander): Der Satz steht jetzt
+            einmal im Formular neben „Weiter", und die Fragen (Sektion 8)
+            nennen Dauer und Leistungsanalyse ebenfalls. */}
         <div class="knoepfe">
-          <div class="probe-gruppe">
-            <a
-              class="knopf-probe"
-              href="/probestunde"
-              aria-describedby="probestunde-hinweis-preise"
-              >Gratis Probestunde sichern<span aria-hidden="true">*</span></a
-            >
-            <p class="fussnote" id="probestunde-hinweis-preise">
-              <span aria-hidden="true">*</span> Die Gratis-Probestunde dauert
-              45 Minuten und dient zugleich als Leistungsanalyse.
-            </p>
-          </div>
           {/* Unter dem Telefon-Knopf der Grund zum Anrufen, wie im Hero
               (Alexander, 28. September 2026). Ersetzt die graue Zeile
               „Mo bis Fr, 9 bis 20 Uhr" unter beiden Knoepfen. */}
@@ -336,6 +322,13 @@ const kante = "M5 2 C 3 20, 7 36, 5 52 S 3 80, 6 98";
               <span><Getarnt text={telefon.anzeige} /></span>
             </a>
             <Beratung nummer={false} />
+          </div>
+          <div class="probe-gruppe">
+            <a
+              class="knopf-probe"
+              href="/probestunde"
+              >Gratis Probestunde sichern</a
+            >
           </div>
         </div>
       </div>
@@ -718,24 +711,13 @@ const kante = "M5 2 C 3 20, 7 36, 5 52 S 3 80, 6 98";
     color: var(--color-text-subtle);
   }
 
-  /* Sternchen in der Displayschrift wie das Wort, aber hell und nicht
-     gestrichen: Die Bedingung gilt. Der Abstand ist groesser als der
-     Ueberstand des Strichs (6 px), sonst beruehrt ihn der Strich. */
-  .sternchen {
-    margin-left: var(--space-3);
-    font-family: var(--font-family-display);
-    font-weight: var(--font-weight-display);
-    font-size: var(--font-size-xl);
-    line-height: var(--line-height-normal);
-    color: var(--color-text-default);
-  }
-
-  /* Wie die Fussnote am Knopf weiter unten: klein, gedaempft. */
-  .posten-fussnote {
-    margin: var(--space-6) 0 0;
+  /* Bedingung unter dem gestrichenen Wort. Klein, aber in voller
+     Helligkeit: Das Wort tritt nach dem Strich grau zurueck, die
+     Bedingung nicht — sie gilt. */
+  .bedingung {
     font-size: var(--font-size-sm);
-    line-height: var(--line-height-normal);
-    color: var(--color-text-subtle);
+    line-height: var(--line-height-snug);
+    color: var(--color-text-default);
   }
 
   .strich {
@@ -1152,8 +1134,7 @@ const kante = "M5 2 C 3 20, 7 36, 5 52 S 3 80, 6 98";
     text-decoration: none;
   }
 
-  /* Ohne Abstand: Er ist fuer das Telefon-Symbol im Nachbarknopf da.
-     Hier stuende er zwischen Text und Sternchen. */
+  /* Ohne Abstand: Er ist fuer das Telefon-Symbol im Nachbarknopf da. */
   .knopf-probe {
     gap: 0;
     background: var(--color-brand);
@@ -1195,29 +1176,10 @@ const kante = "M5 2 C 3 20, 7 36, 5 52 S 3 80, 6 98";
     flex-shrink: 0;
   }
 
-  /* Fussnote zum Sternchen direkt unter dem Knopf — wie im Hero: klein,
-     gedaempft, nicht kursiv. Sie ist nie breiter als der Knopf. */
   .probe-gruppe {
     display: flex;
     flex-direction: column;
     align-items: stretch;
-  }
-
-  .fussnote {
-    margin: var(--space-2) 0 0;
-    font-size: var(--font-size-sm);
-    line-height: var(--line-height-normal);
-    color: var(--color-text-subtle);
-  }
-
-  /* Auf dem Handy stehen die Gruppen untereinander; die Fussnote wird
-     dort so breit wie der Knopf. Ab 768 px nebeneinander darf sie den
-     Knopf nicht verbreitern. */
-  @media (min-width: 768px) {
-    .probe-gruppe .fussnote {
-      width: 0;
-      min-width: 100%;
-    }
   }
 
   /* Ab 1120 px: Kreis links, Abrechnung und Knoepfe rechts, beide
