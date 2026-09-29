@@ -258,6 +258,13 @@ const zahlen = [
     line-height: var(--line-height-tight);
     white-space: nowrap;
     transform: rotate(var(--neigung));
+    /* Six Hands Marker wechselt wiederholte Zeichen automatisch gegen
+       Varianten aus (kontextuelle Alternativen), damit sie wie echte
+       Handschrift wirkt. In „1 : 1" standen dadurch zwei verschiedene
+       Einsen, in „2021" zwei verschiedene Zweien (Alexander,
+       29. September 2026). Gerade „1 : 1" sagt Gleichheit — hier
+       abgeschaltet. In Woertern bleibt die Abwechslung erwuenscht. */
+    font-variant-ligatures: no-contextual;
   }
 
   @media (prefers-reduced-motion: reduce) {

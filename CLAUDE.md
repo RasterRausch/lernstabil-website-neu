@@ -101,56 +101,60 @@ im Klartext ins HTML (Schutz gegen Adresssammler). Links über
 `data-kontakt` + `verschluesseln()`, sichtbarer Text über `<Getarnt>`.
 Die Datei erklärt den Aufbau.
 
-## Offene Punkte vor dem Livegang
+## Offene Punkte
 
-- Nach dem Deploy einmal echt über das Formular absenden. Die
-  Herkunftsprüfung von Astro verlässt sich darauf, dass der Proxy von
-  mittwald `X-Forwarded-Proto: https` sendet (`security.allowedDomains`
-  in `astro.config.mjs`). Kommt 403 zurück, liegt es daran.
+Live seit 29. September 2026 (Stand `afa3828` auf `main`).
+
+- Formular live getestet am 29. September 2026: Anfrage ging mit 200
+  durch, die Herkunftsprüfung hinter dem Proxy funktioniert. Eingang der
+  Mail in info@ hat Alexander noch zu bestätigen.
 - Die IP-Begrenzung nimmt den letzten Eintrag aus `X-Forwarded-For`.
-  Nach dem Deploy einmal prüfen, wie mittwald die Kopfzeile befüllt.
-- Sicherheits-Header: HSTS und nosniff setzt offenbar der Proxy von
-  mittwald (die alte Seite hat sie, ihr Framework setzt sie nicht).
-  Referrer-Policy und frame-ancestors fehlen; nach dem Deploy prüfen.
-- Komprimierung: Der Node-Adapter komprimiert nicht. Nach dem Deploy
-  `curl -sI -H 'Accept-Encoding: gzip, br' https://lernstabil.de/`
-  — fehlt `content-encoding`, einen kleinen eigenen Server mit
-  node:zlib vorschalten (kein Zusatzpaket nötig). Gewinn: Startseite
-  125 → 37 KB, CSS 47 → 7 KB.
-- Die alte Seite zeigt Telefon und E-Mail im Klartext (Startseite,
-  Impressum). Sie stehen damit wahrscheinlich schon in Sammlerlisten;
-  der Schutz der neuen Seite verhindert nur neues Sammeln.
+  Noch nicht geprüft, wie mittwald die Kopfzeile befüllt.
+- Sicherheits-Header (29. September 2026 gemessen): HSTS setzt der
+  Proxy von mittwald. `X-Content-Type-Options: nosniff`,
+  `Referrer-Policy` und `frame-ancestors` fehlen.
+- Komprimierung (29. September 2026 gemessen): Der Proxy komprimiert
+  die Seiten selbst (Startseite 125 → 37 KB, gzip), CSS und JavaScript
+  aber nicht (CSS 30 KB unkomprimiert). Gewinn wäre gering; bei Bedarf
+  einen kleinen eigenen Server mit node:zlib vorschalten.
+- Die alte Seite zeigte Telefon und E-Mail im Klartext. Sie stehen damit
+  wahrscheinlich schon in Sammlerlisten; der Schutz der neuen Seite
+  verhindert nur neues Sammeln.
 - Six Hands Marker gibt es im Adobe-Kit nur im Schnitt 400. Überall,
   wo sie fett gesetzt ist, fettet der Browser künstlich. Einheitlich
   festlegen (Stand 28. September 2026: teils fett, teils normal).
 - Trustindex lädt `loader.js` je Widget neu — dieselbe Datei, 89 KB pro
   Stück. Bei Trustindex nachfragen, ob mehrere Widgets über einen
   Loader gehen.
-- Das Trustindex-Zertifikats-Widget (`loader-cert.js`) ist an die
-  Domain gebunden und zeigt außerhalb von `lernstabil.de` eine
-  englische Fehlermeldung. Nach dem Livegang prüfen.
-- Eine automatisierte Zugänglichkeitsprüfung ist nie gelaufen. Vor dem
-  Livegang axe oder Lighthouse.
+- Eine automatisierte Zugänglichkeitsprüfung ist nie gelaufen (axe
+  oder Lighthouse).
 - **Six Hands Marker (Adobe Fonts)** überträgt die IP jedes Besuchers an
   Adobe, rechtlich wie Google Fonts. Entscheidung vertagt (27. September
   2026): eigene Weblizenz zum Selbsthosten bei der Schriftschmiede,
-  Ersatz durch eine freie Marker-Schrift oder Adobe behalten.
-- Impressum und Datenschutz lässt Alexander vor dem Livegang prüfen.
-- SMTP-Werte (SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASS) als
-  Umgebungsvariablen der App auf mittwald eintragen. Lokal mit `.env`
-  am 28. September 2026 erfolgreich getestet (Produktionsbuild,
-  Eingang in info@ bestätigt).
+  Ersatz durch eine freie Marker-Schrift oder Adobe behalten. Gehört in
+  jedem Fall in die Datenschutzerklärung.
+- Impressum und Datenschutz wollte Alexander vor dem Livegang prüfen
+  lassen; beim Livegang am 29. September 2026 offen geblieben.
 
 ## Deployment
 
 - Hosting: mittwald mStudio
 - Projekt-ID: p-i7b2q9 (#Lernstabil)
-- App-Installation: a-upf6k9, Node.js (Stand 27. September 2026: alte
-  Seite, Startbefehl `node build/index.js`)
+- App-Installation: a-upf6k9, Node.js 22, Verzeichnis
+  `/home/p-i7b2q9/html/lernstabil`. Seit 29. September 2026 die neue
+  Seite; die alte ist gelöscht.
 - Domain: `lernstabil.de` und `www.lernstabil.de` zeigen auf a-upf6k9
-  (aktuell noch die alte Seite)
-- Build: `npm run build` → `dist/client` (statisch) und `dist/server`
-- Start: `node dist/server/entry.mjs` (Port über `PORT`)
+- Im Verzeichnis liegen nur `dist/`, `node_modules/`, `package.json`,
+  `package-lock.json` und `.env` (SMTP-Werte und `HOST=0.0.0.0`; ohne
+  HOST lauscht der Server nur auf localhost).
+- Startbefehl (mStudio → App → Configuration → Start command):
+  `node --env-file=.env dist/server/entry.mjs`. Per MCP
+  (`mittwald_app_update`) kam die Änderung am 29. September 2026 nicht
+  an, obwohl Erfolg gemeldet wurde; Alexander hat sie im mStudio gesetzt.
+- Deploy: `npm run build`, dann per rsync `dist`, `package.json` und
+  `package-lock.json` in das Verzeichnis, dort `npm ci --omit=dev`,
+  App neu starten. SSH: `info@raster-rausch.de@a-upf6k9` auf
+  `ssh.altgemeinde.project.host`.
 - Beim Neuaufsetzen nur die App-Installation ersetzen, **nicht das
   Projekt löschen**: Die Postfächer info@ und bewerbung@ hängen am
   Projekt.

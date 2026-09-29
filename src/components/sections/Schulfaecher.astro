@@ -29,6 +29,15 @@ const ueberschrift = { vor: "Nachhilfe für", kern: "alle Schulfächer" };
 // Spalten nebeneinander, dort passt „Geisteswissenschaften" nicht in
 // eine Zeile. Der Browser trennt dann an der Wortfuge statt irgendwo —
 // und nur, wenn es noetig ist.
+//
+// Einteilung wie in der Schule (29. September 2026, Hinweis eines
+// Schuelers an Alexander): Erdkunde/Geographie steht im
+// gesellschaftswissenschaftlichen Aufgabenfeld, nicht bei den
+// Naturwissenschaften — so in fast allen Bundeslaendern, auch in
+// Sachsen. Die Gruppe heisst deshalb „Gesellschaftswissenschaften" wie
+// in der Schule; „Sozialwissenschaften" ist ein Begriff der Uni bzw. in
+// NRW ein eigenes Fach. Das Icon (Saeule) bleibt, nur der Dateiname
+// traegt noch den alten Begriff.
 const bereiche = [
   {
     titel: "Geistes\u00ADwissenschaften",
@@ -38,19 +47,12 @@ const bereiche = [
   {
     titel: "Natur\u00ADwissenschaften",
     icon: naturwissenschaften,
-    faecher: [
-      "Mathematik",
-      "Physik",
-      "Biologie",
-      "Chemie",
-      "Erdkunde/Geographie",
-      "Informatik",
-    ],
+    faecher: ["Mathematik", "Physik", "Biologie", "Chemie", "Informatik"],
   },
   {
-    titel: "Sozial\u00ADwissenschaften",
+    titel: "Gesellschafts\u00ADwissenschaften",
     icon: sozialwissenschaften,
-    faecher: ["Geschichte", "Sozialkunde"],
+    faecher: ["Geschichte", "Erdkunde/Geographie", "Sozialkunde"],
   },
   {
     titel: "Sprachen",
