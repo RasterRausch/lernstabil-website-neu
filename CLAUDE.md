@@ -151,10 +151,17 @@ Live seit 29. September 2026 (Stand `afa3828` auf `main`).
   `node --env-file=.env dist/server/entry.mjs`. Per MCP
   (`mittwald_app_update`) kam die Änderung am 29. September 2026 nicht
   an, obwohl Erfolg gemeldet wurde; Alexander hat sie im mStudio gesetzt.
-- Deploy: `npm run build`, dann per rsync `dist`, `package.json` und
-  `package-lock.json` in das Verzeichnis, dort `npm ci --omit=dev`,
-  App neu starten. SSH: `info@raster-rausch.de@a-upf6k9` auf
+- Deploy: `npm run build`, dann per rsync `dist/` (mit `--delete`) in
+  das Verzeichnis. Nur bei geänderten Abhängigkeiten zusätzlich
+  `package.json` und `package-lock.json` und dort `npm ci --omit=dev`.
+  SSH: `info@raster-rausch.de@a-upf6k9` auf
   `ssh.altgemeinde.project.host`.
+- Neustart nach jedem Deploy, automatisch und ohne eigene Rückfrage
+  (Alexander, 29. September 2026): per SSH `mittnitectl job restart
+  node`. Das MCP hat kein Werkzeug dafür. Danach lernstabil.de abrufen.
+- Nach einem Build den lokalen Dev-Server neu starten (`astro dev stop`,
+  `astro dev --background`): Er verliert sonst `Astro.site` und zeigt
+  eine Fehlerseite.
 - Beim Neuaufsetzen nur die App-Installation ersetzen, **nicht das
   Projekt löschen**: Die Postfächer info@ und bewerbung@ hängen am
   Projekt.
