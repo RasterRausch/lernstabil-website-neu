@@ -6,13 +6,16 @@ import Beratung from "../Beratung.astro";
 
 // Siegel von Trustindex, aus Alexanders Konto.
 //
-// Am 1. September 2026 stand hier schon einmal ein drittes Siegel: das
+// Am 1. September 2026 stand hier zeitweise ein drittes Siegel: das
 // Zertifikat „Aussergewoehnlicher Kundenservice", als Bild statt als
 // Widget, weil `loader-cert.js` an die Domain gebunden ist und auf
 // jeder Adresse ausser lernstabil.de nur die Meldung „Trustmark widget
 // validation failed" zeigt. Alexander hat es am selben Tag wieder
-// entfernt. Seit dem Livegang (29. September 2026) steht es als Widget
-// neben den Karten.
+// entfernt.
+//
+// Das Bild ist am selben Tag mitgeloescht worden. Zum Zurueckholen:
+// Es stammt aus Alexanders Trustindex-Konto (Format 436 x 90). Die
+// Kennung des zugehoerigen Widgets lautet 3bfd6d6807be50304926958dc7a.
 // Punkte im Hero. Haken im Stil der Sektionen 3 und 5 (Marker-Haken,
 // viewBox 0 0 30 24), hier weiss. Seit dem 25. September 2026 —
 // vorher dünne CSS-Häkchen, die nicht zum Rest passten.
@@ -26,9 +29,6 @@ const punkte = [
 
 // Google zuerst (Alexander, 29. September 2026): die bekanntere Marke
 // vorn. Vorher stand Trustindex links.
-// Zertifikat, seit 29. September 2026 wieder drin (siehe Markup).
-const zertifikat = "3bfd6d6807be50304926958dc7a";
-
 const siegel = [
   { id: "d7ec3be801f95047135619f0996", quelle: "Google" },
   { id: "67c6a0b8012c503e17061c29e56", quelle: "Trustindex" },
@@ -172,19 +172,6 @@ const siegel = [
                 </div>
               ))
             }
-            {/* Zertifikat „Außergewöhnlicher Kundenservice" (Alexander,
-                29. September 2026). loader-cert.js ist an die Domain
-                gebunden: Auf jeder Adresse ausser lernstabil.de, also
-                auch lokal, zeigt es nur „Trustmark widget validation
-                failed". Pruefen deshalb nur live. */}
-            <div class="siegel-zertifikat">
-              <script
-                defer
-                async
-                is:inline
-                src={`https://cdn.trustindex.io/loader-cert.js?${zertifikat}`}
-              />
-            </div>
           </div>
         </div>
       </div>
@@ -622,14 +609,7 @@ const siegel = [
 
      flex-wrap bleibt: Auf schmalen Geraeten sollen sie umbrechen
      duerfen, statt sich zu quetschen. */
-  /* Masse fuer Karten UND Zertifikat, deshalb hier und nicht an
-     .siegel-widget. Erlaeuterung der Werte siehe unten. */
   .siegel {
-    --siegel-massstab: 0.8166;
-    --siegel-hoehe: 213px;
-    --siegel-breite: 148px;
-    --siegel-karte-hoehe: 198px;
-
     display: flex;
     flex-wrap: wrap;
     /* Unten buendig: Beide Siegel stehen auf derselben Linie,
@@ -660,16 +640,19 @@ const siegel = [
        Alexander: 0,7475 x 1,15 = 0,8596.
 
        Am selben Tag wieder um 5 % verkleinert, Vorgabe von Alexander:
-       0,8596 x 0,95 = 0,8166. Wert an .siegel. */
+       0,8596 x 0,95 = 0,8166. */
+    --siegel-massstab: 0.8166;
     /* Hoehe, die ein Siegel vor dem Laden belegt. Sonst springt beim
        Nachladen alles darunter nach unten (Lighthouse, 28. September
        2026: CLS 0,04 aus genau dieser Stelle). Gemessen: 183 px bei
        Massstab 0,8596, also 213 px ungezoomt — zoom rechnet auch die
        Mindesthoehe mit, der Wert gilt deshalb fuer jeden Massstab.
-       Wert des Fremdsystems. --siegel-hoehe an .siegel. */
+       Wert des Fremdsystems. */
+    --siegel-hoehe: 213px;
     /* Ebenso die Breite, sonst rutscht beim Laden, was daneben
        steht, zur Seite. Gemessen: 120 und 127 px bei 0,8596, das breitere
-       ungezoomt 148 px. --siegel-breite an .siegel. */
+       ungezoomt 148 px. */
+    --siegel-breite: 148px;
 
     flex: 0 0 auto;
     min-height: var(--siegel-hoehe);
@@ -684,29 +667,13 @@ const siegel = [
      groesseren. Der Inhalt verteilt sich per space-between, damit
      „verifiziert von" bei beiden unten steht. Werte des Fremdsystems. */
   .siegel-widget :global(.ti-header) {
+    --siegel-karte-hoehe: 198px;
+
     display: inline-flex;
     flex-direction: column;
     justify-content: space-between;
     width: var(--siegel-breite);
     min-height: var(--siegel-karte-hoehe);
-  }
-
-  /* Zertifikat: im selben Massstab wie die Karten, damit es nicht
-     groesser wirkt als sie (von sich aus 217 x 44 px, gezoomt 177 x 36).
-     Unten auf derselben Kante wie die weissen Karten: Deren Kasten ist
-     --siegel-hoehe hoch, die Karte darin nur --siegel-karte-hoehe; um
-     genau die Differenz steht die Karte hoeher (live gemessen am
-     29. September 2026: beide Unterkanten bei 751 px). Mindestmasse
-     gegen Springen beim Nachladen. Werte des Fremdsystems. */
-  .siegel-zertifikat {
-    --zertifikat-breite: 217px;
-    --zertifikat-hoehe: 44px;
-
-    flex: 0 0 auto;
-    min-width: var(--zertifikat-breite);
-    min-height: var(--zertifikat-hoehe);
-    margin-bottom: calc(var(--siegel-hoehe) - var(--siegel-karte-hoehe));
-    zoom: var(--siegel-massstab);
   }
 
   /* ab 768 ---------------------------------------------------------- */
@@ -986,7 +953,7 @@ const siegel = [
     }
 
     /* Kleiner als am Desktop (Alexander, 29. September 2026). */
-    .siegel {
+    .siegel-widget {
       --siegel-massstab: 0.65;
     }
   }
