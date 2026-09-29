@@ -43,7 +43,7 @@ const SCHRITTE: [string, string][] = [
 ];
 
 export function bestaetigung(a: Anfrage) {
-  const betreff = "Danke für Ihre Anfrage – wir melden uns innerhalb von 24 Stunden";
+  const betreff = "Danke für Ihre Anfrage. Wir melden uns innerhalb von 24 Stunden";
   const wann = a.erreichbar.length ? `, am liebsten ${zeitenImSatz(a.erreichbar)}` : "";
 
   const schritte = SCHRITTE.map(
@@ -82,7 +82,7 @@ ${knopf(telefon.href, `${telefon.anzeige} anrufen`)}
 </td></tr></table>
 
 ${absatz("Herzliche Grüße", "margin-bottom:0;")}
-${absatz(`<strong style="font-weight:700;">Alexander Ritter</strong><br><span style="color:${color.textInverseSubtle};">#Lernstabil – Online-Nachhilfe</span>`, "margin:0;")}
+${absatz(`<strong style="font-weight:700;">Alexander Ritter</strong><br><span style="color:${color.textInverseSubtle};">#Lernstabil · Online-Nachhilfe</span>`, "margin:0;")}
 `;
 
   const fuss = `
@@ -117,7 +117,7 @@ ${absatz(`<strong style="font-weight:700;">Alexander Ritter</strong><br><span st
     "",
     "Herzliche Grüße",
     "Alexander Ritter",
-    "#Lernstabil – Online-Nachhilfe",
+    "#Lernstabil · Online-Nachhilfe",
     "",
     "--",
     `${SEITE} · Impressum: ${SEITE}/impressum · Datenschutz: ${SEITE}/datenschutz`,

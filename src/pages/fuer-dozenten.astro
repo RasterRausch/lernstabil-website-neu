@@ -19,15 +19,18 @@ import DozentProfile from "../components/sections/DozentProfile.astro";
 
 // Stellenanzeige als strukturierte Daten (schema.org JobPosting), damit
 // die Seite in der Jobsuche von Google und bei KI-Assistenten auftaucht.
-// Angelegt am 28. September 2026. Nur Angaben von der Seite; die Art
-// der Beschaeftigung (employmentType) und das Honorar fehlen, weil sie
-// nicht feststehen. Bewerbungsadresse bewusst nicht als Klartext.
+// Angelegt am 28. September 2026. Nur Angaben von der Seite und von
+// Alexander. Beschaeftigung: freie Mitarbeit (CONTRACTOR). Das Honorar
+// wird bewusst nicht genannt, baseSalary fehlt deshalb; Google fuehrt es
+// nur als empfohlen, nicht als Pflicht. Bewerbungsadresse bewusst nicht
+// als Klartext.
 const seite = Astro.site!.href.replace(/\/$/, "");
 const stelle = {
   "@context": "https://schema.org",
   "@type": "JobPosting",
   title: "Nachhilfelehrer für Online-Einzelunterricht",
   datePosted: "2026-09-28",
+  employmentType: "CONTRACTOR",
   description:
     "<p>Bei #Lernstabil unterrichten Sie online im Einzelunterricht: ein Schüler, ein Dozent. Sie lernen Ihre Schüler wirklich kennen und begleiten sie über längere Zeit.</p>" +
     "<ul><li>Online und ortsunabhängig, wann und wo es für Sie passt</li><li>Faires Honorar pro Stunde, ohne versteckte Abzüge</li><li>Persönliche Begleitung im kleinen Team, Materialien werden gestellt</li></ul>" +
