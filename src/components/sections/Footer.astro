@@ -137,15 +137,18 @@ const jahr = new Date().getFullYear();
     </nav>
 
     <p class="copyright">
-      © {jahr} <span class="marke">#Lernstabil</span> – Online-Nachhilfe im
+      © {jahr} <span class="marke">#Lernstabil</span> · Online-Nachhilfe im
       Einzelunterricht
     </p>
   </div>
 </footer>
 
 <style>
+  /* sunken statt deepest (29. September 2026, Alexander): Reines Schwarz
+     fiel neben den abgestuften Dunkeltoenen der Seite heraus. #111 ist
+     die dunkelste Stufe, die auch Sektionen tragen. */
   .footer {
-    background: var(--color-surface-deepest);
+    background: var(--color-surface-sunken);
     color: var(--color-text-default);
     padding: var(--space-18) 0 var(--space-12);
   }

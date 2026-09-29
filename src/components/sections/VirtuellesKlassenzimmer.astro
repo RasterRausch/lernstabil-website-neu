@@ -37,11 +37,11 @@ const vorzeile = "Individuell. Interaktiv. Online.";
 const punkte = [
   {
     titel: "Per Video, von zu Hause",
-    text: "Die Stunde läuft per Videokonferenz. Kein Weg zur Nachhilfe – das spart Zeit und Nerven.",
+    text: "Die Stunde läuft per Videokonferenz. Kein Weg zur Nachhilfe, das spart Zeit und Nerven.",
   },
   {
     titel: "Gemeinsam am Whiteboard",
-    text: "Aufgaben löst Ihr Kind zusammen mit dem Dozenten auf demselben Whiteboard – fast wie am Schultisch.",
+    text: "Aufgaben löst Ihr Kind zusammen mit dem Dozenten auf demselben Whiteboard, fast wie am Schultisch.",
   },
   {
     titel: "Auf jedem Gerät",
@@ -63,13 +63,13 @@ const punkte = [
             bei 52 px Schrift 352 px breit und passte auf schmalen Handys
             nicht in die Zeile (gemessen bei 360 px). Bricht nur, wenn
             noetig. */}
-        <Unterstrichen>Echte Nachhilfe</Unterstrichen>{" "}–<br />direkt im
+        {/* Komma statt Gedankenstrich am Zeilenende (29. September 2026). */}
+        <Unterstrichen>Echte Nachhilfe</Unterstrichen>,<br />direkt im
         virtuellen Klassen&shy;zimmer
       </h2>
       <p class="einleitung">
         Der Schüler sieht seinen Dozenten, spricht mit ihm und arbeitet mit ihm
-        auf demselben Whiteboard. So wird aus dem Bildschirm ein Lernraum –
-        flexibel, unkompliziert und persönlich.
+        auf demselben Whiteboard. So wird aus dem Bildschirm ein Lernraum: flexibel, unkompliziert und persönlich.
       </p>
     </div>
 
@@ -203,7 +203,7 @@ const punkte = [
 
           {/* Ueberschrift mit Unterstrich */}
           <text class="rot titel" x="84" y="232"
-            >Steigerung der Adjektive – Übersicht</text
+            >Steigerung der Adjektive: Übersicht</text
           >
           <path class="zug rot-zug" d="M84 243 C 190 239, 300 246, 410 242 S 520 240, 552 243"
           ></path>
@@ -276,13 +276,14 @@ const punkte = [
         </svg>
 
         {
-          /* Hinweis, dass das iPad nur ein Beispiel ist — Wunsch von
+          /* Hinweis, dass das Tablet nur ein Beispiel ist — Wunsch von
              Alexander am 25. September 2026. Smartphone bewusst nicht
              genannt. Als figcaption, damit Screenreader ihn zum Bild
-             lesen. */
+             lesen. Bis 29. September 2026 „am iPad" — nicht jeder hat
+             eins (Alexander). */
         }
         <figcaption class="hinweis">
-          Hier am iPad – genauso am PC oder Laptop.
+          Hier am Tablet, genauso am PC oder Laptop.
         </figcaption>
       </figure>
     </div>
@@ -306,7 +307,10 @@ const punkte = [
        waagerechte Scrollleiste. clip statt hidden: kein
        Scrollcontainer. */
     overflow-x: clip;
-    background: var(--color-surface-inverse);
+    /* Hellgrau wie die Fragen (Sektion 8) statt reinem Weiss
+       (29. September 2026, Alexander). Textrollen unveraendert, die
+       Kontraste stehen in tokens.css bei --color-surface-inverse-muted. */
+    background: var(--color-surface-inverse-muted);
     color: var(--color-text-inverse);
     padding: var(--space-18) 0;
   }
