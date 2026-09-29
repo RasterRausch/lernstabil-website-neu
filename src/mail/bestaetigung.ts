@@ -1,5 +1,6 @@
-// Eingangsbestaetigung an die Eltern. Geht nur raus, wenn im Formular
-// eine E-Mail-Adresse angegeben wurde (das Feld ist freiwillig).
+// Eingangsbestaetigung an die Eltern. Seit 29. September 2026 ist die
+// E-Mail-Adresse Pflicht und das Telefon freiwillig; die Bestaetigung
+// geht also an alle, die mit Skript absenden.
 // Angelegt am 28. September 2026, unterschrieben von Alexander.
 //
 // Die Aussagen zur Probestunde stammen aus den Fragen (Sektion 8) und
@@ -61,12 +62,16 @@ export function bestaetigung(a: Anfrage) {
 ${kicker("Ihre Gratis-Probestunde")}
 ${titel(`Danke, ${esc(a.vorname)}!`)}
 ${absatz(`Ihre Anfrage ist bei uns angekommen. ${hervorgehoben("Wir melden uns innerhalb von 24&nbsp;Stunden.")}`, `font-size:${fontSize.lg}px;line-height:1.4;`)}
-${absatz(`Wir rufen Sie unter <strong style="white-space:nowrap;">${esc(a.telefon)}</strong> an${esc(wann)}.`)}
+${absatz(
+    a.telefon
+      ? `Wir antworten Ihnen per E-Mail oder rufen Sie unter <strong style="white-space:nowrap;">${esc(a.telefon)}</strong> an${esc(wann)}.`
+      : "Wir antworten Ihnen per E-Mail.",
+  )}
 
 ${angaben("Ihre Anfrage", [
   ["Fach", esc(a.fach)],
   ["Klasse", esc(a.klasse)],
-  ["Telefon", esc(a.telefon)],
+  ...(a.telefon ? [["Telefon", esc(a.telefon)] as [string, string]] : []),
   ...(a.erreichbar.length ? [["Erreichbar", esc(a.erreichbar.join(", "))] as [string, string]] : []),
 ])}
 ${absatz("Stimmt etwas nicht? Antworten Sie einfach auf diese E-Mail.", `font-size:${fontSize.sm}px;color:${color.textInverseSubtle};`)}
@@ -100,12 +105,14 @@ ${absatz(`<strong style="font-weight:700;">Alexander Ritter</strong><br><span st
     `Danke, ${a.vorname}!`,
     "",
     "Ihre Anfrage ist bei uns angekommen. Wir melden uns innerhalb von 24 Stunden.",
-    `Wir rufen Sie unter ${a.telefon} an${wann}.`,
+    a.telefon
+      ? `Wir antworten Ihnen per E-Mail oder rufen Sie unter ${a.telefon} an${wann}.`
+      : "Wir antworten Ihnen per E-Mail.",
     "",
     "IHRE ANFRAGE",
     `Fach:        ${a.fach}`,
     `Klasse:      ${a.klasse}`,
-    `Telefon:     ${a.telefon}`,
+    ...(a.telefon ? [`Telefon:     ${a.telefon}`] : []),
     ...(a.erreichbar.length ? [`Erreichbar:  ${a.erreichbar.join(", ")}`] : []),
     "",
     "Stimmt etwas nicht? Antworten Sie einfach auf diese E-Mail.",

@@ -1,6 +1,6 @@
 // Nimmt Anfragen aus dem Probestunden-Formular an und schickt sie per
-// E-Mail an info@lernstabil.de. Haben die Eltern eine E-Mail-Adresse
-// angegeben, bekommen sie eine Eingangsbestaetigung (Vorlagen in
+// E-Mail an info@lernstabil.de. Die Eltern bekommen an ihre
+// E-Mail-Adresse (Pflichtfeld) eine Eingangsbestaetigung (Vorlagen in
 // src/mail/). Die einzige Adresse der Seite, die auf dem Server laeuft
 // (siehe astro.config.mjs).
 //
@@ -147,15 +147,17 @@ function pruefen(daten: FormData) {
     fehler.vorname = "Bitte geben Sie nur Ihren Vornamen an, ohne Ziffern oder Zeichen.";
   }
 
-  const telefon = einzeilig(daten.get("telefon"), 30);
-  const ziffern = telefon.replace(/\D/g, "").length;
-  if (!/^[0-9+()/.\s-]+$/.test(telefon) || ziffern < 6) {
-    fehler.telefon = "Bitte geben Sie eine Telefonnummer an, unter der wir Sie erreichen.";
+  // E-Mail Pflicht, Telefon freiwillig (seit 29. September 2026).
+  const mail = einzeilig(daten.get("email"), 120);
+  if (!mail) fehler.email = "Bitte geben Sie Ihre E-Mail-Adresse an.";
+  else if (!EMAIL.test(mail)) {
+    fehler.email = "Diese E-Mail-Adresse sieht nicht vollständig aus.";
   }
 
-  const mail = einzeilig(daten.get("email"), 120);
-  if (mail && !EMAIL.test(mail)) {
-    fehler.email = "Diese E-Mail-Adresse sieht nicht vollständig aus.";
+  const telefon = einzeilig(daten.get("telefon"), 30);
+  const ziffern = telefon.replace(/\D/g, "").length;
+  if (telefon && (!/^[0-9+()/.\s-]+$/.test(telefon) || ziffern < 6)) {
+    fehler.telefon = "Diese Telefonnummer sieht nicht vollständig aus.";
   }
 
   // Doppelte raus: Sonst liesse sich die Mail mit Wiederholungen aufblaehen.

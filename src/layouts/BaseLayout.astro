@@ -19,6 +19,10 @@ interface Props {
   footerAufruf?: 'probestunde' | 'bewerbung';
   // Vorschaubild fuer Messenger und soziale Netzwerke (Open Graph),
   // 1200 x 630. Ohne Angabe das allgemeine Bild der Marke.
+  // Neu am 29. September 2026 mit dem Test-Motiv aus dem Hero (vorher
+  // weisses Blatt, Datei vorschau-lernstabil.jpg). Neuer Dateiname mit
+  // Absicht: WhatsApp und Facebook merken sich Vorschaubilder nach ihrer
+  // Adresse. Bei jedem neuen Bild also auch den Namen aendern.
   bild?: string;
 }
 
@@ -29,7 +33,7 @@ const {
   probestundeDialog = true,
   noindex = false,
   footerAufruf = 'probestunde',
-  bild = '/bilder/vorschau-lernstabil.jpg',
+  bild = '/bilder/vorschau-startseite.jpg',
 } = Astro.props;
 
 // Kanonische Adresse ohne Anfrageteil, auf Basis von `site` in

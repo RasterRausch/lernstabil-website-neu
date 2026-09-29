@@ -97,13 +97,15 @@ function einrichten(wurzel: HTMLElement) {
       else if (!VORNAME_FORM.test(vorname)) {
         fehler.vorname = "Bitte geben Sie nur Ihren Vornamen an, ohne Ziffern oder Zeichen.";
       }
-      const tel = wert("telefon");
-      if (!TELEFON_ZEICHEN.test(tel) || tel.replace(/\D/g, "").length < 6) {
-        fehler.telefon = "Bitte geben Sie eine Telefonnummer an, unter der wir Sie erreichen.";
-      }
+      // E-Mail Pflicht, Telefon freiwillig (seit 29. September 2026).
       const mail = wert("email");
-      if (mail && !EMAIL_FORM.test(mail)) {
+      if (!mail) fehler.email = "Bitte geben Sie Ihre E-Mail-Adresse an.";
+      else if (!EMAIL_FORM.test(mail)) {
         fehler.email = "Diese E-Mail-Adresse sieht nicht vollständig aus.";
+      }
+      const tel = wert("telefon");
+      if (tel && (!TELEFON_ZEICHEN.test(tel) || tel.replace(/\D/g, "").length < 6)) {
+        fehler.telefon = "Diese Telefonnummer sieht nicht vollständig aus.";
       }
     }
     return fehler;
@@ -111,7 +113,7 @@ function einrichten(wurzel: HTMLElement) {
 
   // Zum ersten Feld mit Fehler, damit man ihn nicht suchen muss.
   function fokusAufFehler(fehler: Fehler) {
-    const reihenfolge = ["fach", "klasse", "vorname", "telefon", "email"];
+    const reihenfolge = ["fach", "klasse", "vorname", "email", "telefon"];
     const erster = reihenfolge.find((n) => fehler[n]);
     if (!erster) return;
     const f = feld(erster === "fach" && wert("fach") === "Anderes Fach" ? "fach_anderes" : erster);

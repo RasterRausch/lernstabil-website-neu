@@ -8,10 +8,11 @@
 // hat, bricht beim dritten Schritt selten ab. Mehrstufig lohnt sich nur,
 // solange es kurz bleibt — kein weiteres Pflichtfeld ohne Grund.
 //
-// TELEFON IST PFLICHT, E-MAIL NICHT: Der Weg zu #Lernstabil ist der
-// Anruf. Am 28. September 2026 kurz als Pflichtfeld erwogen und
-// verworfen (Alexander) — wer eine Adresse angibt, bekommt daran die
-// Eingangsbestaetigung. Keine Einwilligungs-Checkbox — die Anfrage ist eine
+// E-MAIL IST PFLICHT, TELEFON NICHT (seit 29. September 2026,
+// Feedback an Alexander): Eine Antwort per E-Mail ist den meisten
+// angenehmer; wer telefonieren will, kann selbst anrufen. Vorher war es
+// umgekehrt. Die Eingangsbestaetigung geht damit an alle (mit Skript).
+// Keine Einwilligungs-Checkbox — die Anfrage ist eine
 // vorvertragliche Massnahme (Art. 6 Abs. 1 lit. b DSGVO), der Hinweis
 // auf die Datenschutzerklaerung genuegt.
 //
@@ -159,7 +160,24 @@ const i = (name: string) => `${id}-${name}`;
       </div>
 
       <div class="feld">
-        <label class="feld-label" for={i("telefon")}>Telefonnummer</label>
+        <label class="feld-label" for={i("email")}>E-Mail-Adresse</label>
+        <input
+          class="eingabe"
+          id={i("email")}
+          name="email"
+          type="email"
+          autocomplete="email"
+          maxlength="120"
+          required
+          aria-describedby={i("email-fehler")}
+        />
+        <p class="fehler" id={i("email-fehler")} data-fehler="email"></p>
+      </div>
+
+      <div class="feld">
+        <label class="feld-label" for={i("telefon")}>
+          Telefonnummer <span class="optional">(optional)</span>
+        </label>
         <input
           class="eingabe"
           id={i("telefon")}
@@ -168,31 +186,14 @@ const i = (name: string) => `${id}-${name}`;
           autocomplete="tel"
           inputmode="tel"
           maxlength="30"
-          required
           aria-describedby={i("telefon-fehler")}
         />
         <p class="fehler" id={i("telefon-fehler")} data-fehler="telefon"></p>
       </div>
 
-      <div class="feld">
-        <label class="feld-label" for={i("email")}>
-          E-Mail-Adresse <span class="optional">(optional)</span>
-        </label>
-        <input
-          class="eingabe"
-          id={i("email")}
-          name="email"
-          type="email"
-          autocomplete="email"
-          maxlength="120"
-          aria-describedby={i("email-fehler")}
-        />
-        <p class="fehler" id={i("email-fehler")} data-fehler="email"></p>
-      </div>
-
       <fieldset class="zeiten">
         <legend class="feld-label">
-          Wann erreichen wir Sie am besten? <span class="optional">(optional)</span>
+          Wann erreichen wir Sie telefonisch am besten? <span class="optional">(optional)</span>
         </legend>
         <div class="chips">
           {
