@@ -293,9 +293,12 @@ const KURVE_KREIS = "cubic-bezier(0.33, 0.1, 0.67, 0.9)";
 
 /**
  * Ein von Hand gezogener Kreis um ein Rechteck (Mitte cx/cy, halbe
- * Breite/Hoehe hb/hh), in Pixeln. Er beginnt oben links, laeuft im
- * Uhrzeigersinn und schiesst ueber den Anfang hinaus — so zieht man einen
- * Kreis mit dem Stift. Der Radius schwankt leicht und zieht sich zum
+ * Breite/Hoehe hb/hh), in Pixeln. Er beginnt oben (ueber ansatzX, sonst
+ * in der Mitte), laeuft gegen den Uhrzeigersinn (erst nach links) und schiesst
+ * ueber den Anfang hinaus — so zieht man einen Kreis mit dem Stift. Bis
+ * 30. September 2026 begann er oben links und lief im Uhrzeigersinn;
+ * Alexander: „natuerlicher waere nach links, von der Mitte aus". Der
+ * Radius schwankt leicht und zieht sich zum
  * Ende etwas zusammen, damit Anfang und Ende nicht aufeinanderliegen.
  *
  * Form: Superellipse mit Exponent 3 statt Ellipse. Eine Ellipse muesste
@@ -303,7 +306,13 @@ const KURVE_KREIS = "cubic-bezier(0.33, 0.1, 0.67, 0.9)";
  * anzuschneiden, und liefe auf dem Handy ueber den Bildschirmrand. Die
  * Superellipse braucht nur 2^(1/3) = 1,26 und wirkt trotzdem rund.
  */
-function kreisPfad(cx: number, cy: number, hb: number, hh: number) {
+function kreisPfad(
+  cx: number,
+  cy: number,
+  hb: number,
+  hh: number,
+  ansatzX?: number,
+) {
   const exponent = 3;
   const umfassen = Math.pow(2, 1 / exponent);
   // Abstand zum Text. 6 px reichten nicht: Durch das Wackeln kam der
@@ -311,16 +320,29 @@ function kreisPfad(cx: number, cy: number, hb: number, hh: number) {
   const luft = 12;
   const rx = hb * umfassen + luft;
   const ry = hh * umfassen + luft;
-  const anfang = -2.3;
-  const bogen = 2 * Math.PI + 0.5;
-  const schritte = 96;
   const kurve = (w: number) =>
     Math.sign(w) * Math.pow(Math.abs(w), 2 / exponent);
+  // Umkehrung von kurve: welcher Kosinus ergibt diese waagerechte Lage?
+  const zurueck = (w: number) =>
+    Math.sign(w) * Math.pow(Math.abs(w), exponent / 2);
+  // Winkel im Bildschirm (y nach unten): -PI/2 ist oben in der Mitte,
+  // Werte zwischen -PI und 0 liegen auf der oberen Haelfte. Der Winkel
+  // nimmt ab, der Strich laeuft also nach links. Mit ansatzX setzt die
+  // Hand oben genau ueber dieser waagerechten Stelle an (Geschwister-
+  // Hinweis: hinter dem Doppelpunkt, Alexander, 30. September 2026),
+  // ohne oben in der Mitte.
+  const lage =
+    ansatzX === undefined
+      ? 0
+      : Math.max(-1, Math.min(1, zurueck((ansatzX - cx) / rx)));
+  const anfang = -Math.acos(lage);
+  const bogen = 2 * Math.PI + 0.5;
+  const schritte = 96;
 
   const punkte: string[] = [];
   for (let i = 0; i <= schritte; i++) {
     const p = i / schritte;
-    const t = anfang + bogen * p;
+    const t = anfang - bogen * p;
     const wackeln = 1 + 0.02 * Math.sin(3 * t + 1);
     // Zum Ende zieht sich der Strich etwas nach innen — aber erst auf
     // dem Ueberschuss nach dem vollen Umlauf, damit er vorher keine
@@ -357,6 +379,10 @@ export function kreisZiehen(rahmen: HTMLElement) {
   // Der Kreis umschliesst den Text selbst, nicht den Block mit seinem
   // Innenabstand: Gemessen wird die Flaeche der Textzeilen.
   const inhalt = rahmen.querySelector<HTMLElement>("[data-kreis-inhalt]");
+  // Optional: Die Hand setzt oben ueber dem rechten Ende dieses Elements
+  // an (Geschwister-Hinweis: „Für Geschwister:", also hinter dem
+  // Doppelpunkt). Ohne es oben in der Mitte.
+  const ansatz = rahmen.querySelector<HTMLElement>("[data-kreis-ansatz]");
   const zeichnen = () => {
     const r = svg.getBoundingClientRect();
     const bereich = document.createRange();
@@ -370,6 +396,7 @@ export function kreisZiehen(rahmen: HTMLElement) {
         t.top - r.top + t.height / 2,
         t.width / 2,
         t.height / 2,
+        ansatz ? ansatz.getBoundingClientRect().right - r.left : undefined,
       ),
     );
   };
