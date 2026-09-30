@@ -101,6 +101,26 @@ im Klartext ins HTML (Schutz gegen Adresssammler). Links über
 `data-kontakt` + `verschluesseln()`, sichtbarer Text über `<Getarnt>`.
 Die Datei erklärt den Aufbau.
 
+## Besucherstatistik (Umami)
+
+Seit 30. September 2026. Eine Umami-Installation für die ganze Agentur
+unter `statistik.raster-rausch.de`, je Kundenseite eine „Website".
+Lernstabil ist die erste.
+
+- mittwald: Projekt Raster Rausch (p-gdc5j0), Stack „Umami" aus der
+  mStudio-Vorlage, von Claude ergänzt. Dienste `umami` (fest auf
+  3.4.0, nicht `latest`), `postgres` (pgautoupgrade 18) und
+  `sicherung` (pg_dump alle 24 h ins Volume `sicherung`, das die
+  Projektsicherung mitnimmt).
+- `stack_deploy` ersetzt den ganzen Stack: vorher mit `stack_list`
+  (Werte sichtbar) lesen und alles übernehmen.
+- Skript `rr.js`, Zähladresse `/api/rr` (gegen Werbeblocker).
+- Einbau: `src/components/Statistik.astro`. Datenschutz Abschnitt 4.
+- Eigene Besuche: `lernstabil.de/?statistik=aus` je Browser.
+- Update-Check monatlich (Kalender, erster Montag). Neue Version:
+  Release-Notes lesen, Tag im Stack ändern, danach Login und Zählung
+  prüfen.
+
 ## Offene Punkte
 
 Live seit 29. September 2026 (Stand `afa3828` auf `main`).
