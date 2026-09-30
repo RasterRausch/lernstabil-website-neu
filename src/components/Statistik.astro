@@ -1,0 +1,64 @@
+---
+// Besucherstatistik mit Umami, eingebaut am 30. September 2026.
+//
+// Umami gehoert der Agentur, nicht diesem Projekt: eine Installation fuer
+// alle Kundenseiten, je Seite eine „Website" mit eigener ID. Sie laeuft
+// im mittwald-Projekt Raster Rausch (p-gdc5j0), Stack „Umami", unter
+// statistik.raster-rausch.de, fest auf Version 3.4.0.
+//
+// Skript und Zaehladresse heissen rr.js und /api/rr statt script.js und
+// /api/send (TRACKER_SCRIPT_NAME, COLLECT_API_ENDPOINT im Stack):
+// Werbeblocker sperren die Standardnamen haeufig.
+//
+// Nur im gebauten Stand. data-domains laesst trotzdem nur die echte
+// Seite zaehlen, nicht die Vorschau von `npm run build` auf localhost.
+// data-do-not-track: Wer „Do Not Track" eingeschaltet hat, wird nicht
+// gezaehlt — so steht es in der Datenschutzerklaerung (Abschnitt 4).
+//
+// Eigene Besuche ausschliessen (Alexander, 30. September 2026): einmal
+// je Browser und Geraet lernstabil.de/?statistik=aus aufrufen,
+// ?statistik=an schaltet zurueck. Setzt bzw. loescht „umami.disabled"
+// im localStorage; das Umami-Skript prueft diesen Eintrag selbst. Nicht
+// ueber die IP: Privatanschluesse wechseln sie regelmaessig. Normale
+// Besucher bekommen keinen Eintrag, „legt nichts auf Ihrem Geraet ab"
+// in der Datenschutzerklaerung bleibt richtig. Laeuft vor dem Umami-
+// Skript (das ist defer), deshalb zaehlt schon der Aufruf mit ?statistik=aus
+// nicht mehr.
+//
+// Die Website-ID ist nicht geheim, sie steht in jedem Seitenquelltext.
+
+const WEBSITE_ID = "36e6e9cc-7fca-42f4-b719-a1b2ecdf518a";
+---
+
+{
+  import.meta.env.PROD && (
+    <>
+      <script is:inline>
+        (function () {
+          var schalter = new URLSearchParams(location.search).get("statistik");
+          try {
+            if (schalter === "aus") localStorage.setItem("umami.disabled", "1");
+            if (schalter === "an") localStorage.removeItem("umami.disabled");
+          } catch (e) {}
+        })();
+      </script>
+      <script
+        is:inline
+        defer
+        src="https://statistik.raster-rausch.de/rr.js"
+        data-website-id={WEBSITE_ID}
+        data-domains="lernstabil.de,www.lernstabil.de"
+        data-do-not-track="true"
+      ></script>
+      {/* Das Formular meldet eine gesendete Anfrage mit diesem Ereignis
+          (scripts/probestunde-formular.ts). Nur die Tatsache wird
+          gezaehlt, keine Angaben aus dem Formular. Ohne JavaScript zaehlt
+          Umami ueberhaupt nicht, auch nicht den Aufruf von /danke. */}
+      <script is:inline>
+        document.addEventListener("probestunde:gesendet", function () {
+          if (window.umami) window.umami.track("Probestunde angefragt");
+        });
+      </script>
+    </>
+  )
+}

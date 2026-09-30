@@ -17,6 +17,16 @@ import { telefon, email, verschluesseln } from '../data/kontakt';
 //
 // Cookies, localStorage, sessionStorage: keine.
 //
+// Seit 30. September 2026 zaehlt Umami die Besuche (Abschnitt 4,
+// Einbau in components/Statistik.astro). Umami laeuft im mittwald-
+// Projekt Raster Rausch (p-gdc5j0), Stack „Umami", unter
+// statistik.raster-rausch.de. Raster Rausch und #Lernstabil sind
+// beide Einzelunternehmen von Alexander Ritter, deshalb „unser eigener
+// Server" und keine Auftragsverarbeitung. Abschnitt 4 beschreibt
+// Umami 3.4.0 (Quelltext geprueft): Besucher-Pruefsumme aus IP,
+// Browser und APP_SECRET, Salz wechselt monatlich (SALT_ROTATION,
+// Vorgabe „month"). Aendert sich das, Abschnitt 4 nachziehen.
+//
 // WER HIER EINEN DIENST EINBAUT (Formular, Karte, Video, Statistik,
 // Conversion-Tracking fuer Google Ads), MUSS DIESE SEITE NACHZIEHEN.
 //
@@ -134,10 +144,41 @@ import { telefon, email, verschluesseln } from '../data/kontakt';
         lit. b DSGVO.
       </p>
 
-      <h2>4. Cookies und Analyse</h2>
+      <h2>4. Cookies und Besucherstatistik</h2>
       <p>
-        Diese Website setzt keine Cookies und verwendet keine Analyse-,
-        Statistik- oder Werbedienste.
+        Diese Website setzt keine Cookies und legt nichts auf Ihrem Gerät ab.
+      </p>
+      <p>
+        Um zu sehen, wie unsere Website genutzt wird, zählen wir die Besuche
+        mit der Open-Source-Software Umami. Umami läuft auf unserem eigenen
+        Server bei mittwald (siehe Abschnitt 2) unter der Adresse
+        statistik.raster-rausch.de. Daten an andere Anbieter gehen dabei
+        nicht.
+      </p>
+      <p>
+        Erfasst werden die aufgerufene Seite, die Seite, von der Sie zu uns
+        kommen, Browser, Betriebssystem, Gerätetyp, Bildschirmgröße und
+        Spracheinstellung sowie Land, Region und Stadt, die aus Ihrer
+        IP-Adresse abgeleitet werden. Senden Sie über unser Formular eine
+        Anfrage ab, wird zusätzlich gezählt, dass eine Anfrage eingegangen
+        ist. Ihre Angaben aus dem Formular gehen dabei nicht an die Statistik.
+      </p>
+      <p>
+        Ihre IP-Adresse wird nicht gespeichert. Aus IP-Adresse, Browser und
+        einem geheimen Schlüssel bildet Umami eine Prüfsumme, mit der sich
+        mehrere Besuche innerhalb eines Kalendermonats zusammenfassen lassen.
+        Sie lässt sich nicht in die IP-Adresse zurückrechnen und ändert sich
+        mit jedem neuen Monat. Wir führen die Statistik nicht mit anderen
+        Daten zusammen.
+      </p>
+      <p>
+        Haben Sie in Ihrem Browser die Einstellung „Do Not Track“
+        eingeschaltet, wird Ihr Besuch nicht gezählt.
+      </p>
+      <p>
+        Rechtsgrundlage ist Art. 6 Abs. 1 lit. f DSGVO. Unser berechtigtes
+        Interesse liegt darin, zu erfahren, wie Besucher unsere Website
+        finden und nutzen, um sie und unsere Werbung zu verbessern.
       </p>
 
       <h2>5. Schriftarten</h2>

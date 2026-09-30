@@ -3,6 +3,7 @@ import '../styles/tokens.css';
 import Header from '../components/sections/Header.astro';
 import Footer from '../components/sections/Footer.astro';
 import ProbestundeDialog from '../components/ProbestundeDialog.astro';
+import Statistik from '../components/Statistik.astro';
 
 interface Props {
   title: string;
@@ -113,6 +114,9 @@ const bildUrl = new URL(bild, Astro.site).href;
     <link rel="preconnect" href="https://use.typekit.net" crossorigin />
     <link rel="preconnect" href="https://p.typekit.net" crossorigin />
     <link rel="stylesheet" href="https://use.typekit.net/chw4hpk.css" />
+
+    {/* Besucherstatistik (Umami), nur im gebauten Stand. */}
+    <Statistik />
   </head>
   <body>
     {/* Erste fokussierbare Stelle der Seite. Wer mit der Tastatur
